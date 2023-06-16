@@ -1,0 +1,103 @@
+{
+  "nav_languages": {
+    "icon": "vi",
+    "label": "Vietnamese"
+  },
+  "nav_theme": {
+    "dark": "Nền tối",
+    "light": "Nền sáng"
+  },
+  "nav_game_items": "Vật Phẩm Ảo",
+  "nav_gift_cards": "Thẻ Quà Tặng",
+  "nav_more": "Thêm",
+  "nav_profile": {
+    "Selling": "Bán đồ",
+    "Messaging": "Nhắn tin",
+    "Notifications": "Thông báo",
+    "Wallet": "Ví",
+    "Listing": "Danh sách bán",
+    "Purchases": "Danh sách mua",
+    "Settings": "Cài đặt",
+    "Signout": "Đăng xuất"
+  },
+  "all": "Tất cả",
+  "popular": "Phổ biến",
+  "trending": "Xu hướng",
+  "search": "Tìm kiếm...",
+  "gaming_gift_cards": "Thẻ quà tặng trò chơi",
+  "movies": "Phim",
+  "games": "Trò chơi",
+  "game_items": "Vật phẩm ảo",
+  "gift_cards": "Thẻ quà tặng",
+  "popular_categories": "Danh mục phổ biến",
+  "footer": {
+    "join_our_community": "Tham gia cộng đồng",
+    "sell": {
+      "sell": "Bán",
+      "selling_questions": "Cách bán hàng?",
+      "how_to_sell": "Làm thế nào để bán",
+      "sell_ingame_items": "Bán vật phẩm ảo",
+      "sell_video_games": "Bán trò chơi điện tử",
+      "sell_gift_cards": "Bán thẻ quà tặng"
+    },
+    "buy": {
+      "buy": "Mua",
+      "buying_questions": "Cách mua hàng?",
+      "how_to_buy": "Làm thế nào để Mua",
+      "buy_ingame_items": "Mua vật phẩm ảo",
+      "buy_video_games": "Mua trò chơi điện tử",
+      "buy_gift_cards": "Mua thẻ quà tặng"
+    },
+    "faq": {
+      "faq": "Câu hỏi thường gặp",
+      "how_does_gamebay_work": "Cách hoạt động của GameBay?",
+      "what_is_gamebay_guarantee": "Bảo đảm từ GameBay",
+      "how_does_gamebay_protect_sellers": "Làm cách nào GameBay bảo vệ người bán?"
+    },
+    "resources": {
+      "resources": "Thông tin hữu ích",
+      "help_center": "Trung tâm trợ giúp",
+      "return_policy": "Chính sách đổi trả",
+      "contact_us": "Liên hệ chúng tôi"
+    },
+    "about_us": "Về chúng tôi",
+    "term_of_use": "Điều khoản sử dụng",
+    "privacy_policy": "Chính sách bảo mật",
+    "copyright": "Bản quyền 2023 thuộc về GameBay. Đã đăng ký bản quyền."
+  },
+  "settings": {
+    "account": {
+      "personal_information": "Thông tin cá nhân",
+      "name": "Tên",
+      "public_profile": "Hồ sơ công khai",
+      "phone_number": "Số điện thoại",
+      "avatar": "Ảnh đại diện",
+      "display_as": "Tên hiển thị",
+      "bio": "Mô tả bản thân",
+      "languages": {
+        "language": "Ngôn ngữ",
+        "proficiency": "Độ thông thạo"
+      },
+      "steam_connect": "Kết nối với Steam",
+      "steam_desc": "Bạn phải kết nối tài khoản Steam để bán vật phẩm ảo",
+      "btn": {
+        "add": "Thêm vào",
+        "update": "Cập nhật Trade URL",
+        "upload": "Cập nhật ảnh"
+      }
+    },
+    "payment": {
+      "payment_method": "Phương thức thanh toán",
+      "addresses": {
+        "addresses": "Địa chỉ",
+        "add_new": "Thêm địa chỉ mới",
+        "full_name": "Họ và Tên",
+        "street_address": "Địa chỉ ",
+        "city": "Thành phố",
+        "zip": "Mã vùng hoặc mã bưu chính",
+        "state": "Tỉnh",
+        "country": "Quốc gia"
+      }
+    }
+  }
+}

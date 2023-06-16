@@ -1,0 +1,23 @@
+.card-container {
+  margin-top: 50px;
+  overflow: hidden;
+  transition: transform 0.3s ease-in-out;
+}
+.card-container:hover {
+  transform: scale(1.2);
+}
+.card-container img {
+  /* width: 250px;
+  height: 250px; */
+  border-radius: 10px;
+  /* border: 1px solid var(--text-color); */
+}
+.card-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* Additional styles if needed */
+}

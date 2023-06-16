@@ -1,0 +1,17 @@
+@import "../../../component/Navigation/navigation.css";
+.categoryTable td,
+.categoryTable th {
+  color: var(--text-color);
+}
+.collapseCategory span {
+  color: var(--text-color);
+}
+.ant-collapse-header {
+  background-color: var(--background-table-head);
+}
+.ant-collapse .ant-collapse-content {
+  background-color: var(--background-table-body);
+}
+::placeholder {
+  color: grey !important;
+}

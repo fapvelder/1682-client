@@ -1,0 +1,106 @@
+{
+  "nav_languages": {
+    "icon": "us",
+    "label": "English"
+  },
+  "nav_theme": {
+    "dark": "Dark theme",
+    "light": "Light theme"
+  },
+  "nav_game_items": "Game Items",
+  "nav_gift_cards": "Gift Cards",
+  "nav_more": "More",
+  "nav_profile": {
+    "Selling": "Start Selling",
+    "Messaging": "Messaging",
+    "Notifications": "Notifications",
+    "Wallet": "Wallet",
+    "Listing": "Listings",
+    "Purchases": "Purchases",
+    "Settings": "Settings",
+    "Signout": "Sign out"
+  },
+  "all": "All",
+  "popular": "Popular",
+  "trending": "Trending",
+  "search": "Search...",
+  "gaming_gift_cards": "Gaming Gift Cards",
+  "movies": "Movies",
+  "games": "Games",
+  "game_items": "Game Items",
+  "gift_cards": "Gift Cards",
+  "popular_categories": "Popular Categories",
+  "footer": {
+    "join_our_community": "Join Our Community",
+    "sell": {
+      "sell": "Sell",
+      "selling_questions": "Selling Questions",
+      "how_to_sell": "How to Sell",
+      "sell_ingame_items": "Sell In-Game Items",
+      "sell_video_games": "Sell Video Games",
+      "sell_gift_cards": "Sell Gift Cards"
+    },
+    "buy": {
+      "buy": "Buy",
+      "buying_questions": "Buying Questions",
+      "how_to_buy": "How to Buy",
+      "buy_ingame_items": "Buy In-Game Items",
+      "buy_video_games": "Buy Video Games",
+      "buy_gift_cards": "Buy Gift Cards"
+    },
+    "faq": {
+      "faq": "FAQ",
+
+      "how_does_gamebay_work": "How does GameBay work?",
+      "what_is_gamebay_guarantee": "What is GameBay guarantee?",
+      "how_does_gamebay_protect_sellers": "How does GameBay protect sellers?"
+    },
+    "resources": {
+      "resources": "Resources",
+      "help_center": "Help Center",
+      "return_policy": "Return Policy",
+      "contact_us": "Contact Us"
+    },
+    "about_us": "About Us",
+    "term_of_use": "Term of Use",
+    "privacy_policy": "Privacy Policy",
+    "copyright": "Copyright © 2023 GameBay. All rights reserved."
+  },
+  "settings": {
+    "account": {
+      "personal_information": "Personal Information",
+      "name": "Name",
+      "public_profile": "Public Profile",
+
+      "phone_number": "Phone Number",
+      "avatar": "Avatar",
+      "display_as": "Display As",
+      "bio": "Profile Description",
+      "languages": {
+        "language": "Language",
+        "proficiency": "Proficiency"
+      },
+      "steam_connect": "Steam Connect",
+      "steam_desc": "Connect your Steam account with GameBay is required for selling skins.",
+      "btn": {
+        "add": "Add",
+        "update": "Update Trade URL",
+        "upload": "Upload Avatar"
+      }
+    },
+
+    "payment": {
+      "payment_method": "Payment Method",
+      "addresses": {
+        "addresses": "Addresses",
+        "add_new": "Add new address",
+        "full_name": "Full Name",
+        "street_address": "Street Address ",
+        "city": "City",
+        "zip": "Zip or Postal Code",
+        "state": "State or Province",
+        "country": "Country"
+      }
+    }
+  }
+}
