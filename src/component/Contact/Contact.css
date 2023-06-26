@@ -8,7 +8,7 @@
 }
 .bodyChat {
   margin-top: 10px;
-  border: 1px solid white;
+  border: 1px solid var(--border-color);
   box-shadow: var(--box-shadow-color);
   /* padding: 10px; */
   /* border-radius: 10px; */

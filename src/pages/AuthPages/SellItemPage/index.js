@@ -99,7 +99,6 @@ export default function SellItem() {
                     style={{
                       width: 140,
                       height: 140,
-                      border: "1px solid white",
                     }}
                   />
                   <h6>{element.name}</h6>
@@ -133,7 +132,6 @@ export default function SellItem() {
                     style={{
                       width: 140,
                       height: 140,
-                      border: "1px solid white",
                     }}
                   />
                   <h6>{element.name}</h6>

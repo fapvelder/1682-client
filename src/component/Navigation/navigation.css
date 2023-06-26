@@ -194,6 +194,7 @@ ul li ul.dropdown section {
   z-index: 999;
   display: none;
   color: black;
+  border: 1px solid var(--border-color);
 }
 ul li ul.dropdownProfile section.profile {
   width: 100%;
@@ -201,7 +202,7 @@ ul li ul.dropdownProfile section.profile {
   margin-left: -520%;
   z-index: 999;
   display: block;
-  border: 1px solid black;
+  border: 1px solid var(--border-color);
   border-radius: 10px;
   margin-top: 0px;
 }
@@ -211,7 +212,7 @@ ul li:hover ul.dropdown section {
 ul li ul.dropdownLanguage section,
 ul li ul.dropdownProfile section {
   width: 200px;
-  border: 1px solid grey;
+  border: 1px solid var(--border-color);
   border-radius: 5px;
   margin-left: -33px;
   text-align: start;

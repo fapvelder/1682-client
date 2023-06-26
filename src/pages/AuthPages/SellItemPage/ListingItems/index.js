@@ -5,26 +5,36 @@ import {
   Form,
   Input,
   InputNumber,
+  Modal,
   Radio,
   Select,
   Space,
+  Steps,
 } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import React, { useContext, useState } from "react";
 import "./listingItems.css";
 import { PlusOutlined } from "@ant-design/icons";
 import { Upload } from "antd";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Schema from "async-validator";
-import { createListing } from "../../../../api";
+import { checkOfferStatus, createListing, depositItem } from "../../../../api";
 import { Store } from "../../../../Store";
+import handleLoading from "../../../../component/HandleLoading";
+import useLoading from "../../../../component/HandleLoading/useLoading";
+import Loading from "../../../../component/Loading";
+import { toast } from "react-toastify";
+import { LoadingOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
 export default function ListingItem() {
   const location = useLocation();
   const { state } = useContext(Store);
+  const navigate = useNavigate();
+  const { loading, setLoading, reload, setReload } = useLoading();
   const userID = state?.data?._id;
   const {
+    item,
     url,
     title,
     description,
@@ -45,6 +55,21 @@ export default function ListingItem() {
   const [visibility, setVisibility] = useState("Public");
   const [deliveryIn, setDeliveryIn] = useState("");
   const [deliveryMethod, setDeliveryMethod] = useState("");
+  const [tradeOffer, setTradeOffer] = useState("");
+  const [id, setID] = useState("");
+  const [completeTrade, setCompleteTrade] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [current, setCurrent] = useState(0);
+  const showModal = () => {
+    setDeliveryIn("");
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
   const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
   const uploadButton = (
     <div>
@@ -70,48 +95,128 @@ export default function ListingItem() {
       setDigitalFee((e * 0.02).toFixed(2));
       setCommissionFee((e * 0.08).toFixed(2));
       setFinalIncome((e - digitalFee - commissionFee).toFixed(2));
-      console.log(price);
     }
+  };
+  const handleDepositItem = async () => {
+    const appID = item.appid;
+    const version = item.contextid;
+    // const assetID = item.assetID;
+    const classID = item.classID;
+    handleLoading(
+      async () => {
+        const response = await depositItem(userID, appID, version, classID);
+        setTradeOffer(response.data.tradeOfferUrl);
+        setID(response.data.id);
+        setCurrent(1);
+      },
+      setLoading,
+      setReload,
+      "Trade offer has been sent"
+    );
+  };
+
+  const handleComplete = async () => {
+    handleLoading(
+      async () => {
+        const offerID = tradeOffer?.split("/")[4];
+        const response = await checkOfferStatus(offerID);
+        if (response.data.message === "ACCEPTED") {
+          setCompleteTrade(true);
+          setDeliveryIn("auto");
+        }
+        setCurrent(2);
+      },
+      setLoading,
+      setReload,
+      "Trade offer has been completed"
+    );
+  };
+  const checkToContinue = () => {
+    return (
+      userID === "" ||
+      title === "" ||
+      description === "" ||
+      price === 0 ||
+      deliveryIn === "" ||
+      deliveryMethod === "" ||
+      category === "" ||
+      subCategory === "" ||
+      visibility === "" ||
+      gameTitle === "" ||
+      url === ""
+    );
   };
   const createListingItem = async () => {
     if (
-      (userID,
-      title,
-      description,
-      price,
-      deliveryIn,
-      deliveryMethod,
-      category,
-      subCategory,
-      visibility,
-      gameTitle,
-      url)
+      userID &&
+      editedTitle &&
+      editedDescription &&
+      price >= 1 &&
+      deliveryIn &&
+      deliveryMethod &&
+      category &&
+      subCategory &&
+      visibility &&
+      gameTitle &&
+      url
     ) {
-      await createListing(
-        userID,
-        title,
-        description,
-        price,
-        deliveryIn,
-        deliveryMethod,
-        category,
-        subCategory,
-        visibility,
-        gameTitle,
-        url
-      );
+      if (deliveryMethod === "Bot" && completeTrade) {
+        console.log("bot");
+        handleLoading(
+          async () => {
+            await createListing(
+              userID,
+              editedTitle,
+              editedDescription,
+              price,
+              deliveryIn,
+              deliveryMethod,
+              category,
+              subCategory,
+              visibility,
+              gameTitle,
+              url,
+              item
+            );
+            navigate("/");
+          },
+          setLoading,
+          setReload,
+          "Product listing successfully"
+        );
+      } else {
+        console.log("send");
+
+        handleLoading(
+          async () => {
+            await createListing(
+              userID,
+              editedTitle,
+              editedDescription,
+              price,
+              deliveryIn,
+              deliveryMethod,
+              category,
+              subCategory,
+              visibility,
+              gameTitle,
+              url,
+              ""
+            );
+            navigate("/");
+          },
+          setLoading,
+          setReload,
+          "Product listing successfully"
+        );
+      }
+    } else {
+      toast.error("Do not have enough elements");
     }
-
-    // console.log(url);
-    // console.log(description);
-    // console.log(deliveryMethod, delivery);
-    // console.log(visibility);
-    // console.log(title, category, subCategory);
-    // console.log(gameTitle)
   };
-
   return (
     <Grid container className="pb-50">
+      {loading && <Loading />}
       <div className="mg-auto-80 mt-15">
         <Grid container className="mg-auto-80 selectCustom">
           <Grid container className="customSection">
@@ -130,7 +235,6 @@ export default function ListingItem() {
                       style={{
                         width: 160,
                         height: 160,
-                        border: "1px solid white",
                       }}
                       src={url}
                       alt=""
@@ -234,8 +338,8 @@ export default function ListingItem() {
                 style={{ padding: 15 }}
               >
                 <Space direction="vertical">
-                  <Radio value="Bot">
-                    Automatic delivery via Bot (Deposit Item)
+                  <Radio value="Bot" onClick={showModal}>
+                    Automatic delivery via Bot{" "}
                   </Radio>
 
                   <Radio value="Transfer" style={{ marginTop: 20 }}>
@@ -297,7 +401,7 @@ export default function ListingItem() {
                 </Select>
                 <p>
                   Public listings can be seen and searched by anyone using
-                  Gameflip. Unlisted listings can be seen and shared by anyone
+                  GameBay. Unlisted listings can be seen and shared by anyone
                   with the link.
                 </p>
               </div>
@@ -337,6 +441,7 @@ export default function ListingItem() {
           <Grid container style={{ display: "flex", justifyContent: "end" }}>
             <Button
               className="defaultButton"
+              disabled={checkToContinue()}
               onClick={() => createListingItem()}
             >
               {" "}
@@ -345,6 +450,126 @@ export default function ListingItem() {
           </Grid>
         </Grid>
       </div>
+      <Modal
+        title="Deposit item to Bot"
+        open={isModalOpen}
+        // onOk={handleOk}
+        onCancel={handleCancel}
+        width={800}
+        height={500}
+        footer={
+          current === 0
+            ? [
+                <div
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  <Button key="back" onClick={handleCancel}>
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={() => handleDepositItem()}
+                    className="defaultButton"
+                  >
+                    Start Bot Trade
+                  </Button>
+                </div>,
+              ]
+            : current === 1 &&
+              tradeOffer && [
+                <div
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  <Button
+                    className="defaultButton"
+                    onClick={() => handleComplete()}
+                  >
+                    I've completed Bot Trade
+                  </Button>
+                  <Button
+                    className="defaultButton"
+                    onClick={() => window.open(tradeOffer)}
+                  >
+                    See trade offer
+                  </Button>
+                </div>,
+              ]
+        }
+      >
+        {current === 0 ? (
+          <div>
+            <div>
+              Our GameBay Bot will hold your item and deliver to buyer when your
+              listing is sold. When you click Start, a GameBay bot will send you
+              a trade offer in Steam using your Steam Trade URL. The trade offer
+              is automatically cancelled if you do not accept within 5 minutes.
+            </div>
+            <br />
+            <div>
+              You must be logged in Steam and have your Steam Guard Mobile ready
+              for trading.
+            </div>
+            <div>Having problems to deposit your item?</div>
+            <Button
+              className="defaultButton"
+              onClick={() => window.open("https://steamstat.us/")}
+            >
+              Check the current Steam status.
+            </Button>
+          </div>
+        ) : current === 1 ? (
+          <div>
+            <div>
+              Please verify that the bot trade offer references the following
+              Listing ID
+            </div>
+            <center>{id}</center>
+            <div>
+              Once you successfully traded with GameBay Steam bot, please
+              confirm below.
+            </div>
+          </div>
+        ) : (
+          current === 2 && <div>Thank you for depositing item</div>
+        )}
+        {/* <div onClick={() => handleDepositItem()}>Deposit Item</div> */}
+        <Steps
+          style={{ marginTop: 15 }}
+          labelPlacement="vertical"
+          current={current}
+          items={[
+            {
+              title: "Start Bot Trade",
+            },
+            {
+              title: "Accept Bot Trade In Steam",
+              icon: current === 1 && <LoadingOutlined />,
+            },
+            {
+              title: "Complete Bot Trade",
+            },
+          ]}
+        />
+        {/* <Button
+          onClick={() => setCurrent(current - 1)}
+          disabled={current === 0}
+        >
+          Previous
+        </Button>
+        <Button
+          onClick={() => setCurrent(current + 1)}
+          disabled={current === 2}
+        >
+          Next
+        </Button> */}
+        {/* {tradeOffer && (
+          <Button
+            className="defaultButton"
+            onClick={() => window.open(tradeOffer)}
+          >
+            See trade offer
+          </Button>
+        )} */}
+      </Modal>
     </Grid>
   );
 }

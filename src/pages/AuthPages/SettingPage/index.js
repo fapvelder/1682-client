@@ -1,14 +1,25 @@
 import { Grid } from "@material-ui/core";
 import { Tabs } from "antd";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import Account from "./SettingChildren/Account";
 import Payment from "./SettingChildren/Payment";
 import { Store } from "../../../Store";
 import { Helmet } from "react-helmet-async";
 import "./settings.css";
+import { useLocation, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 export default function Setting() {
   const { state } = useContext(Store);
-  const user = state.data;
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location?.state?.warn) {
+      toast.warn("You must sign in via Steam before selling Steam Items", {
+        toastId: location?.key,
+      });
+    }
+  }, [location?.state?.warn, location?.key]);
+  const user = state?.data;
   const items = [
     {
       key: "1",

@@ -15,6 +15,7 @@ import { useLocation } from "react-router-dom";
 import "./footer.css";
 import vi from "../languages/vi.json";
 import en from "../languages/en.json";
+import fullPaypalTrans from "../img/fullPaypalTrans.png";
 export default function Footer() {
   const { state } = useContext(Store);
   const language = state.language || "en";
@@ -186,18 +187,16 @@ export default function Footer() {
             : vi.footer.privacy_policy}
         </Grid>
         <Grid item md={6}>
-          {/* <img
+          <img
             className="logo"
-            src={
-              "https://p7.hiclipart.com/preview/289/163/702/paypal-business-logo-computer-icons-paypal.jpg"
-            }
+            src={fullPaypalTrans}
             style={{
               width: 120,
               height: 50,
               marginLeft: -5,
             }}
             alt="logo"
-          /> */}
+          />
         </Grid>
         <Grid item md={12}>
           {language === "en" ? en.footer.copyright : vi.footer.copyright}

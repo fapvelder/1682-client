@@ -10,14 +10,14 @@
 }
 .backgroundProduct {
   background: url(../img/item_background.jpg) !important;
-  width: 250px;
-  height: 250px;
+  width: 250px !important;
+  height: 250px !important;
 }
 
 .productCard {
   padding: 5px;
-  width: 260px;
-  height: 100%;
+  width: 260px !important;
+  height: 100% !important;
   border-radius: 10px;
   border: 1px solid var(--border-color);
   background-color: var(--background-color-outside);

@@ -5,7 +5,7 @@ import { Store } from "../../../../Store";
 
 export default function Balance() {
   const { state } = useContext(Store);
-  const balance = state?.data?.wallet;
+  const balance = state?.data?.wallet.toFixed(2);
   return (
     <Grid container className="pb-50">
       <Grid container>

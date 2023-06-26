@@ -2,7 +2,7 @@ import { Grid } from "@material-ui/core";
 import { Button, Divider } from "antd";
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getItemSteam } from "../../../../api";
+import { getItemSteam, getUserByID } from "../../../../api";
 import { Store } from "../../../../Store";
 import "./gameItems.css";
 import { toast } from "react-toastify";
@@ -12,7 +12,7 @@ import handleLoading from "../../../../component/HandleLoading";
 import useLoading from "../../../../component/HandleLoading/useLoading";
 import Loading from "../../../../component/Loading";
 export default function GameItems() {
-  const { state } = useContext(Store);
+  const { state, dispatch: ctxDispatch } = useContext(Store);
   const params = useParams();
   const category = params.category;
   const subCategory = params.subcategory;
@@ -21,11 +21,24 @@ export default function GameItems() {
   const { loading, setLoading, reload, setReload } = useLoading();
   const steam = state?.data?.profile?.steam;
   const url = "https://community.cloudflare.steamstatic.com/economy/image/";
-  const [price, setPrice] = useState("");
-  const [tradable, setTradable] = useState([]);
+
   const [steamInventory, setSteamInventory] = useState([]);
   const [priceInventory, setPriceInventory] = useState([]);
   const [selectedItem, setSelectedItem] = useState("");
+  useEffect(() => {
+    const getUser = async () => {
+      const userID = state?.data?._id;
+      if (userID) {
+        try {
+          const result = await getUserByID(userID);
+          ctxDispatch({ type: "SET_DATA", payload: result?.data });
+        } catch (err) {
+          toast.error(getError(err));
+        }
+      }
+    };
+    getUser();
+  }, [ctxDispatch, reload]);
   const refreshInventory = async () => {
     handleLoading(
       async () => {
@@ -38,9 +51,10 @@ export default function GameItems() {
       "Refresh successfully"
     );
   };
-  const handleContinue = () => {
+  const handleContinue = (item) => {
     navigate("/listing", {
       state: {
+        item: item,
         url: `${url}${selectedItem.icon_url}`,
         title: selectedItem.name,
         description: selectedItem.description,
@@ -52,10 +66,30 @@ export default function GameItems() {
     });
   };
   useEffect(() => {
-    setSteamInventory(
-      steam?.steamInventory?.filter((item) => item.tradable === 1)
-    );
-  }, [steam?.steamInventory, reload]);
+    if (steam) {
+      if (gameTitle === "CS:GO") {
+        setSteamInventory(
+          steam?.steamInventory[1]?.filter((item) => item?.tradable)
+        );
+      } else if (gameTitle === "Steam Items") {
+        setSteamInventory(
+          steam?.steamInventory[0]?.filter((item) => item?.tradable)
+        );
+      } else {
+        navigate("/settings", { state: { warn: "steam" } });
+      }
+    }
+  }, [
+    steam?.steamInventory,
+    gameTitle,
+    reload,
+    navigate,
+    steam,
+    setLoading,
+    setReload,
+    state?.data?.profile?.steam?.steamID,
+    state?.data?._id,
+  ]);
   useEffect(() => {
     const getPrice = async () => {
       if (steamInventory) {
@@ -72,27 +106,29 @@ export default function GameItems() {
         // );
         setPriceInventory(
           steamInventory.map((item, index) => ({
+            key: item.assetid,
             appid: item.appid,
+            contextid: item.contextid,
             icon_url: item.icon_url,
             market_hash_name: item.market_hash_name,
             name: item.name,
             description: item.descriptions,
             assetID: item.assetid,
-            tags: item.tags,
+            classID: item.classid,
             // price: price[index],
-            price: "1$",
+            price: gameTitle === "CS:GO" ? "1$" : "No suggested price",
           }))
         );
       }
     };
     getPrice();
-  }, [steamInventory, reload]);
-
+  }, [steamInventory, reload, gameTitle]);
   return (
     <Grid container className="selling-item pb-50">
       {loading && <Loading />}
       <div className="mg-auto-80">
-        <h3 className="mt-15"> Start Selling - CS:GO</h3>
+        <h3 className="mt-15"> Start Selling - {gameTitle}</h3>
+
         <Grid
           container
           style={{ gridGap: "79px" }}
@@ -103,17 +139,30 @@ export default function GameItems() {
               <span>Your Inventory</span>
             </h3>
             <Grid container>
+              <Grid container style={{ marginBottom: 20, padding: 10 }}>
+                <Button onClick={() => refreshInventory()}>
+                  Refresh Inventory
+                </Button>
+              </Grid>
               {steamInventory &&
                 priceInventory.map((item) => (
                   <Grid
                     item
                     sm={4}
                     md={3}
+                    key={item.key}
                     className="product"
                     onClick={() => setSelectedItem(item)}
                   >
                     <div className="specific-item">
-                      <p className="text-start ml-15">{item?.price}</p>
+                      <p
+                        className="text-start ml-15"
+                        style={{
+                          fontSize: gameTitle === "Steam Items" && 10,
+                        }}
+                      >
+                        {item?.price}
+                      </p>
                       <img src={`${url}${item.icon_url}`} alt="" />
                     </div>
                     <p>{item?.name}</p>
@@ -139,7 +188,7 @@ export default function GameItems() {
                   <Button
                     className="defaultButton ml-15"
                     disabled={selectedItem ? false : true}
-                    onClick={() => handleContinue()}
+                    onClick={() => handleContinue(selectedItem)}
                   >
                     Continue
                   </Button>
@@ -166,12 +215,6 @@ export default function GameItems() {
                           </div>
                         ))}
                       </div>
-                      {selectedItem.tags.map((item) => (
-                        <p>
-                          {item.localized_category_name}:{" "}
-                          {item.localized_tag_name}
-                        </p>
-                      ))}
                     </div>
                   </div>
                   <Divider />
@@ -180,10 +223,6 @@ export default function GameItems() {
             </Grid>
           </Grid>
         </Grid>
-        {/* <Grid container>
-          <div>Your inventory</div>
-          <Button onClick={() => refreshInventory()}>Refresh</Button>
-        </Grid> */}
       </div>
     </Grid>
   );
