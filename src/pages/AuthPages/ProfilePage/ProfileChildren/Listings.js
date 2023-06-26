@@ -3,12 +3,13 @@ import React, { useContext, useEffect, useState } from "react";
 import { getUserProducts } from "../../../../api";
 import { Store } from "../../../../Store";
 import ProductList from "../../../../component/Product/ProductList";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function Listings() {
   const { state } = useContext(Store);
+  const params = useParams();
   const navigate = useNavigate();
-  const slug = state?.data?.slug;
+  const slug = params?.slug;
   const [products, setProducts] = useState([]);
   useEffect(() => {
     const getProducts = async () => {

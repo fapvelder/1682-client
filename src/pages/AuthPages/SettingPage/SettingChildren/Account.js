@@ -39,7 +39,6 @@ export default function Account({ user }) {
       if (user) {
         try {
           const result = await getUserByID(user._id);
-          console.log(result);
           ctxDispatch({ type: "SET_DATA", payload: result.data });
         } catch (err) {
           toast.error(getError(err));
@@ -286,7 +285,7 @@ export default function Account({ user }) {
           <Grid item md={6} style={{ marginTop: 5 }}>
             <div className="inputGroup">
               <Input
-                className="inputAntd"
+                className="customInputAntd"
                 placeholder={user?.displayName}
                 style={{ width: 500 }}
                 onClick={() => setToggleEditInput(true)}
@@ -302,7 +301,7 @@ export default function Account({ user }) {
                   </button>
                 </div>
               ) : (
-                <div className="inputGroupAppend" style={{ marginLeft: -50 }}>
+                <div className="inputGroupAppend">
                   <button
                     className="leftButton"
                     onClick={() => addDisplayAsHandler()}
@@ -330,7 +329,7 @@ export default function Account({ user }) {
           <Grid item md={6} style={{ marginTop: 5 }}>
             <div className="inputGroup">
               <TextArea
-                className="inputAntd"
+                className="customInputAntd"
                 placeholder={user?.profile?.bio}
                 autoSize={{
                   minRows: 3,
@@ -350,7 +349,7 @@ export default function Account({ user }) {
                   </button>
                 </div>
               ) : (
-                <div className="inputGroupAppend" style={{ marginLeft: -50 }}>
+                <div className="inputGroupAppend">
                   <button
                     className="leftButton"
                     onClick={() => addBioHandler()}

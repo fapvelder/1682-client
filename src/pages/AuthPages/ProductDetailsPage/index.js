@@ -1,25 +1,32 @@
 import { Grid } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./productDetails.css";
 import { Button, Divider, Input } from "antd";
 import img from "../../../component/img/movie.jpg";
 import UserDetails from "../../../component/UserDetails";
 import { Helmet } from "react-helmet-async";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getProductDetails } from "../../../api";
 import moment from "moment";
+import { Store } from "../../../Store";
 export default function ProductDetails() {
   const params = useParams();
+  const navigate = useNavigate();
+  const { state } = useContext(Store);
   const [product, setProduct] = useState("");
   const id = params?.productID;
-
   useEffect(() => {
     const getDetails = async () => {
       const result = await getProductDetails(id);
       setProduct(result.data);
+      console.log(result.data);
     };
     getDetails();
   }, [id]);
+  const handleBuy = () => {
+    navigate(`/checkout/${id}`);
+  };
+
   return (
     <Grid container className="pb-50">
       <Helmet>
@@ -54,21 +61,33 @@ export default function ProductDetails() {
               <span>${product?.price} USD</span>
             </Grid>
             <Grid container className="buyBtn">
-              <Button className="defaultButton">Buy</Button>
+              {product?.listingBy?._id !== state?.data?._id ? (
+                <Button className="defaultButton" onClick={() => handleBuy()}>
+                  Buy
+                </Button>
+              ) : (
+                <Button className="defaultButton">Edit</Button>
+              )}
             </Grid>
             <Grid container>
-              {product?.description?.map((item, index) => (
-                <div key={index} className="itemDesc text-start">
-                  {item.value.split("\n").map((line, lineIndex) => (
-                    <p key={lineIndex}>{line}</p>
-                  ))}
-                </div>
-              ))}
+              {Array.isArray(product?.description) ? (
+                product?.description?.map((item, index) => (
+                  <div key={index} className="itemDesc text-start">
+                    {item.value.split("\n").map((line, lineIndex) => (
+                      <p key={lineIndex}>{line}</p>
+                    ))}
+                  </div>
+                ))
+              ) : (
+                <div className="itemDesc text-start">{product.description}</div>
+              )}
             </Grid>
             <Grid container>
               <UserDetails
-                currentChatUser={product?.sellBy}
-                contact={true}
+                currentChatUser={product?.listingBy}
+                contact={
+                  product?.listingBy?._id === state?.data?._id ? false : true
+                }
                 width={"100%"}
               />
             </Grid>
@@ -152,12 +171,12 @@ export default function ProductDetails() {
                     <Grid container>
                       <Grid item md={3}>
                         <div className="imageComment">
-                          <img src={product?.sellBy?.avatar} alt="" />
+                          <img src={product?.listingBy?.avatar} alt="" />
                         </div>
                       </Grid>
                       <Grid item md={9}>
                         <div className="text-start">
-                          <p>{product?.sellBy?.fullName}</p>
+                          <p>{product?.listingBy?.fullName}</p>
                           <p>This is a comment</p>
                           <p>19 minutes ago</p>
                         </div>

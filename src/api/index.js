@@ -153,7 +153,8 @@ export const createListing = (
   subCategory,
   visibility,
   gameTitle,
-  url
+  url,
+  item
 ) =>
   axiosInstance.post("/products/create", {
     userID,
@@ -167,6 +168,7 @@ export const createListing = (
     visibility,
     gameTitle,
     url,
+    item,
   });
 export const getUserProducts = (slug) =>
   axiosInstance.post("/products/user", { slug });
@@ -176,18 +178,46 @@ export const createOrderPaypal = (cost) =>
   axiosInstance.post("/paypal/my-server/create-paypal-order", {
     cost,
   });
-export const approvePaypal = (data) =>
+export const approvePaypal = (data, userID) =>
   axiosInstance.post("/paypal/my-server/capture-paypal-order", {
     orderID: data?.orderID,
+    userID,
   });
-export const payoutPaypal = (secretToken, userID, amount, email) =>
+export const payoutPaypal = (
+  secretToken,
+  userID,
+  amount,
+  withdrawalFee,
+  email
+) =>
   axiosInstance.post("/paypal/my-server/payout", {
     secretToken,
     userID,
     amount,
+    withdrawalFee,
     email,
   });
 export const addFundUser = (userID, amount) =>
   axiosInstance.post("/users/addFund/", { userID, amount });
 export const requestSecret = (userID) =>
   axiosInstance.post("/users/sendSecret", { userID });
+export const addFundVNPay = (userID, amount, bankCode, language) =>
+  axiosInstance.post("/vnpay/create-url", {
+    userID,
+    amount,
+    bankCode,
+    language,
+  });
+export const depositItem = (userID, appID, version, classID) =>
+  axiosInstance.post("/steam/getItem", { userID, appID, version, classID });
+export const checkOfferStatus = (offerID) =>
+  axiosInstance.post("/steam/checkStatus", { offerID });
+export const withdrawItem = (userID, appID, version, classID) =>
+  axiosInstance.post("/steam/sendItem", { userID, appID, version, classID });
+export const placeOrder = (userID, productID) =>
+  axiosInstance.post("/orders/buy", { userID, productID });
+export const completeOrder = (userID, productID) =>
+  axiosInstance.post("/orders/complete", { userID, productID });
+export const getOrders = () => axiosInstance.get("/orders");
+export const getOrderDetails = (orderID) =>
+  axiosInstance.post(`/orders/details`, { orderID });

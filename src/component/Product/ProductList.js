@@ -11,8 +11,28 @@ export default function ProductList({ img, title, price }) {
     //   <Grid item xs={6} md={2} lg={2}>
     <div className="productCard">
       <Card
-        className="productImg backgroundProduct text-start"
-        cover={<img alt={title} src={img} />}
+        className="backgroundProduct text-start"
+        cover={
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              margin: "auto",
+              height: 250,
+              width: 250,
+            }}
+          >
+            <img
+              style={{
+                width: 200,
+                height: 200,
+              }}
+              alt={title}
+              src={img}
+            />
+          </div>
+        }
       />
       <div className="text-start">
         <div className="title-container">

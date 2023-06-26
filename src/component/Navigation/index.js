@@ -126,7 +126,6 @@ export default function Navigation() {
                       display: "flex",
                       width: 400,
                       backgroundColor: "white",
-                      border: "1px solid black",
                       borderRadius: "5px",
                     }}
                   >
@@ -157,7 +156,6 @@ export default function Navigation() {
                       display: "flex",
                       width: 400,
                       backgroundColor: "white",
-                      border: "1px solid black",
                       borderRadius: "5px",
                     }}
                   >
@@ -186,7 +184,6 @@ export default function Navigation() {
                       display: "flex",
                       width: 400,
                       backgroundColor: "white",
-                      border: "1px solid black",
                       borderRadius: "5px",
                     }}
                   >
@@ -315,9 +312,11 @@ export default function Navigation() {
                           : vi.nav_profile.Listing}
                       </li>
                       <li>
-                        {language === "en"
-                          ? en.nav_profile.Purchases
-                          : vi.nav_profile.Purchases}
+                        <Link to="/purchases">
+                          {language === "en"
+                            ? en.nav_profile.Purchases
+                            : vi.nav_profile.Purchases}
+                        </Link>
                       </li>
                       <li>
                         <Link to="/settings">

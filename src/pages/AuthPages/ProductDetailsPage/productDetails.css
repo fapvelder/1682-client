@@ -3,7 +3,7 @@
   margin-top: 25px !important;
 }
 .general {
-  border: 1px solid white;
+  border: 1px solid var(--border-color);
   max-width: 700px;
   margin-left: 40px;
 }
@@ -48,7 +48,7 @@
 
   width: 100%;
   height: 100%;
-  border: 1px solid white;
+  border: 1px solid var(--border-color);
 }
 .detailsRow {
   border-bottom: 1px solid grey;
@@ -64,7 +64,7 @@
 .listComments {
   width: 100%;
   height: 130px;
-  border: 1px solid white;
+  border: 1px solid var(--border-color);
   position: relative;
   margin-top: 15px;
 }
@@ -88,8 +88,7 @@
 .comment {
   display: flex;
   align-items: center;
-
-  border: 1px solid white;
+  border: 1px solid var(--border-color);
   width: 100%;
   padding: 10px;
   background-color: #5c5c5c;
