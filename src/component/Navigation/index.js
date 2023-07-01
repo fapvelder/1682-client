@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Layout, Menu } from "antd";
+import { Badge, Layout, Menu } from "antd";
 import Icon, {
   HomeOutlined,
   ApartmentOutlined,
@@ -26,11 +26,48 @@ import sun from "../img/sun.png";
 import moon from "../img/moon.png";
 import { toast } from "react-toastify";
 import { getError } from "../../utils";
-
+import io from "socket.io-client";
+import bell from "../img/bell.png";
 export default function Navigation() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
-  const user = state.data;
+  const user = state?.data;
   const theme = localStorage.getItem("theme");
+  const [notificationCount, setNotificationCount] = useState(0);
+  const [messageCount, setMessageCount] = useState(0);
+
+  useEffect(() => {
+    const socket = io("http://localhost:5000");
+    socket.on("msg-count", (data) => {
+      if (data.to === user?._id) {
+        setMessageCount((messageCount) => messageCount + 1);
+      }
+    });
+    return () => {
+      socket.disconnect();
+    };
+  }, [user]);
+  console.log(messageCount);
+  useEffect(() => {
+    const socket = io("http://localhost:5000");
+    socket.on("receive-notify", (data) => {
+      if (data.userID === user?._id) {
+        setNotificationCount((notificationCount) => notificationCount + 1);
+      }
+    });
+    return () => {
+      socket.disconnect();
+    };
+  }, [user]);
+  useEffect(() => {
+    if (user) {
+      const socket = io("http://localhost:5000");
+      socket.emit("authenticate", user?._id);
+      return () => {
+        socket.disconnect();
+      };
+    }
+  }, [user]);
+
   const logoutHandler = async () => {
     ctxDispatch({ type: "USER_LOGOUT" });
     localStorage.removeItem("token");
@@ -236,16 +273,20 @@ export default function Navigation() {
           </div>
         </Grid>
         {state.token ? (
-          <Grid item md={1} className="profileContainer">
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "start",
-                marginBottom: "-10px",
-              }}
-            >
-              <ul>
-                {/* <li className="navbarList">
+          <Badge
+            style={{ marginRight: 5, marginTop: 5 }}
+            dot={notificationCount > 0 || messageCount > 0}
+          >
+            <Grid item md={1} className="profileContainer">
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "start",
+                  marginBottom: "-10px",
+                }}
+              >
+                <ul>
+                  {/* <li className="navbarList">
                 <img
                   src="https://production-gameflipusercontent.fingershock.com/us-east-1:23c8e81f-64ba-47cc-8bcc-68c787dd809c/avatar/87dd8626-5309-4efa-bb1f-d721320a7f82/320x320.webp"
                   alt=""
@@ -262,80 +303,100 @@ export default function Navigation() {
                 </ul>
               </li> */}
 
-                <li className="navbarList">
-                  <img src={user?.avatar} alt={user?.fullName} />
-                  <ul className="dropdownProfile">
-                    <section
-                      style={{ backgroundColor: "white", width: "220px" }}
-                      className="profile"
-                    >
-                      <li>
-                        <Link to={`/profile/${user?.slug}`}>
-                          <img
-                            className="dropdownProfileImg"
-                            src={user?.avatar}
-                            alt={user?.fullName}
-                          />{" "}
-                          {user?.displayName || user?.fullName}
-                        </Link>
-                      </li>
-                      <li>
-                        <Link to={"/sell-item"}>
+                  <li className="navbarList">
+                    <img src={user?.avatar} alt={user?.fullName} />
+                    <ul className="dropdownProfile">
+                      <section
+                        style={{ backgroundColor: "white", width: "220px" }}
+                        className="profile"
+                      >
+                        <li>
+                          <Link to={`/profile/${user?.slug}`}>
+                            <img
+                              className="dropdownProfileImg"
+                              src={user?.avatar}
+                              alt={user?.fullName}
+                            />{" "}
+                            {user?.displayName || user?.fullName}
+                          </Link>
+                        </li>
+                        <li>
+                          <Link to={"/sell-item"}>
+                            {language === "en"
+                              ? en.nav_profile.Selling
+                              : vi.nav_profile.Selling}
+                          </Link>
+                        </li>
+                        <li>
+                          <Link to="/chat" onClick={() => setMessageCount(0)}>
+                            {language === "en"
+                              ? en.nav_profile.Messaging
+                              : vi.nav_profile.Messaging}
+
+                            <Badge
+                              style={{ marginLeft: 5 }}
+                              count={messageCount > 0 ? messageCount : 0}
+                              overflowCount={10}
+                            />
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            to="/notifications"
+                            onClick={() => setNotificationCount(0)}
+                            style={{ display: "inline" }}
+                          >
+                            {language === "en"
+                              ? en.nav_profile.Notifications
+                              : vi.nav_profile.Notifications}
+
+                            <Badge
+                              style={{ marginLeft: 5 }}
+                              count={
+                                notificationCount > 0 ? notificationCount : 0
+                              }
+                              overflowCount={10}
+                            />
+                          </Link>
+                        </li>
+                        <li>
+                          <Link to="/wallet">
+                            {language === "en"
+                              ? en.nav_profile.Wallet
+                              : vi.nav_profile.Wallet}
+                          </Link>
+                        </li>
+                        <li>
                           {language === "en"
-                            ? en.nav_profile.Selling
-                            : vi.nav_profile.Selling}
-                        </Link>
-                      </li>
-                      <li>
-                        <Link to="/chat">
+                            ? en.nav_profile.Listing
+                            : vi.nav_profile.Listing}
+                        </li>
+                        <li>
+                          <Link to="/purchases">
+                            {language === "en"
+                              ? en.nav_profile.Purchases
+                              : vi.nav_profile.Purchases}
+                          </Link>
+                        </li>
+                        <li>
+                          <Link to="/settings">
+                            {language === "en"
+                              ? en.nav_profile.Settings
+                              : vi.nav_profile.Settings}
+                          </Link>
+                        </li>
+                        <li onClick={() => logoutHandler()}>
                           {language === "en"
-                            ? en.nav_profile.Messaging
-                            : vi.nav_profile.Messaging}
-                        </Link>
-                      </li>
-                      <li>
-                        {" "}
-                        {language === "en"
-                          ? en.nav_profile.Notifications
-                          : vi.nav_profile.Notifications}
-                      </li>
-                      <li>
-                        <Link to="/wallet">
-                          {language === "en"
-                            ? en.nav_profile.Wallet
-                            : vi.nav_profile.Wallet}
-                        </Link>
-                      </li>
-                      <li>
-                        {language === "en"
-                          ? en.nav_profile.Listing
-                          : vi.nav_profile.Listing}
-                      </li>
-                      <li>
-                        <Link to="/purchases">
-                          {language === "en"
-                            ? en.nav_profile.Purchases
-                            : vi.nav_profile.Purchases}
-                        </Link>
-                      </li>
-                      <li>
-                        <Link to="/settings">
-                          {language === "en"
-                            ? en.nav_profile.Settings
-                            : vi.nav_profile.Settings}
-                        </Link>
-                      </li>
-                      <li onClick={() => logoutHandler()}>
-                        {language === "en"
-                          ? en.nav_profile.Signout
-                          : vi.nav_profile.Signout}
-                      </li>
-                    </section>
-                  </ul>
-                </li>
-              </ul>
-            </div>
-          </Grid>
+                            ? en.nav_profile.Signout
+                            : vi.nav_profile.Signout}
+                        </li>
+                      </section>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </Grid>
+          </Badge>
         ) : (
           <Link to="/login">Login</Link>
         )}

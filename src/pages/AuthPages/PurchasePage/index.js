@@ -26,7 +26,6 @@ export default function PurchasePage() {
       <Helmet>
         <title>Purchases</title>
       </Helmet>
-      {console.log(purchases)}
       <Grid container className="border mt-15" style={{ padding: 10 }}>
         {purchases?.map((purchase) => (
           <Grid
@@ -34,7 +33,10 @@ export default function PurchasePage() {
             className="border"
             style={{ padding: "10px 0 10px 50px" }}
           >
-            <div style={{ marginRight: 10 }}>
+            <div
+              style={{ marginRight: 10 }}
+              onClick={() => navigate(`/order-details/${purchase._id}`)}
+            >
               <img
                 style={{ width: 100, height: 100 }}
                 src={purchase.product.photos[0]}

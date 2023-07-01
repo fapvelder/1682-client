@@ -17,7 +17,6 @@ export default function InventoryPage() {
   const { loading, setLoading, reload, setReload } = useLoading();
   useEffect(() => {
     const socket = io();
-
     // Listen for the 'tradeOfferStatus' event
     socket.on("tradeOfferStatus", (data) => {
       if (data.messageSuccess) {
@@ -28,31 +27,41 @@ export default function InventoryPage() {
         setTradeOffer("");
       }
     });
-
     // Clean up the socket connection when the component unmounts
     return () => {
       socket.disconnect();
     };
   }, []);
-
+  useEffect(() => {
+    const socket = io();
+    // Listen for the 'tradeOfferStatus' event
+    socket.on("tradeOfferURL", (data) => {
+      if (data.tradeOfferURL) {
+        setTradeOffer(data.tradeOfferURL);
+      }
+    });
+    // Clean up the socket connection when the component unmounts
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
   const handleWithdraw = async (item) => {
     const userID = state?.data?._id;
     handleLoading(
       async () => {
-        const response = await withdrawItem(
+        await withdrawItem(
           userID,
           item.appid,
           item.contextid,
-          item.classid
+          item.classid,
+          userID
         );
-        setTradeOffer(response.data.tradeOfferURL);
       },
       setLoading,
       setReload,
       "Trade offer has been sent"
     );
   };
-  console.log(tradeOffer);
   return (
     <Grid container className="mg-auto-80 pb-50 ">
       {loading && <Loading />}

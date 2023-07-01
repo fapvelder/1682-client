@@ -154,7 +154,8 @@ export const createListing = (
   visibility,
   gameTitle,
   url,
-  item
+  item,
+  code
 ) =>
   axiosInstance.post("/products/create", {
     userID,
@@ -169,6 +170,8 @@ export const createListing = (
     gameTitle,
     url,
     item,
+
+    code,
   });
 export const getUserProducts = (slug) =>
   axiosInstance.post("/products/user", { slug });
@@ -212,12 +215,49 @@ export const depositItem = (userID, appID, version, classID) =>
   axiosInstance.post("/steam/getItem", { userID, appID, version, classID });
 export const checkOfferStatus = (offerID) =>
   axiosInstance.post("/steam/checkStatus", { offerID });
-export const withdrawItem = (userID, appID, version, classID) =>
-  axiosInstance.post("/steam/sendItem", { userID, appID, version, classID });
+export const withdrawItem = (userID, appID, version, classID, receiverID) =>
+  axiosInstance.post("/steam/sendItem", {
+    userID,
+    appID,
+    version,
+    classID,
+    receiverID,
+  });
 export const placeOrder = (userID, productID) =>
   axiosInstance.post("/orders/buy", { userID, productID });
-export const completeOrder = (userID, productID) =>
-  axiosInstance.post("/orders/complete", { userID, productID });
+export const completeOrder = (orderID, userID) =>
+  axiosInstance.post("/orders/complete", { orderID, userID });
+
 export const getOrders = () => axiosInstance.get("/orders");
 export const getOrderDetails = (orderID) =>
   axiosInstance.post(`/orders/details`, { orderID });
+export const getProductComments = (productID) =>
+  axiosInstance.post("/comments/productComment", { productID });
+export const createComment = (userID, productID, comment) =>
+  axiosInstance.post("/comments/create", { userID, productID, comment });
+export const getOrderItem = (
+  orderID,
+  userID,
+  receiverID,
+  appID,
+  version,
+  classID
+) =>
+  axiosInstance.post("/orders/getItem", {
+    orderID,
+    userID,
+    receiverID,
+    appID,
+    version,
+    classID,
+  });
+export const feedbackOrder = (orderID, feedback, rating) =>
+  axiosInstance.post("/orders/feedback", { orderID, feedback, rating });
+export const getUserFeedback = (slug, rating) =>
+  axiosInstance.post("/feedbacks/get", { slug, rating });
+export const getNotifications = (userID) =>
+  axiosInstance.post("/notifications/", { userID });
+export const sendNotification = (userID, message) =>
+  axiosInstance.post("/notifications/send", { userID, message });
+export const deleteNotification = (notificationID) =>
+  axiosInstance.delete(`/notifications/delete/${notificationID}`);

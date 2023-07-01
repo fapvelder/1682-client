@@ -2,6 +2,9 @@
 
 .border {
   border: 1px solid var(--border-color);
+  box-shadow: var(--box-shadow-color);
+  background-color: var(--background-color-outside);
+
   /* padding: 10px !important; */
 }
 .placeOrderBtn {

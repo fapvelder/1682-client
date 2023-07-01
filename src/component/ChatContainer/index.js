@@ -23,7 +23,7 @@ export default function ChatContainer({ currentChatUser, onReload }) {
   const id = data._id;
   const scrollRef = useRef();
   const socket = useRef();
-  const sendMessage = () => {
+  const sendMessage = async () => {
     const newId = Math.random() * 10;
     if (inputMessage.length > 0) {
       const messages = {
@@ -36,7 +36,7 @@ export default function ChatContainer({ currentChatUser, onReload }) {
         from: id,
         message: inputMessage,
       });
-      sendMessages(id, currentChatUser._id, inputMessage);
+      await sendMessages(id, currentChatUser._id, inputMessage);
       setMessage(message.concat(messages));
       setInputMessage("");
       onReload();

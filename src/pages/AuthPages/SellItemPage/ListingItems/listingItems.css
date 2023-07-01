@@ -3,6 +3,7 @@
   border: 1px solid var(--border-color);
   /* width: 100px; */
 }
+
 .item-background {
   background: url(../../../../component/img/item_background.jpg);
   width: 160px;
