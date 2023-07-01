@@ -6,23 +6,51 @@ import img from "../../../component/img/movie.jpg";
 import UserDetails from "../../../component/UserDetails";
 import { Helmet } from "react-helmet-async";
 import { useNavigate, useParams } from "react-router-dom";
-import { getProductDetails } from "../../../api";
+import {
+  createComment,
+  getProductComments,
+  getProductDetails,
+} from "../../../api";
 import moment from "moment";
 import { Store } from "../../../Store";
+import handleLoading from "../../../component/HandleLoading";
+import useLoading from "../../../component/HandleLoading/useLoading.js";
+import Loading from "../../../component/Loading/index.js";
 export default function ProductDetails() {
   const params = useParams();
   const navigate = useNavigate();
   const { state } = useContext(Store);
+  const { loading, setLoading, reload, setReload } = useLoading();
   const [product, setProduct] = useState("");
+  const [comment, setComment] = useState("");
+  const [comments, setComments] = useState([]);
+  const userID = state?.data?._id;
   const id = params?.productID;
   useEffect(() => {
     const getDetails = async () => {
       const result = await getProductDetails(id);
       setProduct(result.data);
-      console.log(result.data);
     };
+    const getComments = async () => {
+      const result = await getProductComments(id);
+      console.log(result.data);
+      setComments(result.data);
+    };
+    getComments();
     getDetails();
   }, [id]);
+  const handleComment = async () => {
+    if (userID && id && comment) {
+      handleLoading(
+        async () => {
+          await createComment(userID, id, comment);
+        },
+        setLoading,
+        setReload,
+        "Comment successfully"
+      );
+    }
+  };
   const handleBuy = () => {
     navigate(`/checkout/${id}`);
   };
@@ -32,6 +60,7 @@ export default function ProductDetails() {
       <Helmet>
         <title>{product?.title}</title>
       </Helmet>
+      {loading && <Loading />}
       <Grid container className="generalContainer">
         <Grid item md={6}>
           <div className="general">
@@ -166,26 +195,49 @@ export default function ProductDetails() {
                   Caution: Comments are written by the marketplace users.
                   GameBay will never write comments on listings.
                 </Grid>
+
                 <Grid container>
-                  <div className="listComments">
-                    <Grid container>
-                      <Grid item md={3}>
-                        <div className="imageComment">
-                          <img src={product?.listingBy?.avatar} alt="" />
-                        </div>
+                  {comments?.map((comment) => (
+                    <div className="listComments">
+                      <Grid container>
+                        <Grid item md={3}>
+                          <div
+                            className="imageComment"
+                            style={{ cursor: "pointer" }}
+                            onClick={() =>
+                              navigate(`/profile/${comment.commenter.slug}`)
+                            }
+                          >
+                            <img src={comment.commenter.avatar} alt="" />
+                          </div>
+                        </Grid>
+                        <Grid item md={9}>
+                          <div className="text-start">
+                            <p
+                              style={{ cursor: "pointer", color: "orange" }}
+                              onClick={() =>
+                                navigate(`/profile/${comment.commenter.slug}`)
+                              }
+                            >
+                              {comment.commenter?.displayName ||
+                                comment.commenter?.fullName}
+                            </p>
+                            <p>{comment.comment}</p>
+                            <p>
+                              {moment(comment.createdAt).format("MMM YYYY")}
+                            </p>
+                          </div>
+                        </Grid>
                       </Grid>
-                      <Grid item md={9}>
-                        <div className="text-start">
-                          <p>{product?.listingBy?.fullName}</p>
-                          <p>This is a comment</p>
-                          <p>19 minutes ago</p>
-                        </div>
-                      </Grid>
-                    </Grid>
-                  </div>
+                    </div>
+                  ))}
                   <div className="comment">
-                    <Input placeholder="Write a comment" />
-                    <Button>Send</Button>
+                    <Input
+                      value={comment}
+                      onChange={(e) => setComment(e.target.value)}
+                      placeholder="Write a comment"
+                    />
+                    <Button onClick={() => handleComment()}>Send</Button>
                   </div>
                 </Grid>
               </div>

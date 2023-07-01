@@ -11,6 +11,8 @@ import useLoading from "../../../component/HandleLoading/useLoading";
 import Loading from "../../../component/Loading";
 import { toast } from "react-toastify";
 import handleLoading from "../../../component/HandleLoading";
+import io from "socket.io-client";
+
 export default function CheckoutPage() {
   const params = useParams();
   const { state } = useContext(Store);
@@ -29,7 +31,12 @@ export default function CheckoutPage() {
     if (userID !== product?.listingBy?._id) {
       handleLoading(
         async () => {
+          const socket = io("http://localhost:5000");
           await placeOrder(userID, product?._id);
+          socket.emit("send-notify", {
+            userID: product?.listingBy?._id,
+            message: "Purchase product",
+          });
         },
         setLoading,
         setReload,

@@ -4,6 +4,8 @@ import Chat from "../pages/AuthPages/ChatPage/Chat";
 import CheckoutPage from "../pages/AuthPages/CheckoutPage";
 import Homepage from "../pages/AuthPages/Homepage/Homepage";
 import InventoryPage from "../pages/AuthPages/InventoryPage";
+import NotificationsPage from "../pages/AuthPages/NotificationsPage";
+import OrderDetailsPage from "../pages/AuthPages/OrderDetailsPage";
 import ProductDetails from "../pages/AuthPages/ProductDetailsPage";
 import Profile from "../pages/AuthPages/ProfilePage";
 import PurchasePage from "../pages/AuthPages/PurchasePage";
@@ -114,5 +116,13 @@ export const routes = [
   {
     path: "/purchases/",
     element: <PurchasePage />,
+  },
+  {
+    path: "/order-details/:id",
+    element: <OrderDetailsPage />,
+  },
+  {
+    path: "/notifications",
+    element: <NotificationsPage />,
   },
 ];

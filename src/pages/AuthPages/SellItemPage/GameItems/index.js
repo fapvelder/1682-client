@@ -1,6 +1,6 @@
 import { Grid } from "@material-ui/core";
 import { Button, Divider } from "antd";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getItemSteam, getUserByID } from "../../../../api";
 import { Store } from "../../../../Store";
@@ -11,9 +11,11 @@ import { getError } from "../../../../utils.js";
 import handleLoading from "../../../../component/HandleLoading";
 import useLoading from "../../../../component/HandleLoading/useLoading";
 import Loading from "../../../../component/Loading";
+import axios from "axios";
 export default function GameItems() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const params = useParams();
+  const element = useRef(null);
   const category = params.category;
   const subCategory = params.subcategory;
   const gameTitle = params.gametitle;
@@ -39,6 +41,13 @@ export default function GameItems() {
     };
     getUser();
   }, [ctxDispatch, reload]);
+  const handleScroll = () => {
+    if (element?.current) {
+      setTimeout(() => {
+        element?.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+      }, 200);
+    }
+  };
   const refreshInventory = async () => {
     handleLoading(
       async () => {
@@ -95,14 +104,14 @@ export default function GameItems() {
       if (steamInventory) {
         // const requests = steamInventory.map(
         //   (item) =>
-        //     item.tradable === 1 &&
+        //     item.tradable &&
         //     axios.get(
         //       `https://gameflip.com/api/v1/steam/price/730/${item.market_hash_name}`
         //     )
         // );
-        // const responses = await axios.all(requests);
-        // const price = responses.map(
-        //   (response) => response?.data.data.median_price
+        // const responses = await axios?.all(requests);
+        // const price = responses?.map(
+        //   (response) => response?.data?.data?.median_price
         // );
         setPriceInventory(
           steamInventory.map((item, index) => ({
@@ -115,7 +124,7 @@ export default function GameItems() {
             description: item.descriptions,
             assetID: item.assetid,
             classID: item.classid,
-            // price: price[index],
+            // price: gameTitle === "CS:GO" ? price[index] : "No suggested price",
             price: gameTitle === "CS:GO" ? "1$" : "No suggested price",
           }))
         );
@@ -127,7 +136,10 @@ export default function GameItems() {
     <Grid container className="selling-item pb-50">
       {loading && <Loading />}
       <div className="mg-auto-80">
-        <h3 className="mt-15"> Start Selling - {gameTitle}</h3>
+        <h3 className="mt-15" ref={element}>
+          {" "}
+          Start Selling - {gameTitle}
+        </h3>
 
         <Grid
           container
@@ -152,7 +164,10 @@ export default function GameItems() {
                     md={3}
                     key={item.key}
                     className="product"
-                    onClick={() => setSelectedItem(item)}
+                    onClick={() => {
+                      setSelectedItem(item);
+                      handleScroll();
+                    }}
                   >
                     <div className="specific-item">
                       <p
@@ -183,7 +198,7 @@ export default function GameItems() {
                   justifyContent: "space-between",
                 }}
               >
-                <div>{selectedItem ? 1 : 0} item(s) selected </div>
+                <div> {selectedItem ? 1 : 0} item(s) selected </div>
                 <div>
                   <Button
                     className="defaultButton ml-15"

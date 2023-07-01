@@ -15,7 +15,16 @@ export default function SellItem() {
 
   useEffect(() => {
     if (category && brand) {
-      navigate(`/sell-item/${category}/${subCategory}/${brand}`);
+      if (category === "Game Items") {
+        navigate(`/sell-item/${category}/${subCategory}/${brand}`);
+      } else {
+        navigate("/listing", {
+          state: {
+            category: category,
+            subCategory: subCategory,
+          },
+        });
+      }
     }
   }, [brand, category, subCategory, navigate]);
   const [subCategories, setSubCategories] = useState("");

@@ -10,11 +10,16 @@ import Listings from "./ProfileChildren/Listings";
 import Ratings from "./ProfileChildren/Ratings";
 import moment from "moment";
 import { Store } from "../../../Store";
+import useLoading from "../../../component/HandleLoading/useLoading";
+import handleLoading from "../../../component/HandleLoading";
+import Loading from "../../../component/Loading";
+
 export default function Profile() {
+  const { loading, setLoading, reload, setReload } = useLoading();
+
   const { state } = useContext(Store);
   const { slug } = useParams();
   const navigate = useNavigate();
-
   const [user, setUser] = useState([]);
   useEffect(() => {
     const getUser = async () => {
@@ -25,14 +30,34 @@ export default function Profile() {
   }, [slug]);
   const items = [
     {
-      key: "1",
+      key: 1,
       label: `Listings`,
-      children: <Listings />,
+      children: (
+        <Listings
+          slug={slug}
+          loading={loading}
+          setLoading={setLoading}
+          reload={reload}
+          setReload={setReload}
+          handleLoading={handleLoading}
+          Loading={Loading}
+        />
+      ),
     },
     {
-      key: "2",
+      key: 2,
       label: `Ratings`,
-      children: <Ratings />,
+      children: (
+        <Ratings
+          slug={slug}
+          loading={loading}
+          setLoading={setLoading}
+          reload={reload}
+          setReload={setReload}
+          handleLoading={handleLoading}
+          Loading={Loading}
+        />
+      ),
     },
     // {
     //   key: "3",
