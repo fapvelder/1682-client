@@ -4,18 +4,41 @@ import "./homepage.css";
 import banner2 from "../../../component/img/banner.png";
 import banner1 from "../../../component/img/banner2.jpg";
 import movie from "../../../component/img/movie.jpg";
+import giftcards from "../../../component/img/giftcards.png";
+import ingame from "../../../component/img/ingame.png";
+import games from "../../../component/img/games.png";
 import ProductList from "../../../component/Product/ProductList";
 import CardContainer from "../../../component/CardContainer";
 import { Grid } from "@material-ui/core";
 import en from "../../../component/languages/en.json";
 import vi from "../../../component/languages/vi.json";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Store } from "../../../Store";
+import { useNavigate } from "react-router-dom";
+import { fetchCategories } from "../../../api";
 export default function Homepage() {
-  const { state } = useContext(Store);
+  const { state, dispatch: ctxDispatch } = useContext(Store);
+  const navigate = useNavigate();
   const banners = [banner1, banner2];
   const captions = ["Welcome to GameBay", "Join our subscription"];
   const language = state.language || "en";
+  const [categories, setCategories] = useState([]);
+  let src = [ingame, giftcards, games, movie];
+  useEffect(() => {
+    const fetchAllCategories = async () => {
+      const result = await fetchCategories();
+      setCategories(result.data);
+    };
+    fetchAllCategories();
+  }, []);
+  const handleSearch = (categoryID, subCategory) => {
+    navigate("/search/product");
+    ctxDispatch({ type: "SET_CATEGORY", payload: categoryID });
+    ctxDispatch({ type: "SET_SUBCATEGORY", payload: "" });
+    if (subCategory) {
+      ctxDispatch({ type: "SET_SUBCATEGORY", payload: subCategory });
+    }
+  };
   return (
     <div className="pb-50">
       <Helmet>
@@ -40,38 +63,39 @@ export default function Homepage() {
         {language === "en" ? en.popular_categories : vi.popular_categories}
       </h2>
       <Grid container className="mg-auto-80">
-        <CardContainer
-          title={language === "en" ? en.game_items : vi.game_items}
-          img="https://gameflip.com/img/banners/category_ingame.png"
-        />
-        <CardContainer
-          title={language === "en" ? en.gift_cards : vi.gift_cards}
-          img="https://gameflip.com/img/banners/category_giftcards2.png"
-        />
-        <CardContainer
-          title={language === "en" ? en.games : vi.games}
-          img="https://gameflip.com/img/banners/category_games.png"
-        />
-        <CardContainer
-          title={language === "en" ? en.movies : vi.movies}
-          img={movie}
-        />
+        {categories.map((category, index) => (
+          <CardContainer
+            key={index}
+            title={category.name}
+            img={src[index]}
+            handleSearch={handleSearch}
+            category={category._id}
+          />
+        ))}
       </Grid>
-      <h2 className="content">
-        {language === "en" ? en.game_items : vi.game_items}
-      </h2>
-      <Grid container className="mg-auto-80">
-        <CardContainer
-          title={language === "en" ? en.game_items : vi.game_items}
-          width="200px"
-          height="200px"
-          img="https://gameflip.com/img/banners/category_ingame.png"
-        />
-      </Grid>
-      <h2 className="content">
+      {categories.map((category, index) => (
+        <Grid container key={category._id}>
+          <h2 className="content">{category.name}</h2>
+          <Grid container className="mg-auto-80">
+            {category.subCategory.map((subCategory) => (
+              <CardContainer
+                key={subCategory._id}
+                title={subCategory.title}
+                width="200px"
+                height="200px"
+                img={subCategory.image}
+                handleSearch={handleSearch}
+                category={category._id}
+                subCategory={subCategory.title}
+              />
+            ))}
+          </Grid>
+        </Grid>
+      ))}
+      {/* <h2 className="content">
         {language === "en" ? en.gaming_gift_cards : vi.gaming_gift_cards}
-      </h2>
-      <Grid container className="mg-auto-80">
+      </h2> */}
+      {/* <Grid container className="mg-auto-80">
         <CardContainer
           title="App Store"
           width="200px"
@@ -120,7 +144,7 @@ export default function Homepage() {
           height="200px"
           img="https://gameflip.com/img/banners/gc_riot.png"
         />
-      </Grid>
+      </Grid> */}
       {/* <ProductList
         title="Sticker banner asdasfhhh1 203000"
         price="10.00"

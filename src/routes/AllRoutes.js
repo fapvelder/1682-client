@@ -4,11 +4,14 @@ import Chat from "../pages/AuthPages/ChatPage/Chat";
 import CheckoutPage from "../pages/AuthPages/CheckoutPage";
 import Homepage from "../pages/AuthPages/Homepage/Homepage";
 import InventoryPage from "../pages/AuthPages/InventoryPage";
+import ListingsPage from "../pages/AuthPages/ListingPage";
 import NotificationsPage from "../pages/AuthPages/NotificationsPage";
 import OrderDetailsPage from "../pages/AuthPages/OrderDetailsPage";
 import ProductDetails from "../pages/AuthPages/ProductDetailsPage";
 import Profile from "../pages/AuthPages/ProfilePage";
+import Listings from "../pages/AuthPages/ProfilePage/ProfileChildren/Listings";
 import PurchasePage from "../pages/AuthPages/PurchasePage";
+import SearchPage from "../pages/AuthPages/SearchPage";
 import SellItem from "../pages/AuthPages/SellItemPage";
 import GameItems from "../pages/AuthPages/SellItemPage/GameItems";
 import ListingItem from "../pages/AuthPages/SellItemPage/ListingItems";
@@ -17,6 +20,7 @@ import Wallet from "../pages/AuthPages/WalletPage";
 import ForgotPassword from "../pages/NotAuthPages/ForgotPasswordPage/ForgotPassword";
 import ResetPassword from "../pages/NotAuthPages/ForgotPasswordPage/ResetPassword";
 import Login from "../pages/NotAuthPages/LoginPage/Login";
+import NotFoundPage from "../pages/NotAuthPages/NotFoundPage";
 import Register from "../pages/NotAuthPages/RegisterPage/Register";
 
 export const routes = [
@@ -27,6 +31,10 @@ export const routes = [
       <Homepage />
       // </UserRoute>
     ),
+  },
+  {
+    path: "*",
+    element: <NotFoundPage />,
   },
   {
     path: "/chat",
@@ -118,11 +126,19 @@ export const routes = [
     element: <PurchasePage />,
   },
   {
+    path: "/listings/",
+    element: <ListingsPage />,
+  },
+  {
     path: "/order-details/:id",
     element: <OrderDetailsPage />,
   },
   {
     path: "/notifications",
     element: <NotificationsPage />,
+  },
+  {
+    path: "/search/:keyword",
+    element: <SearchPage />,
   },
 ];

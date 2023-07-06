@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import "./ChatContainer.css";
 import { Store } from "../../Store";
 import jwtDecode from "jwt-decode";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { getError } from "../../utils";
 import { io } from "socket.io-client";

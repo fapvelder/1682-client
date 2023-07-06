@@ -227,6 +227,8 @@ export const placeOrder = (userID, productID) =>
   axiosInstance.post("/orders/buy", { userID, productID });
 export const completeOrder = (orderID, userID) =>
   axiosInstance.post("/orders/complete", { orderID, userID });
+export const cancelOrder = (orderID, userID) =>
+  axiosInstance.post("/orders/cancel", { orderID, userID });
 
 export const getOrders = () => axiosInstance.get("/orders");
 export const getOrderDetails = (orderID) =>
@@ -255,9 +257,39 @@ export const feedbackOrder = (orderID, feedback, rating) =>
   axiosInstance.post("/orders/feedback", { orderID, feedback, rating });
 export const getUserFeedback = (slug, rating) =>
   axiosInstance.post("/feedbacks/get", { slug, rating });
+export const getFeedbacks = (userID) =>
+  axiosInstance.post("/feedbacks/getRating", { userID });
 export const getNotifications = (userID) =>
   axiosInstance.post("/notifications/", { userID });
 export const sendNotification = (userID, message) =>
   axiosInstance.post("/notifications/send", { userID, message });
 export const deleteNotification = (notificationID) =>
   axiosInstance.delete(`/notifications/delete/${notificationID}`);
+export const transferItem = (userID, orderID, code) =>
+  axiosInstance.post("/orders/transfer", { userID, orderID, code });
+export const searchProduct = (
+  search,
+  category,
+  subCategory,
+  platform,
+  isAvailable,
+  min,
+  max,
+  page,
+  pageSize
+) =>
+  axiosInstance.get(`/products/search/product`, {
+    params: {
+      search,
+      category,
+      subCategory,
+      platform,
+      isAvailable,
+      min,
+      max,
+      page,
+      pageSize,
+    },
+  });
+export const getMyProducts = (userID) =>
+  axiosInstance.post("/products/myProducts", { userID });

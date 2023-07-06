@@ -95,6 +95,11 @@ button.borderRight {
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
 }
+.borderLeft {
+  cursor: pointer;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
 button.leftButton {
   border-right: 0;
 }
@@ -114,6 +119,10 @@ button.leftButton {
   /* border: 1px solid   black; */
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
+}
+.customLeftInputAntd {
+  /* border-top-left-radius: 0;
+  border-bottom-left-radius: 0; */
 }
 .inputAntd::placeholder {
   color: #333333;

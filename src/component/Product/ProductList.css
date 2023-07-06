@@ -4,13 +4,15 @@
   overflow: hidden;
   text-overflow: ellipsis;
   max-height: 3.5em;
+  word-wrap: nowrap;
+  height: 3.5em;
 }
 .title {
   margin: 0;
 }
 .backgroundProduct {
   background: url(../img/item_background.jpg) !important;
-  width: 250px !important;
+  width: 248px !important;
   height: 250px !important;
 }
 

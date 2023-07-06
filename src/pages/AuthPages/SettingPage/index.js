@@ -14,9 +14,12 @@ export default function Setting() {
 
   useEffect(() => {
     if (location?.state?.warn) {
-      toast.warn("You must sign in via Steam before selling Steam Items", {
-        toastId: location?.key,
-      });
+      toast.warn(
+        "You must sign in via Steam before selling or purchasing Steam Items",
+        {
+          toastId: location?.key,
+        }
+      );
     }
   }, [location?.state?.warn, location?.key]);
   const user = state?.data;

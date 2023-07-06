@@ -29,8 +29,10 @@
   --background-color-chat: white;
   --box-shadow-color: rgba(234, 230, 230, 0.35) 0px 5px 15px;
   --border-color: #ddd;
+  --background-pagination: white;
+  --color-pagination: #3a3a3a;
   height: 100vh;
-  width: 100vw;
+  width: 100vw !important;
   color: black;
   background-color: var(--background-color) !important;
   overflow: auto;
@@ -64,9 +66,10 @@
   --background-color-chat: grey;
   --box-shadow-color: rgba(234, 230, 230, 0.35) 0px 5px 15px;
   --border-color: #ddd;
-
+  --background-pagination: #3a3a3a;
+  --color-pagination: #fff;
   height: 100vh;
-  width: 100vw;
+  width: 100vw !important;
   color: white;
   background-color: var(--background-color) !important;
   overflow: auto;
@@ -130,6 +133,14 @@ ul li a,
   text-decoration: none;
   font-size: 20px;
 }
+.navigation section.listCategory {
+  display: block;
+  padding: 0px 10px;
+  margin-bottom: 10px;
+  color: var(--text-color);
+  text-decoration: none;
+  font-size: 18px;
+}
 .profile a {
   text-decoration: none;
   font-size: 16px;
@@ -151,12 +162,13 @@ ul li ul.dropdown li {
 ul li ul.dropdown,
 ul li ul.dropdownLanguage,
 ul li ul.dropdownProfile {
-  width: 100%;
+  width: 90%;
   position: absolute;
   z-index: 999;
   display: none;
   margin-top: 5px;
   color: black;
+  margin-left: 0px;
 }
 .profile {
   width: 100%;
@@ -168,13 +180,15 @@ ul li ul.dropdownProfile {
   padding-bottom: 10px;
   margin-left: -405%;
 }
-ul li:hover > a {
+ul li:hover > section {
   color: var(--text-color-hover);
+  cursor: pointer;
 }
 
-ul li:hover > a + ul.dropdown li:hover {
+ul li:hover > section + ul.dropdown li:hover {
   background-color: var(--text-color-hover);
   color: var(--text-li-color-hover);
+  cursor: pointer;
 }
 
 ul.dropdownLanguage li:hover,
@@ -219,6 +233,7 @@ ul li ul.dropdownProfile section {
   border-radius: 5px;
   margin-left: -33px;
   text-align: start;
+  cursor: pointer;
 }
 ul.dropdownLanguage li {
   padding-left: 30px;

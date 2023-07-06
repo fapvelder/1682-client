@@ -1,30 +1,76 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./search.css";
+import { Input, Select } from "antd";
+import handleLoading from "../HandleLoading";
+import useLoading from "../HandleLoading/useLoading";
+import { fetchCategories, searchProduct } from "../../api";
+import { useNavigate } from "react-router-dom";
+import { Store } from "../../Store";
+const { Option } = Select;
 export default function Search({ placeholder }) {
+  const navigate = useNavigate();
+  const { state, dispatch: ctxDispatch } = useContext(Store);
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("");
+  const [categories, setCategories] = useState([]);
+
+  const { loading, setLoading, reload, setReload } = useLoading();
+  const handleSearch = async () => {
+    navigate(`/search/product`);
+    ctxDispatch({ type: "SET_SEARCH", payload: search });
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
+  useEffect(() => {
+    const fetchAllCategories = async () => {
+      const result = await fetchCategories();
+      setCategories(result.data);
+    };
+    fetchAllCategories();
+  }, []);
+  const calculateDefaultValue = () => {
+    return state?.category ? state?.category : "";
+  };
+  const handleChangeCategory = (category) => {
+    ctxDispatch({ type: "SET_CATEGORY", payload: category });
+  };
   return (
-    <div>
-      <div className="search">
-        <div className="search-box">
-          <div className="search-field">
-            <input placeholder={placeholder} className="input" type="text" />
-            <div className="search-box-icon">
-              <button className="btn-icon-content">
-                <i className="search-icon">
-                  <svg
-                    xmlns="://www.w3.org/2000/svg"
-                    version="1.1"
-                    viewBox="0 0 512 512"
-                  >
-                    <path
-                      d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"
-                      fill="black"
-                    ></path>
-                  </svg>
-                </i>
-              </button>
-            </div>
-          </div>
-        </div>
+    <div className="inputGroup">
+      <Input
+        className="customInputAntd"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        placeholder={placeholder}
+        style={{ width: 350 }}
+        onKeyDown={handleKeyDown}
+        addonBefore={
+          <Select
+            defaultValue={state?.category || ""}
+            className="borderLeft"
+            style={{ backgroundColor: "white" }}
+            dropdownMatchSelectWidth={false}
+            value={calculateDefaultValue()}
+            onChange={(e) => {
+              handleChangeCategory(e);
+            }}
+          >
+            <Option value="">All</Option>
+            {categories.map((category) => (
+              <Option key={category._id} value={category._id}>
+                {category.name}
+              </Option>
+            ))}
+          </Select>
+        }
+      />
+      <div className="inputGroupAppendSearch">
+        <button className="borderRight" onClick={() => handleSearch()}>
+          <i className="fas fa-search" />
+        </button>
       </div>
     </div>
   );

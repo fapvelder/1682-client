@@ -32,7 +32,7 @@ export default function Ratings({
       );
     };
     getFeedback();
-  }, [slug, rating, setLoading, setReload]);
+  }, [handleLoading, slug, rating, setLoading, setReload]);
   return (
     <Grid container>
       {loading && <Loading />}
@@ -76,8 +76,8 @@ export default function Ratings({
                       <p>{fb.comment}</p>
 
                       <p style={{ fontSize: 12, color: "grey" }}>
-                        Bought {fb.order.product.title} (
-                        {fb.order.product.category.name})
+                        Bought {fb?.order?.product?.title} (
+                        {fb?.order?.product?.category?.name})
                       </p>
                     </div>
                   </Grid>

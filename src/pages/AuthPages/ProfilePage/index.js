@@ -73,7 +73,7 @@ export default function Profile() {
       </Helmet>
       <Grid container>
         <div className="coverPhoto">
-          <img src={banner} alt="" />
+          <img src={banner} style={{ width: "100vw" }} alt="" />
         </div>
       </Grid>
       <Grid container>
