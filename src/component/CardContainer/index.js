@@ -6,11 +6,25 @@ export default function CardContainer({
   img,
   width = "250px",
   height = "250px",
+  handleSearch,
+  category,
+  subCategory,
 }) {
   return (
-    <Grid item xs={6} md={4} lg={3}>
+    <Grid
+      item
+      xs={12}
+      s={6}
+      md={4}
+      lg={3}
+      onClick={() => handleSearch(category, subCategory)}
+    >
       <div className="card-container">
-        <img src={img} alt={title} style={{ width: width, height: height }} />
+        <img
+          src={img}
+          alt={title}
+          style={{ width: width, height: height, cursor: "pointer" }}
+        />
         <div className="card-title">{title}</div>
       </div>
     </Grid>

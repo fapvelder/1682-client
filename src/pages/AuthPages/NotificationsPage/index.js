@@ -14,9 +14,12 @@ import deleteImg from "../../../component/img/delete.png";
 import handleLoading from "../../../component/HandleLoading";
 import useLoading from "../../../component/HandleLoading/useLoading";
 import Loading from "../../../component/Loading";
+import { Helmet } from "react-helmet-async";
+import { useNavigate } from "react-router-dom";
 export default function NotificationsPage() {
   const { loading, setLoading, reload, setReload } = useLoading();
   const { state } = useContext(Store);
+  const navigate = useNavigate();
   const [notifications, setNotifications] = useState([]);
   const userID = state?.data?._id;
 
@@ -60,6 +63,9 @@ export default function NotificationsPage() {
       className="mg-auto-80 pb-50"
       style={{ paddingBottom: "50vh" }}
     >
+      <Helmet>
+        <title>Notifications</title>
+      </Helmet>
       {loading && <Loading />}
       <h2>Notifications</h2>
 
@@ -72,6 +78,7 @@ export default function NotificationsPage() {
               key={notification?._id}
               className="text-start border"
               style={{ padding: "20px 20px" }}
+              onClick={() => navigate(notification?.url)}
             >
               <Grid item md={1}>
                 <img

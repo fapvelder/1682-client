@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Badge, Layout, Menu } from "antd";
 import Icon, {
   HomeOutlined,
@@ -18,7 +18,7 @@ import { Grid } from "@material-ui/core";
 import en from "../languages/en.json";
 import vi from "../languages/vi.json";
 import Flag from "../languages/flag.js";
-import { getUserByID, logout, refresh } from "../../api";
+import { fetchCategories, getUserByID, logout, refresh } from "../../api";
 import jwtDecode from "jwt-decode";
 import logoName from "../img/logoName.png";
 import darkLogoName from "../img/darkLogoName.png";
@@ -30,11 +30,21 @@ import io from "socket.io-client";
 import bell from "../img/bell.png";
 export default function Navigation() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
+  const navigate = useNavigate();
   const user = state?.data;
   const theme = localStorage.getItem("theme");
   const [notificationCount, setNotificationCount] = useState(0);
   const [messageCount, setMessageCount] = useState(0);
+  const [categories, setCategories] = useState([]);
 
+  const handleSearch = (categoryID, subCategory) => {
+    navigate("/search/product");
+    ctxDispatch({ type: "SET_CATEGORY", payload: categoryID });
+    ctxDispatch({ type: "SET_SUBCATEGORY", payload: "" });
+    if (subCategory) {
+      ctxDispatch({ type: "SET_SUBCATEGORY", payload: subCategory });
+    }
+  };
   useEffect(() => {
     const socket = io("http://localhost:5000");
     socket.on("msg-count", (data) => {
@@ -46,7 +56,6 @@ export default function Navigation() {
       socket.disconnect();
     };
   }, [user]);
-  console.log(messageCount);
   useEffect(() => {
     const socket = io("http://localhost:5000");
     socket.on("receive-notify", (data) => {
@@ -58,6 +67,13 @@ export default function Navigation() {
       socket.disconnect();
     };
   }, [user]);
+  useEffect(() => {
+    const fetchAllCategories = async () => {
+      const result = await fetchCategories();
+      setCategories(result.data);
+    };
+    fetchAllCategories();
+  }, []);
   useEffect(() => {
     if (user) {
       const socket = io("http://localhost:5000");
@@ -141,10 +157,10 @@ export default function Navigation() {
             />
           </Link>
         </Grid>
-        <Grid item md={2}>
+        <Grid item md={3}>
           <Search placeholder={language === "en" ? en.search : vi.search} />
         </Grid>
-        <Grid item md={8}>
+        <Grid item md={7}>
           <div
             style={{
               display: "flex",
@@ -153,92 +169,36 @@ export default function Navigation() {
             }}
           >
             <ul>
-              <li className="navbarList">
-                <Link to="/a">
-                  {language === "en" ? en.nav_game_items : vi.nav_game_items}
-                </Link>
-                <ul className="dropdown">
-                  <section
-                    style={{
-                      display: "flex",
-                      width: 400,
-                      backgroundColor: "white",
-                      borderRadius: "5px",
-                    }}
-                  >
-                    <div style={{ width: 400, marginTop: 5 }}>
-                      <span>{language === "en" ? en.popular : vi.popular}</span>
-                      <li>{language === "en" ? en.all : vi.all}</li>
-                      <li>Itunes</li>
-                      <li>Google Plays</li>
-                    </div>
-                    <div style={{ width: 400, marginTop: 5 }}>
-                      <span>
-                        {language === "en" ? en.trending : vi.trending}
-                      </span>
-                      <li>Amazon</li>
-                      <li>Walmart</li>
-                      <li>Target</li>
-                    </div>
-                  </section>
-                </ul>
-              </li>
-              <li className="navbarList">
-                <Link to="#">
-                  {language === "en" ? en.nav_gift_cards : vi.nav_gift_cards}
-                </Link>
-                <ul className="dropdown">
-                  <section
-                    style={{
-                      display: "flex",
-                      width: 400,
-                      backgroundColor: "white",
-                      borderRadius: "5px",
-                    }}
-                  >
-                    <div style={{ width: 400, marginTop: 5 }}>
-                      <span>Popular</span>
-                      <li>All</li>
-                      <li>Itunes</li>
-                      <li>Google Plays</li>
-                    </div>
-                    <div style={{ width: 400, marginTop: 5 }}>
-                      <span>Trending</span>
-                      <li>Amazon</li>
-                      <li>Walmart</li>
-                      <li>Target</li>
-                    </div>
-                  </section>
-                </ul>
-              </li>
-              <li className="navbarList">
-                <Link to="/a">
-                  {language === "en" ? en.nav_more : vi.nav_more}
-                </Link>
-                <ul className="dropdown">
-                  <section
-                    style={{
-                      display: "flex",
-                      width: 400,
-                      backgroundColor: "white",
-                      borderRadius: "5px",
-                    }}
-                  >
-                    <div style={{ width: 400, marginTop: 5 }}>
-                      <span>Popular</span>
-                      <li>All</li>
-                      <li>Itunes</li>
-                      <li>Google Plays</li>
-                    </div>
-                    <div style={{ width: 400, marginTop: 5 }}>
-                      <span>Trending</span>
-                      <li>Amazon</li>
-                      <li>Walmart</li>
-                      <li>Target</li>
-                    </div>
-                  </section>
-                </ul>
-              </li>
+              {categories?.map((category) => (
+                <li className="navbarList" key={category._id}>
+                  <section className="listCategory">{category.name}</section>
+                  <ul className="dropdown">
+                    <section
+                      style={{
+                        display: "flex",
+                        width: 200,
+                        backgroundColor: "white",
+                        borderRadius: "5px",
+                      }}
+                    >
+                      <div style={{ width: 200, marginTop: 5 }}>
+                        <li onClick={() => handleSearch(category._id)}>All</li>
+                        {category.subCategory.map((subCategory) => (
+                          <span
+                            onClick={() =>
+                              handleSearch(category._id, subCategory.title)
+                            }
+                            key={subCategory._id}
+                          >
+                            <li>{subCategory.title}</li>
+                          </span>
+                        ))}
+                      </div>
+                    </section>
+                  </ul>
+                </li>
+              ))}
+
               <li className="navbarList language">
                 {language === "en" ? (
                   <Flag flagName="US" />
@@ -286,23 +246,6 @@ export default function Navigation() {
                 }}
               >
                 <ul>
-                  {/* <li className="navbarList">
-                <img
-                  src="https://production-gameflipusercontent.fingershock.com/us-east-1:23c8e81f-64ba-47cc-8bcc-68c787dd809c/avatar/87dd8626-5309-4efa-bb1f-d721320a7f82/320x320.webp"
-                  alt=""
-                />
-                <ul className="dropdown">
-                  <section style={{ width: 240 }} className="profile">
-                    <li>Username</li>
-                    <li>Start Selling</li>
-                    <li>
-                      <Link to="/chat">Messaging</Link>
-                    </li>
-                    <li>Notifications</li>
-                  </section>
-                </ul>
-              </li> */}
-
                   <li className="navbarList">
                     <img src={user?.avatar} alt={user?.fullName} />
                     <ul className="dropdownProfile">
@@ -367,9 +310,11 @@ export default function Navigation() {
                           </Link>
                         </li>
                         <li>
-                          {language === "en"
-                            ? en.nav_profile.Listing
-                            : vi.nav_profile.Listing}
+                          <Link to="/listings">
+                            {language === "en"
+                              ? en.nav_profile.Listing
+                              : vi.nav_profile.Listing}
+                          </Link>
                         </li>
                         <li>
                           <Link to="/purchases">

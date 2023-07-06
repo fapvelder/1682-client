@@ -137,15 +137,9 @@ export default function GameItems() {
       {loading && <Loading />}
       <div className="mg-auto-80">
         <h3 className="mt-15" ref={element}>
-          {" "}
           Start Selling - {gameTitle}
         </h3>
-
-        <Grid
-          container
-          style={{ gridGap: "79px" }}
-          className="mg-auto-80 selectSkin"
-        >
+        <Grid container style={{ gridGap: "99px" }} className="selectSkin">
           <Grid item md={7} className="inventorySection">
             <h3>
               <span>Your Inventory</span>

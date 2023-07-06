@@ -1,7 +1,7 @@
 import { Grid } from "@material-ui/core";
 import React, { useContext, useEffect, useState } from "react";
 import { getProductDetails, placeOrder } from "../../../api";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import UserDetails from "../../../component/UserDetails";
 import { Store } from "../../../Store";
@@ -15,11 +15,17 @@ import io from "socket.io-client";
 
 export default function CheckoutPage() {
   const params = useParams();
+  const navigate = useNavigate();
   const { state } = useContext(Store);
   const [product, setProduct] = useState("");
   const id = params?.id;
   const userID = state?.data?._id;
   const { loading, setLoading, reload, setReload } = useLoading();
+  useEffect(() => {
+    if (!state?.data?.profile?.steam?.steamTradeURL) {
+      navigate("/settings", { state: { warn: "steam" } });
+    }
+  });
   useEffect(() => {
     const getDetails = async () => {
       const result = await getProductDetails(id);
@@ -29,19 +35,23 @@ export default function CheckoutPage() {
   }, [id]);
   const placeOrderProduct = () => {
     if (userID !== product?.listingBy?._id) {
-      handleLoading(
-        async () => {
-          const socket = io("http://localhost:5000");
-          await placeOrder(userID, product?._id);
-          socket.emit("send-notify", {
-            userID: product?.listingBy?._id,
-            message: "Purchase product",
-          });
-        },
-        setLoading,
-        setReload,
-        "Place order successfully"
-      );
+      if (window.confirm("Are you sure to place the order?")) {
+        handleLoading(
+          async () => {
+            const socket = io("http://localhost:5000");
+            const result = await placeOrder(userID, product?._id);
+            navigate(`/order-details/${result.data._id}`);
+            socket.emit("send-notify", {
+              userID: product?.listingBy?._id,
+              type: "Purchase",
+              url: `/order-details/${result.data._id}`,
+            });
+          },
+          setLoading,
+          setReload,
+          "Place order successfully"
+        );
+      }
     } else {
       toast.error("Cannot place order your own product");
     }
@@ -98,7 +108,7 @@ export default function CheckoutPage() {
         </Grid>
 
         <Grid container>
-          <div className="specificDetails text-start">
+          <div className="specificDetails text-start border">
             <Grid container className=" detailsRow">
               <Grid item md={4}>
                 Category

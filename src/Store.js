@@ -17,6 +17,12 @@ const reducer = (state, action) => {
       return { ...state, theme: action.payload };
     case "SET_LANGUAGE":
       return { ...state, language: action.payload };
+    case "SET_CATEGORY":
+      return { ...state, category: action.payload };
+    case "SET_SUBCATEGORY":
+      return { ...state, subCategory: action.payload };
+    case "SET_SEARCH":
+      return { ...state, search: action.payload };
     default:
       return state;
   }

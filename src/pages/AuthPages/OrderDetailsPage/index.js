@@ -2,13 +2,15 @@ import { Grid } from "@material-ui/core";
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
+  cancelOrder,
   completeOrder,
   feedbackOrder,
   getOrderDetails,
   getOrderItem,
+  transferItem,
   withdrawItem,
 } from "../../../api";
-import { Button, Checkbox, Input, Radio } from "antd";
+import { Button, Checkbox, Input, Modal, Radio } from "antd";
 import moment from "moment";
 import { Store } from "../../../Store";
 import handleLoading from "../../../component/HandleLoading";
@@ -20,6 +22,9 @@ import neutral from "../../../component/img/neutral.png";
 import bad from "../../../component/img/bad.png";
 import check from "../../../component/img/check.png";
 import pending from "../../../component/img/pending.png";
+import cancelled from "../../../component/img/cancelled.png";
+import { Statistic } from "antd";
+const { Countdown } = Statistic;
 export default function OrderDetailsPage() {
   const { id } = useParams();
   const { state } = useContext(Store);
@@ -27,9 +32,25 @@ export default function OrderDetailsPage() {
   const navigate = useNavigate();
   const [order, setOrder] = useState("");
   const [feedback, setFeedback] = useState("");
+  const [code, setCode] = useState("");
   const [tradeOffer, setTradeOffer] = useState("");
   const [rating, setRating] = useState("");
   const [ratingText, setRatingText] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const presentTime = Date.now();
+  const deliveryTime =
+    new Date(order?.createdAt).getTime() +
+    24 * 1000 * order?.product?.deliveryIn;
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+    setCode("");
+  };
   const feedbackRating = [
     {
       rating: "Good",
@@ -54,7 +75,7 @@ export default function OrderDetailsPage() {
       setOrder(result.data);
     };
     getOrder();
-  }, [id]);
+  }, [id, reload]);
 
   useEffect(() => {
     const socket = io();
@@ -69,18 +90,45 @@ export default function OrderDetailsPage() {
       socket.disconnect();
     };
   }, []);
-
+  const handleCancelOrder = async () => {
+    if (window.confirm("Are you sure to cancel the order?")) {
+      const orderID = order?._id;
+      const userID = state?.data?._id;
+      handleLoading(
+        async () => {
+          await cancelOrder(orderID, userID);
+          const socket = io("http://localhost:5000");
+          socket.emit("send-notify", {
+            userID: order?.seller?._id,
+            type: "Cancel",
+            url: `/order-details/${orderID}`,
+          });
+        },
+        setLoading,
+        setReload,
+        "Order is cancelled"
+      );
+    }
+  };
   const handleCompleteOrder = async () => {
     const orderID = order?._id;
     const userID = state?.data?._id;
-    handleLoading(
-      async () => {
-        await completeOrder(orderID, userID);
-      },
-      setLoading,
-      setReload,
-      "Order is completed"
-    );
+    if (window.confirm("Are you sure to complete the order?")) {
+      handleLoading(
+        async () => {
+          await completeOrder(orderID, userID);
+          const socket = io("http://localhost:5000");
+          socket.emit("send-notify", {
+            userID: order?.seller?._id,
+            type: "Complete",
+            url: `/order-details/${orderID}`,
+          });
+        },
+        setLoading,
+        setReload,
+        "Order is completed"
+      );
+    }
   };
   const handleTrade = async () => {
     const orderID = order?._id;
@@ -112,10 +160,32 @@ export default function OrderDetailsPage() {
     handleLoading(
       async () => {
         await feedbackOrder(orderID, feedback, rating);
+        const socket = io("http://localhost:5000");
+        socket.emit("send-notify", {
+          userID: order?.seller?._id,
+          type: "Feedback",
+          url: `/order-details/${orderID}`,
+        });
       },
       setLoading,
       setReload,
       "Your feedback has been sent"
+    );
+  };
+  const handleSendItem = async () => {
+    const orderID = order?._id;
+    const userID = state?.data?._id;
+    handleLoading(
+      async () => {
+        await transferItem(
+          userID,
+          orderID,
+          order?.product?.category?.name !== "Game Items" ? code : ""
+        );
+      },
+      setLoading,
+      setReload,
+      "You have sent item successfully"
     );
   };
   return (
@@ -124,7 +194,11 @@ export default function OrderDetailsPage() {
         <Grid item md={6} style={{ paddingRight: 10 }}>
           <Grid container className="border" style={{ padding: 10 }}>
             <Grid item md={4}>
-              <img src={order?.product?.photos?.[0]} alt="" />
+              <img
+                style={{ width: 150, height: 150 }}
+                src={order?.product?.photos?.[0]}
+                alt=""
+              />
             </Grid>
             <Grid item md={8} className="text-start">
               <p>{order?.product?.title}</p>
@@ -148,7 +222,8 @@ export default function OrderDetailsPage() {
             </Grid>
           </Grid>
           <Grid container className="border mt-15" style={{ padding: 20 }}>
-            <Grid container>
+            <Grid container style={{ height: "100%" }}>
+              <h3>Product Details</h3>
               <div className="specificDetails text-start">
                 <Grid container className=" detailsRow">
                   <Grid item md={4}>
@@ -166,14 +241,32 @@ export default function OrderDetailsPage() {
                     {order?.product?.gameTitle}
                   </Grid>
                 </Grid>
-
                 <Grid container className="detailsRow">
                   <Grid item md={4}>
                     Delivery method
                   </Grid>
                   <Grid item md={8}>
-                    {order?.product?.deliveryIn} day(s)
+                    {order?.product?.deliveryMethod === "Bot"
+                      ? "Bot Trade"
+                      : order?.product?.deliveryMethod === "Auto"
+                      ? "Digital Code"
+                      : `Transfer`}{" "}
                   </Grid>
+                </Grid>
+                <Grid container className="detailsRow">
+                  <Grid item md={4}>
+                    Delivery in
+                  </Grid>
+                  {order?.product?.deliveryMethod === "Bot" ||
+                  order?.product?.deliveryMethod === "Auto" ? (
+                    <Grid item md={8}>
+                      Auto delivery
+                    </Grid>
+                  ) : (
+                    <Grid item md={8}>
+                      {order?.product?.deliveryIn} day(s)
+                    </Grid>
+                  )}
                 </Grid>
                 <Grid container className="detailsRow">
                   <Grid item md={4}>
@@ -216,7 +309,13 @@ export default function OrderDetailsPage() {
           <Grid container style={{ height: 150, padding: 20 }}>
             <Grid item md={4}>
               <img
-                src={order?.status === "Completed" ? check : pending}
+                src={
+                  order?.status === "Completed"
+                    ? check
+                    : order?.status === "Cancelled"
+                    ? cancelled
+                    : order?.status === "Pending" && pending
+                }
                 alt=""
                 style={{ width: "150px", height: "150px" }}
               />
@@ -225,29 +324,116 @@ export default function OrderDetailsPage() {
               Transaction is {order?.status}
             </Grid>
           </Grid>
-          <Grid container style={{ padding: 20, marginTop: 15 }}>
-            <Grid item md={12} className="text-start">
-              <h3>Start bot trade</h3>
+          {order?.product?.deliveryMethod === "Bot" ? (
+            <Grid container style={{ padding: 20, marginTop: 15 }}>
+              <Grid item md={12} className="text-start">
+                <h3>Start bot trade</h3>
+              </Grid>
+              <Grid
+                item
+                md={12}
+                style={{ display: "flex", justifyContent: "center" }}
+              >
+                {!order?.isBotSent ? (
+                  <Button
+                    style={{ height: 50 }}
+                    onClick={() => handleTrade()}
+                    className="defaultButton"
+                  >
+                    Click here to start bot trade
+                  </Button>
+                ) : (
+                  <div style={{ height: 50 }}>
+                    You has accepted the trade offer.
+                  </div>
+                )}
+              </Grid>
             </Grid>
-            <Grid
-              item
-              md={12}
-              style={{ display: "flex", justifyContent: "center" }}
-            >
-              {!order?.isBotSent ? (
-                <Button
-                  style={{ height: 50 }}
-                  onClick={() => handleTrade()}
-                  className="defaultButton"
-                >
-                  Click here to start bot trade
-                </Button>
-              ) : (
-                <div style={{ height: 50 }}>
-                  You has accepted the trade offer.
-                </div>
-              )}
+          ) : order?.product?.deliveryMethod === "Auto" ? (
+            <Grid container style={{ padding: 20, marginTop: 15 }}>
+              <Grid item md={12} className="text-start">
+                <h3>Key or Code</h3>
+              </Grid>
+              <Grid item md={12} className="border" style={{ padding: 10 }}>
+                {order?.product?.digitalCode}
+              </Grid>
             </Grid>
+          ) : (
+            order?.product?.deliveryMethod === "Transfer" &&
+            (!order.isTransfer ? (
+              <Grid container style={{ padding: 20, marginTop: 15 }}>
+                {order.product.category.name === "Game Items" &&
+                  order?.buyer?.profile?.steam?.steamTradeURL && (
+                    <Grid item md={12} className="text-start">
+                      <h3>Buyer Steam Trade Offer URL</h3>
+
+                      <Input value={order.buyer.profile.steam.steamTradeURL} />
+                      <div style={{ display: "flex", justifyContent: "end" }}>
+                        <Button
+                          className="defaultButton mt-15"
+                          onClick={() =>
+                            window.open(order.buyer.profile.steam.steamTradeURL)
+                          }
+                        >
+                          Open it
+                        </Button>
+                      </div>
+                    </Grid>
+                  )}
+                <Grid item md={12} className="text-start">
+                  <h3>Wait for seller to send item</h3>
+                </Grid>
+
+                <Grid item md={12}>
+                  <Countdown
+                    title="Seller must send the item"
+                    value={
+                      new Date(order?.createdAt).getTime() +
+                      24 * 60 * 60 * 1000 * order?.product?.deliveryIn
+                    }
+                  />
+
+                  {order?.seller?._id === state?.data?._id &&
+                  order?.product?.category.name === "Game Items" ? (
+                    <Button
+                      className="defaultButton"
+                      onClick={() => handleSendItem()}
+                    >
+                      I have sent the item
+                    </Button>
+                  ) : (
+                    order?.seller?._id === state?.data?._id &&
+                    order?.product?.category.name !== "Game Items" && (
+                      <Button
+                        className="defaultButton"
+                        onClick={() => showModal()}
+                        // onClick={() => handleSendItem()}
+                      >
+                        Send Code
+                      </Button>
+                    )
+                  )}
+                </Grid>
+              </Grid>
+            ) : (
+              <Grid container style={{ padding: 20, marginTop: 15 }}>
+                <Grid item md={12} className="text-start">
+                  <h3>Seller has sent the item</h3>
+                </Grid>
+                {order?.product?.category?.name !== "Game Items" ? (
+                  <Grid item md={12} className="border" style={{ padding: 10 }}>
+                    {order?.product?.digitalCode}
+                  </Grid>
+                ) : (
+                  <Grid item md={12} className="border" style={{ padding: 10 }}>
+                    Please check your trade offer
+                  </Grid>
+                )}
+              </Grid>
+            ))
+          )}
+          <Grid container style={{ padding: 20 }}>
+            <h3>Order Details</h3>
           </Grid>
           <Grid container style={{ padding: 20 }}>
             <Grid item md={12} className="border text-start">
@@ -265,7 +451,7 @@ export default function OrderDetailsPage() {
                 style={{ display: "flex", justifyContent: "space-between" }}
               >
                 <div>Date</div>
-                <div>{moment(order?.createdAt).format("MMM DD, YYYY")}</div>
+                <div>{moment(order?.createdAt).fromNow()}</div>
               </Grid>
               <Grid
                 container
@@ -312,42 +498,6 @@ export default function OrderDetailsPage() {
                     <p>{ratingText}</p>
                   </Grid>
                 )}
-                {/* <Radio.Group className="mt-15" onChange={handleRadioChange}>
-                  <div style={{ display: "flex", columnGap: 30 }}>
-                    <span>
-                      <div>
-                        <img
-                          style={{ width: 50, height: 50 }}
-                          src={bad}
-                          alt="bad"
-                        />
-                      </div>
-                      <Radio value="Bad">Bad</Radio>
-                    </span>
-                    <span>
-                      <div>
-                        <img
-                          style={{ width: 50, height: 50 }}
-                          src={neutral}
-                          alt="neutral"
-                        />
-                      </div>
-
-                      <Radio value="Neutral">Neutral</Radio>
-                    </span>
-                    <span>
-                      <div>
-                        <img
-                          style={{ width: 50, height: 50 }}
-                          src={good}
-                          alt="good"
-                        />
-                      </div>
-
-                      <Radio value="Good">Good</Radio>
-                    </span>
-                  </div>
-                </Radio.Group> */}
               </Grid>
               <Grid container className="mt-15">
                 <p>Give us feedback about the seller:</p>
@@ -364,7 +514,7 @@ export default function OrderDetailsPage() {
                 style={{ display: "flex", justifyContent: "end" }}
               >
                 <Button
-                  disabled={feedback === ""}
+                  disabled={rating === ""}
                   className="defaultButton mt-15"
                   onClick={() => handleFeedback()}
                 >
@@ -373,21 +523,52 @@ export default function OrderDetailsPage() {
               </Grid>
             </Grid>
           )}
-          {order?.status !== "Completed" && (
-            <Button
-              style={{
-                position: "absolute",
-                right: 20,
-                bottom: 20,
-              }}
-              className="defaultButton"
-              onClick={() => handleCompleteOrder()}
-            >
-              Complete
-            </Button>
-          )}
+          {}
+          {order?.status !== "Completed" &&
+            state?.data?._id === order?.buyer?._id &&
+            (presentTime >= deliveryTime ? (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  padding: 20,
+                }}
+              >
+                <Button
+                  className="defaultButton"
+                  onClick={() => handleCancelOrder()}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  className="defaultButton"
+                  onClick={() => handleCompleteOrder()}
+                >
+                  Complete
+                </Button>
+              </div>
+            ) : (
+              <div
+                style={{ display: "flex", justifyContent: "end", padding: 20 }}
+              >
+                <Button
+                  className="defaultButton"
+                  onClick={() => handleCompleteOrder()}
+                >
+                  Complete
+                </Button>
+              </div>
+            ))}
         </Grid>
       </Grid>
+      <Modal
+        title="Send the digital or key code"
+        open={isModalOpen}
+        onOk={() => handleSendItem()}
+        onCancel={handleCancel}
+      >
+        <Input value={code} onChange={(e) => setCode(e.target.value)} />
+      </Modal>
     </Grid>
   );
 }

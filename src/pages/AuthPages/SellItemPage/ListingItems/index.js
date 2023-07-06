@@ -74,7 +74,7 @@ export default function ListingItem() {
   const [id, setID] = useState("");
   const [completeTrade, setCompleteTrade] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [code, setCode] = useState(0);
+  const [code, setCode] = useState("");
   const [current, setCurrent] = useState(0);
   const showModalCode = () => {
     setDeliveryIn("");
@@ -200,6 +200,7 @@ export default function ListingItem() {
             deliveryMethod === "Bot" && completeTrade ? item : "", // item
             deliveryMethod === "Auto" ? code : "" // code
           );
+
           setCompleteTrade(false);
           setItem("");
           setDeliveryMethod("");
@@ -567,6 +568,11 @@ export default function ListingItem() {
           onCancel={handleCancel}
           width={800}
           height={500}
+          footer={[
+            <Button key="submit" type="primary" onClick={handleOk}>
+              Submit
+            </Button>,
+          ]}
         >
           <Grid container>
             <TextArea

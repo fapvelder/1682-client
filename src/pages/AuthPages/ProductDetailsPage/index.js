@@ -16,6 +16,9 @@ import { Store } from "../../../Store";
 import handleLoading from "../../../component/HandleLoading";
 import useLoading from "../../../component/HandleLoading/useLoading.js";
 import Loading from "../../../component/Loading/index.js";
+import { io } from "socket.io-client";
+import soldBanner from "../../../component/img/sold.png";
+
 export default function ProductDetails() {
   const params = useParams();
   const navigate = useNavigate();
@@ -26,6 +29,7 @@ export default function ProductDetails() {
   const [comments, setComments] = useState([]);
   const userID = state?.data?._id;
   const id = params?.productID;
+
   useEffect(() => {
     const getDetails = async () => {
       const result = await getProductDetails(id);
@@ -33,17 +37,23 @@ export default function ProductDetails() {
     };
     const getComments = async () => {
       const result = await getProductComments(id);
-      console.log(result.data);
       setComments(result.data);
     };
     getComments();
     getDetails();
-  }, [id]);
+  }, [id, reload]);
   const handleComment = async () => {
     if (userID && id && comment) {
       handleLoading(
         async () => {
           await createComment(userID, id, comment);
+          const socket = io("http://localhost:5000");
+          socket.emit("send-notify", {
+            userID: product?.listingBy?._id,
+            type: "Comment",
+            url: `/item/${id}`,
+          });
+          setComment("");
         },
         setLoading,
         setReload,
@@ -54,7 +64,6 @@ export default function ProductDetails() {
   const handleBuy = () => {
     navigate(`/checkout/${id}`);
   };
-
   return (
     <Grid container className="pb-50">
       <Helmet>
@@ -76,7 +85,31 @@ export default function ProductDetails() {
               <Divider />
             </Grid>
             <Grid container>
-              <img src={product?.photos?.[0]} alt="" />
+              <div style={{ position: "relative" }}>
+                <img
+                  style={{
+                    marginTop: 15,
+                    width: 698,
+                    height: 680,
+                    objectFit: "cover",
+                  }}
+                  src={product?.photos?.[0]}
+                  alt=""
+                />
+                {!product?.isAvailable && (
+                  <img
+                    src={soldBanner}
+                    style={{
+                      width: 200,
+                      height: 200,
+                      position: "absolute",
+                      top: 15,
+                      left: 0,
+                    }}
+                    alt=""
+                  />
+                )}
+              </div>
             </Grid>
           </div>
         </Grid>
@@ -91,11 +124,17 @@ export default function ProductDetails() {
             </Grid>
             <Grid container className="buyBtn">
               {product?.listingBy?._id !== state?.data?._id ? (
-                <Button className="defaultButton" onClick={() => handleBuy()}>
-                  Buy
-                </Button>
-              ) : (
+                product.isAvailable ? (
+                  <Button className="defaultButton" onClick={() => handleBuy()}>
+                    Buy
+                  </Button>
+                ) : (
+                  <Button disabled>Sold</Button>
+                )
+              ) : product.isAvailable ? (
                 <Button className="defaultButton">Edit</Button>
+              ) : (
+                <Button disabled>Sold</Button>
               )}
             </Grid>
             <Grid container>
@@ -121,7 +160,7 @@ export default function ProductDetails() {
               />
             </Grid>
             <Grid container>
-              <div className="specificDetails text-start">
+              <div className="specificDetails text-start border">
                 <Grid container className=" detailsRow">
                   <Grid item md={4}>
                     Category
@@ -198,7 +237,7 @@ export default function ProductDetails() {
 
                 <Grid container>
                   {comments?.map((comment) => (
-                    <div className="listComments">
+                    <div className="listComments border">
                       <Grid container>
                         <Grid item md={3}>
                           <div
@@ -223,15 +262,13 @@ export default function ProductDetails() {
                                 comment.commenter?.fullName}
                             </p>
                             <p>{comment.comment}</p>
-                            <p>
-                              {moment(comment.createdAt).format("MMM YYYY")}
-                            </p>
+                            <p>{moment(comment.createdAt).fromNow()}</p>
                           </div>
                         </Grid>
                       </Grid>
                     </div>
                   ))}
-                  <div className="comment">
+                  <div className="comment border">
                     <Input
                       value={comment}
                       onChange={(e) => setComment(e.target.value)}

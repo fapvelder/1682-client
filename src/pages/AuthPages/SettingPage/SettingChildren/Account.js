@@ -481,6 +481,7 @@ export default function Account({ user }) {
                   onChange={(e) => setSteamURL(e.target.value)}
                 />
                 <i
+                  style={{ marginLeft: 5 }}
                   onClick={() =>
                     window.open(
                       `${state?.data?.profile?.steam?.steamURL}/tradeoffers/privacy#trade_offer_access_url`
@@ -524,8 +525,8 @@ export default function Account({ user }) {
           <Grid item md={8}>
             <div className="steamConnect">
               <p className="text-start ml-15 mt-15">
-                Connect your Steam account with Gameflip. You can only connect
-                one Steam account with Gameflip, and you cannot connect another
+                Connect your Steam account with GameBay. You can only connect
+                one Steam account with GameBay, and you cannot connect another
                 Steam account at any time later.
               </p>
 

@@ -5,15 +5,32 @@
   --input-border-color: grey;
   --input-border-hover-color: grey;
   --input-bg-color: white;
-  --search-max-width: 250px;
-  --search-min-width: 150px;
+  /* --search-max-width: 450px; */
+  /* --search-min-width: 250px; */
   --border-radius: 5px;
   --transition-cubic-bezier: 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
+.option-100 {
+  width: 100%;
+}
+.ant-select-dropdown-menu-item-selected {
+  width: 100%;
+}
 
+.inputGroupAppendSearch {
+  display: flex;
+  margin-left: -29px;
+  /* margin-left: -25px; */
+  z-index: 1;
+}
+.inputGroupAppendSearch button {
+  height: 100%;
+  border: 1px solid var(--border-color);
+}
 .search-box {
-  max-width: var(--search-max-width);
-  min-width: var(--search-min-width);
+  width: 300px;
+  max-width: var(--search-max-width) !important;
+  min-width: var(--search-min-width) !important;
   height: 35px;
   border: 1px solid var(--input-border-color);
   border-radius: var(--border-radius);

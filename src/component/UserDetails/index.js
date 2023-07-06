@@ -1,21 +1,33 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./UserDetails.css";
 import { Grid } from "@material-ui/core";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import { Button } from "antd";
+import handleLoading from "../HandleLoading";
+import { getUserFeedback } from "../../api";
 
 export default function UserDetails({
   currentChatUser,
   contact,
   width = "80%",
 }) {
+  const [rating, setRating] = useState("");
+  useEffect(() => {
+    const getUserFeedbacks = async () => {
+      if (currentChatUser?.slug) {
+        const result = await getUserFeedback(currentChatUser?.slug, "");
+        setRating(result.data);
+      }
+    };
+    getUserFeedbacks();
+  }, [currentChatUser?.slug]);
   const navigate = useNavigate();
   return (
     <Grid
       container
-      className="userDetailsContainer"
-      style={{ width: width, height: "150px" }}
+      className="userDetailsContainer border"
+      style={{ width: width, height: "170px" }}
     >
       <Grid item md={3}>
         <img
@@ -54,7 +66,10 @@ export default function UserDetails({
           <p>
             Member since {moment(currentChatUser?.since).format("MMM YYYY")}
           </p>
-          <p>Seller Rating: Not available</p>
+          <p>
+            Seller Rating:{" "}
+            {rating.length > 0 ? `${rating.length} Ratings` : "Not available"}
+          </p>
           {currentChatUser?.profile?.communication &&
             currentChatUser?.profile?.communication.length > 0 && (
               <p>

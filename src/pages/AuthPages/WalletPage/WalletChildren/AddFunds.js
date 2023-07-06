@@ -9,7 +9,6 @@ import {
   approvePaypal,
   createOrderPaypal,
 } from "../../../../api";
-import Paypal from "../../../../component/Paypal";
 import { toast } from "react-toastify";
 import { Store } from "../../../../Store";
 import "./addFunds.css";
@@ -161,7 +160,7 @@ export default function AddFund() {
                   <tbody>
                     {transactions?.map((trans) => (
                       <tr key={trans._id}>
-                        <td>{moment(trans.date).format("L")}</td>
+                        <td>{moment(trans.date).fromNow()}</td>
                         <td>{trans.paymentMethod}</td>
                         <td>{trans.amount}</td>
                         <td>{trans.status}</td>
