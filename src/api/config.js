@@ -1,2 +1,2 @@
-export const URL = "http://localhost:5000";
+export const URL = "https://one682.onrender.com";
 export const token = localStorage.getItem("token");
