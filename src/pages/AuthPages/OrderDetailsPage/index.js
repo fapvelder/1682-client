@@ -23,6 +23,7 @@ import bad from "../../../component/img/bad.png";
 import check from "../../../component/img/check.png";
 import pending from "../../../component/img/pending.png";
 import cancelled from "../../../component/img/cancelled.png";
+import { Helmet } from "react-helmet-async";
 import { Statistic } from "antd";
 const { Countdown } = Statistic;
 export default function OrderDetailsPage() {
@@ -190,6 +191,9 @@ export default function OrderDetailsPage() {
   };
   return (
     <Grid container className="pb-50" style={{ padding: 10 }}>
+      <Helmet>
+        <title>Order Details</title>
+      </Helmet>
       <Grid container>
         <Grid item md={6} style={{ paddingRight: 10 }}>
           <Grid container className="border" style={{ padding: 10 }}>
@@ -203,7 +207,12 @@ export default function OrderDetailsPage() {
             <Grid item md={8} className="text-start">
               <p>{order?.product?.title}</p>
               <img
-                style={{ borderRadius: "50%", cursor: "pointer" }}
+                style={{
+                  width: 100,
+                  height: 100,
+                  borderRadius: "50%",
+                  cursor: "pointer",
+                }}
                 onClick={() => navigate(`/profile/${order?.seller?.slug}`)}
                 src={order?.seller?.avatar}
                 alt=""

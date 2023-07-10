@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
 
 import Footer from "./component/Footer";
+import ChatGPT from "./component/ChatGPT";
 
 function App() {
   const allRoutes = useRoutes(routes);
@@ -19,7 +20,7 @@ function App() {
   return (
     <div className={`App ${theme}`}>
       <Navigation />
-
+      <ChatGPT />
       <ToastContainer position="bottom-center" limit={5} />
       {allRoutes}
       <Footer />

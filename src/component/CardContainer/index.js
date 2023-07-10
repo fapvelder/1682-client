@@ -14,7 +14,7 @@ export default function CardContainer({
     <Grid
       item
       xs={12}
-      s={6}
+      sm={6}
       md={4}
       lg={3}
       onClick={() => handleSearch(category, subCategory)}

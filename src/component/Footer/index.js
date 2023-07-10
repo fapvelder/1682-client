@@ -33,12 +33,8 @@ export default function Footer() {
 
   return (
     <Grid container className="footer">
-      <Grid
-        container
-        className="mg-auto-80"
-        style={{ marginTop: 50, height: 200 }}
-      >
-        <Grid item md={4}>
+      <Grid container className="mg-auto-80" style={{ marginTop: 50 }}>
+        <Grid item xs={12} sm={12} md={4} lg={4}>
           {language === "en"
             ? en.footer.join_our_community
             : vi.footer.join_our_community}
@@ -50,7 +46,7 @@ export default function Footer() {
             <RedditOutlined className="icon" />
           </div>
         </Grid>
-        <Grid item md={2}>
+        <Grid item xs={12} sm={6} md={2} lg={2}>
           <span className="span">
             {language === "en" ? en.footer.sell.sell : vi.footer.sell.sell}
           </span>
@@ -82,7 +78,7 @@ export default function Footer() {
             </li>
           </ul>
         </Grid>
-        <Grid item md={2}>
+        <Grid item xs={12} sm={6} md={2} lg={2}>
           <span>
             {language === "en" ? en.footer.buy.buy : vi.footer.buy.buy}
           </span>
@@ -118,7 +114,7 @@ export default function Footer() {
             </li>
           </ul>
         </Grid>
-        <Grid item md={2}>
+        <Grid item xs={12} sm={6} md={2} lg={2}>
           <span>
             {" "}
             {language === "en" ? en.footer.faq.faq : vi.footer.faq.faq}
@@ -144,7 +140,7 @@ export default function Footer() {
             </li>
           </ul>
         </Grid>
-        <Grid item md={2}>
+        <Grid item xs={12} sm={6} md={2} lg={2}>
           <span>
             {" "}
             {language === "en"
@@ -177,16 +173,18 @@ export default function Footer() {
           />
         </Grid>
       </Grid>
-      <Divider />
-      <Grid container className="copyright">
-        <Grid item md={6}>
+      <Grid container>
+        <Divider />
+      </Grid>
+      <Grid container className="copyright" style={{ padding: "20px" }}>
+        <Grid item xs={6} sm={6} md={6} lg={6}>
           {language === "en" ? en.footer.about_us : vi.footer.about_us} |{" "}
           {language === "en" ? en.footer.term_of_use : vi.footer.term_of_use} |{" "}
           {language === "en"
             ? en.footer.privacy_policy
             : vi.footer.privacy_policy}
         </Grid>
-        <Grid item md={6}>
+        <Grid item xs={6} sm={6} md={6} lg={6}>
           <img
             className="logo"
             src={fullPaypalTrans}
@@ -198,7 +196,7 @@ export default function Footer() {
             alt="logo"
           />
         </Grid>
-        <Grid item md={12}>
+        <Grid item xs={12} sm={12} md={12} lg={12} style={{ marginTop: 20 }}>
           {language === "en" ? en.footer.copyright : vi.footer.copyright}
         </Grid>
       </Grid>

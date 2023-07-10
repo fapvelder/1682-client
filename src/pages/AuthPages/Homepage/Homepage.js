@@ -40,25 +40,26 @@ export default function Homepage() {
     }
   };
   return (
-    <div className="pb-50">
+    <Grid container className="pb-50">
       <Helmet>
         <title> GameBay | Buy & Sell Games, Gift Cards & More </title>
       </Helmet>
-      <Carousel autoplay>
-        {banners.map((banner, index) => (
-          <div className="carousel" key={index}>
-            <img
-              src={banner}
-              alt={`Banner ${index + 1}`}
-              className="carousel-image"
-            />
-            <div className="carousel-caption">
-              <h3>{captions[index]}</h3>
+      <div style={{ width: "100vw", height: "100%" }}>
+        <Carousel autoplay>
+          {banners.map((banner, index) => (
+            <div className="carousel" key={index}>
+              <img
+                src={banner}
+                alt={`Banner ${index + 1}`}
+                className="carousel-image"
+              />
+              <div className="carousel-caption">
+                <h3>{captions[index]}</h3>
+              </div>
             </div>
-          </div>
-        ))}
-      </Carousel>
-
+          ))}
+        </Carousel>
+      </div>
       <h2 className="content">
         {language === "en" ? en.popular_categories : vi.popular_categories}
       </h2>
@@ -150,6 +151,6 @@ export default function Homepage() {
         price="10.00"
         img={banner1}
       /> */}
-    </div>
+    </Grid>
   );
 }
