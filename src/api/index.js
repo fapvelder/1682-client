@@ -4,7 +4,7 @@ import { URL, token } from "./config";
 export const serverURL = "https://one682.onrender.com";
 
 const axiosInstance = axios.create({
-  baseURL: "https://one682.onrender.com",
+  baseURL: URL,
   withCredentials: true,
 });
 axiosInstance.interceptors.request.use((config) => {

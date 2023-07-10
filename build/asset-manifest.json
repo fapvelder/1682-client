@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.6171f125.css",
-    "main.js": "/static/js/main.099cefd6.js",
+    "main.css": "/static/css/main.4889eded.css",
+    "main.js": "/static/js/main.82abbdab.js",
     "static/js/787.c4e7f8f9.chunk.js": "/static/js/787.c4e7f8f9.chunk.js",
     "static/media/paypaltrans.png": "/static/media/paypaltrans.4fb8d21a585f5a527008.png",
     "static/media/Roboto-Regular.ttf": "/static/media/Roboto-Regular.160d7a6ac26376e5e977.ttf",
@@ -16,6 +16,7 @@
     "static/media/vnpayTrans.png": "/static/media/vnpayTrans.689bfcd38825471f2537.png",
     "static/media/moon.png": "/static/media/moon.8129ab9835404e1ce67b.png",
     "static/media/ingame.png": "/static/media/ingame.1918220fc2663afb9053.png",
+    "static/media/logo-icon.png": "/static/media/logo-icon.7bf1a1d317b43f61cfee.png",
     "static/media/sun.png": "/static/media/sun.6d48da504f4816188c8d.png",
     "static/media/darkLogoName.png": "/static/media/darkLogoName.ac1adac5eefed349a441.png",
     "static/media/logoName.png": "/static/media/logoName.3a3bcb7fc2807d16ffd6.png",
@@ -23,12 +24,12 @@
     "static/media/bell.png": "/static/media/bell.5846d4b1994ad4088108.png",
     "static/media/chat.png": "/static/media/chat.5dd0968617bc2ebb4f70.png",
     "index.html": "/index.html",
-    "main.6171f125.css.map": "/static/css/main.6171f125.css.map",
-    "main.099cefd6.js.map": "/static/js/main.099cefd6.js.map",
+    "main.4889eded.css.map": "/static/css/main.4889eded.css.map",
+    "main.82abbdab.js.map": "/static/js/main.82abbdab.js.map",
     "787.c4e7f8f9.chunk.js.map": "/static/js/787.c4e7f8f9.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.6171f125.css",
-    "static/js/main.099cefd6.js"
+    "static/css/main.4889eded.css",
+    "static/js/main.82abbdab.js"
   ]
 }
