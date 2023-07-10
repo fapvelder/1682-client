@@ -148,7 +148,7 @@ export default function Navigation() {
   return (
     <div className={`navigation`} style={{ marginBottom: 65 }}>
       <Grid container className="navContainer">
-        <Grid item sm={4} md={2} lg={2}>
+        <Grid item sm={4} md={2} lg={1}>
           <Link to="/">
             <img
               style={{ width: 110, height: 40, marginTop: -5, marginLeft: -5 }}
@@ -160,7 +160,7 @@ export default function Navigation() {
         <Grid item sm={4} md={3} lg={3}>
           <Search placeholder={language === "en" ? en.search : vi.search} />
         </Grid>
-        <Grid item sm={4} md={6} lg={6}>
+        <Grid item sm={4} md={6} lg={7}>
           <div
             style={{
               display: "flex",
@@ -171,9 +171,9 @@ export default function Navigation() {
             <ul>
               {categories?.map((category) => (
                 <li
-                  style={{
-                    display: "none",
-                  }}
+                  // style={{
+                  //   display: "none",
+                  // }}
                   className="navbarList"
                   key={category._id}
                 >
