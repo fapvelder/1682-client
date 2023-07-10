@@ -7,6 +7,7 @@ import {
   feedbackOrder,
   getOrderDetails,
   getOrderItem,
+  serverURL,
   transferItem,
   withdrawItem,
 } from "../../../api";
@@ -98,7 +99,7 @@ export default function OrderDetailsPage() {
       handleLoading(
         async () => {
           await cancelOrder(orderID, userID);
-          const socket = io("http://localhost:5000");
+          const socket = io(serverURL);
           socket.emit("send-notify", {
             userID: order?.seller?._id,
             type: "Cancel",
@@ -118,7 +119,7 @@ export default function OrderDetailsPage() {
       handleLoading(
         async () => {
           await completeOrder(orderID, userID);
-          const socket = io("http://localhost:5000");
+          const socket = io(serverURL);
           socket.emit("send-notify", {
             userID: order?.seller?._id,
             type: "Complete",
@@ -161,7 +162,7 @@ export default function OrderDetailsPage() {
     handleLoading(
       async () => {
         await feedbackOrder(orderID, feedback, rating);
-        const socket = io("http://localhost:5000");
+        const socket = io(serverURL);
         socket.emit("send-notify", {
           userID: order?.seller?._id,
           type: "Feedback",

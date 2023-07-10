@@ -1,19 +1,10 @@
 import axios from "axios";
 import { URL, token } from "./config";
 
-let serverURL = "";
-
-if (
-  window.location.hostname === "localhost" ||
-  window.location.hostname === "127.0.0.1"
-) {
-  serverURL = "http://localhost:5000";
-} else {
-  serverURL = "https://one682.onrender.com";
-}
+export const serverURL = "https://one682.onrender.com";
 
 const axiosInstance = axios.create({
-  baseURL: serverURL,
+  baseURL: "https://one682.onrender.com",
   withCredentials: true,
 });
 axiosInstance.interceptors.request.use((config) => {

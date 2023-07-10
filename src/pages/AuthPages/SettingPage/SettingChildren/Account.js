@@ -11,6 +11,7 @@ import {
   deleteSteamID,
   getSteam,
   getUserByID,
+  serverURL,
   updateSteamURL,
   uploadAvatar,
 } from "../../../../api";
@@ -530,7 +531,7 @@ export default function Account({ user }) {
                 Steam account at any time later.
               </p>
 
-              <Link to={`http://localhost:5000/steam/auth/steam/return/`}>
+              <Link to={`${serverURL}/steam/auth/steam/return/`}>
                 <img
                   src={steamLogin}
                   alt="Steam Logo"

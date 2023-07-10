@@ -1,6 +1,6 @@
 import { Grid } from "@material-ui/core";
 import React, { useContext, useEffect, useState } from "react";
-import { getProductDetails, placeOrder } from "../../../api";
+import { getProductDetails, placeOrder, serverURL } from "../../../api";
 import { useNavigate, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import UserDetails from "../../../component/UserDetails";
@@ -38,7 +38,7 @@ export default function CheckoutPage() {
       if (window.confirm("Are you sure to place the order?")) {
         handleLoading(
           async () => {
-            const socket = io("http://localhost:5000");
+            const socket = io(serverURL);
             const result = await placeOrder(userID, product?._id);
             navigate(`/order-details/${result.data._id}`);
             socket.emit("send-notify", {
