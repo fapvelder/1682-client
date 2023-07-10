@@ -45,7 +45,7 @@ export default function Search({ placeholder }) {
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         placeholder={placeholder}
-        style={{ width: 350 }}
+        style={{ width: "90%" }}
         onKeyDown={handleKeyDown}
         addonBefore={
           <Select

@@ -31,48 +31,64 @@ export default function ResetPassword() {
     }
   };
   return (
-    <Grid container>
+    <Grid container className="mg-auto-80">
       {loading && <Loading />}
       <Helmet>
         <title>Reset Password</title>
       </Helmet>
-      <Grid item xs={false} sm={3} md={5} />
-      <Grid item xs={12} sm={6} md={3}>
-        <div className="forgot-password">
-          <center>
-            <img
-              style={{
-                width: 128,
-                height: 128,
-                marginBottom: 15,
-                marginTop: 50,
-              }}
-              src="https://cdn-icons-png.flaticon.com/512/625/625130.png"
-              alt="unlock"
-            />
-            <p style={{ marginBottom: 15 }}>Input to change password</p>
+      <Grid
+        container
+        style={{
+          marginTop: 20,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Grid
+          item
+          xs={12}
+          sm={8}
+          md={4}
+          className="border"
+          style={{ padding: 20 }}
+        >
+          <div className="forgot-password">
+            <center>
+              <img
+                style={{
+                  width: 128,
+                  height: 128,
+                  marginBottom: 15,
+                  marginTop: 50,
+                }}
+                src="https://cdn-icons-png.flaticon.com/512/625/625130.png"
+                alt="unlock"
+              />
+              <p style={{ marginBottom: 15 }}>Input to change password</p>
 
-            <Input.Password
-              placeholder={"Input your new password"}
-              style={{ width: "80%", marginBottom: 15 }}
-              onChange={(e) => setNewPassword(e.target.value)}
-              value={newPassword}
-            />
-            <Input.Password
-              style={{ width: "80%", marginBottom: 15 }}
-              placeholder={"Input confirm password"}
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
-            <Button
-              style={{ width: "80%", marginBottom: 15 }}
-              onClick={(e) => submitHandler(e)}
-              type="primary"
-            >
-              Change password
-            </Button>
-          </center>
-        </div>
+              <Input.Password
+                placeholder={"Input your new password"}
+                style={{ width: "80%", marginBottom: 15 }}
+                onChange={(e) => setNewPassword(e.target.value)}
+                value={newPassword}
+              />
+              <Input.Password
+                style={{ width: "80%", marginBottom: 15 }}
+                placeholder={"Input confirm password"}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+              <Button
+                style={{ width: "80%", marginBottom: 15 }}
+                onClick={(e) => submitHandler(e)}
+                type="primary"
+              >
+                Change password
+              </Button>
+            </center>
+          </div>
+        </Grid>
       </Grid>
     </Grid>
   );

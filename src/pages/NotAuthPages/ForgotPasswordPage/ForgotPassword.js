@@ -27,54 +27,70 @@ function ForgotPassword() {
     );
   };
   return (
-    <Grid container>
+    <Grid container className="mg-auto-80">
       {loading && <Loading />}
       <Helmet>
         <title>Forgot Password</title>
       </Helmet>
-      <Grid item xs={false} sm={3} md={5} />
-      <Grid item xs={12} sm={6} md={3}>
-        <div className="forgot-password-not-signedin">
-          <center className="item">
-            <img
-              style={{
-                width: 128,
-                height: 128,
-                marginBottom: 15,
-                marginTop: 50,
-              }}
-              src="https://cdn-icons-png.flaticon.com/512/625/625086.png"
-              alt="lock"
-            />
-            <p style={{ marginBottom: 15 }}>Trouble logging in?</p>
-            <span style={{ fontSize: 16, marginBottom: 15 }}>
-              Enter your email and we'll send you a link to get back into your
-              account.
-            </span>
-            <Input
-              type="email"
-              id="email"
-              placeholder="Input your email"
-              style={{ width: "80%", marginBottom: 15 }}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <Button
-              type="primary"
-              style={{ width: "80%", marginBottom: 15 }}
-              onClick={(e) => handleSubmit(e)}
-            >
-              Reset Password
-            </Button>
-            <Divider>OR</Divider>
-            <Button
-              style={{ width: "80%", marginBottom: 15 }}
-              onClick={() => navigate("/login")}
-            >
-              Back to login
-            </Button>
-          </center>
-        </div>
+      <Grid
+        container
+        style={{
+          marginTop: 20,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Grid
+          item
+          xs={12}
+          sm={8}
+          md={4}
+          className="border"
+          style={{ padding: 20 }}
+        >
+          <div className="forgot-password-not-signedin">
+            <center className="item">
+              <img
+                style={{
+                  width: 128,
+                  height: 128,
+                  marginBottom: 15,
+                  marginTop: 50,
+                }}
+                src="https://cdn-icons-png.flaticon.com/512/625/625086.png"
+                alt="lock"
+              />
+              <p style={{ marginBottom: 15 }}>Trouble logging in?</p>
+              <span style={{ fontSize: 16, marginBottom: 15 }}>
+                Enter your email and we'll send you a link to get back into your
+                account.
+              </span>
+              <Input
+                type="email"
+                id="email"
+                placeholder="Input your email"
+                style={{ width: "80%", marginBottom: 15 }}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <Button
+                type="primary"
+                style={{ width: "80%", marginBottom: 15 }}
+                onClick={(e) => handleSubmit(e)}
+              >
+                Reset Password
+              </Button>
+              <Divider>OR</Divider>
+              <Button
+                style={{ width: "80%", marginBottom: 15 }}
+                onClick={() => navigate("/login")}
+              >
+                Back to login
+              </Button>
+            </center>
+          </div>
+        </Grid>
       </Grid>
     </Grid>
   );

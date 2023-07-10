@@ -148,7 +148,7 @@ export default function Navigation() {
   return (
     <div className={`navigation`} style={{ marginBottom: 65 }}>
       <Grid container className="navContainer">
-        <Grid item md={1}>
+        <Grid item sm={4} md={2} lg={2}>
           <Link to="/">
             <img
               style={{ width: 110, height: 40, marginTop: -5, marginLeft: -5 }}
@@ -157,10 +157,10 @@ export default function Navigation() {
             />
           </Link>
         </Grid>
-        <Grid item md={3}>
+        <Grid item sm={4} md={3} lg={3}>
           <Search placeholder={language === "en" ? en.search : vi.search} />
         </Grid>
-        <Grid item md={7}>
+        <Grid item sm={4} md={6} lg={6}>
           <div
             style={{
               display: "flex",
@@ -170,7 +170,13 @@ export default function Navigation() {
           >
             <ul>
               {categories?.map((category) => (
-                <li className="navbarList" key={category._id}>
+                <li
+                  style={{
+                    display: "none",
+                  }}
+                  className="navbarList"
+                  key={category._id}
+                >
                   <section className="listCategory">{category.name}</section>
                   <ul className="dropdown">
                     <section
@@ -237,7 +243,7 @@ export default function Navigation() {
             style={{ marginRight: 5, marginTop: 5 }}
             dot={notificationCount > 0 || messageCount > 0}
           >
-            <Grid item md={1} className="profileContainer">
+            <Grid item md={1} lg={1} className="profileContainer">
               <div
                 style={{
                   display: "flex",
