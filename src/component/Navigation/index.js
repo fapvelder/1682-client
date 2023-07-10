@@ -63,7 +63,7 @@ export default function Navigation() {
     };
   }, [user]);
   useEffect(() => {
-    const socket = io("http://localhost:5000");
+    const socket = io(serverURL);
     socket.on("receive-notify", (data) => {
       if (data.userID === user?._id) {
         setNotificationCount((notificationCount) => notificationCount + 1);
