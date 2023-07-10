@@ -5,7 +5,7 @@ import jwtDecode from "jwt-decode";
 import { toast } from "react-toastify";
 import { getError } from "../../utils";
 import { io } from "socket.io-client";
-import { getMessage, sendMessages } from "../../api";
+import { getMessage, sendMessages, serverURL } from "../../api";
 import Picker from "@emoji-mart/react";
 import dataEmoji from "@emoji-mart/data";
 import { SendOutlined } from "@ant-design/icons";
@@ -58,7 +58,7 @@ export default function ChatContainer({ currentChatUser, onReload }) {
   }, [message]);
   useEffect(() => {
     if (currentChatUser !== "") {
-      socket.current = io("http://localhost:5000");
+      socket.current = io(serverURL);
       socket.current.emit("addUser", id);
     }
   }, [currentChatUser, id]);

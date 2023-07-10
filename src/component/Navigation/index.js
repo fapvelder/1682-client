@@ -18,7 +18,13 @@ import { Grid } from "@material-ui/core";
 import en from "../languages/en.json";
 import vi from "../languages/vi.json";
 import Flag from "../languages/flag.js";
-import { fetchCategories, getUserByID, logout, refresh } from "../../api";
+import {
+  fetchCategories,
+  getUserByID,
+  logout,
+  refresh,
+  serverURL,
+} from "../../api";
 import jwtDecode from "jwt-decode";
 import logoName from "../img/logoName.png";
 import darkLogoName from "../img/darkLogoName.png";
@@ -46,7 +52,7 @@ export default function Navigation() {
     }
   };
   useEffect(() => {
-    const socket = io("http://localhost:5000");
+    const socket = io(serverURL);
     socket.on("msg-count", (data) => {
       if (data.to === user?._id) {
         setMessageCount((messageCount) => messageCount + 1);
@@ -76,7 +82,7 @@ export default function Navigation() {
   }, []);
   useEffect(() => {
     if (user) {
-      const socket = io("http://localhost:5000");
+      const socket = io(serverURL);
       socket.emit("authenticate", user?._id);
       return () => {
         socket.disconnect();

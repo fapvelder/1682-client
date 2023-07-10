@@ -6,6 +6,7 @@ import {
   deleteNotification,
   getNotifications,
   sendNotification,
+  serverURL,
 } from "../../../api";
 import { Grid } from "@material-ui/core";
 import moment from "moment";
@@ -24,7 +25,7 @@ export default function NotificationsPage() {
   const userID = state?.data?._id;
 
   useEffect(() => {
-    const socket = io("http://localhost:5000");
+    const socket = io(serverURL);
     const getUserNotifications = async () => {
       const result = await getNotifications(userID);
       setNotifications(result.data);
@@ -37,7 +38,7 @@ export default function NotificationsPage() {
   }, [userID, reload]);
 
   useEffect(() => {
-    const socket = io("http://localhost:5000");
+    const socket = io(serverURL);
     socket.on("receive-notify", (newNotification) => {
       if (newNotification?.userID === userID) {
         setNotifications((prevNotifications) => [
