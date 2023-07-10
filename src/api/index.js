@@ -11,9 +11,9 @@ if (
 } else {
   serverURL = "https://one682.onrender.com";
 }
-
+console.log(serverURL);
 const axiosInstance = axios.create({
-  baseURL: serverURL,
+  baseURL: "https://one682.onrender.com",
   withCredentials: true,
 });
 axiosInstance.interceptors.request.use((config) => {
