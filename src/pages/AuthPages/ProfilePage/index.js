@@ -13,6 +13,7 @@ import { Store } from "../../../Store";
 import useLoading from "../../../component/HandleLoading/useLoading";
 import handleLoading from "../../../component/HandleLoading";
 import Loading from "../../../component/Loading";
+import Responsive from "../../../component/ResponsiveCode/Responsive";
 
 export default function Profile() {
   const { loading, setLoading, reload, setReload } = useLoading();
@@ -60,6 +61,7 @@ export default function Profile() {
       ),
     },
   ];
+  const { mobile } = Responsive();
 
   return (
     <Grid container className="pb-50">
@@ -72,12 +74,16 @@ export default function Profile() {
         </div>
       </Grid>
       <Grid container>
-        <Grid item md={4}>
+        <Grid item xs={6} sm={6} md={4}>
           <div className="avatar">
-            <img src={user?.avatar} alt={user?.fullName} />
+            <img
+              style={{ width: mobile ? 100 : 250, height: mobile ? 100 : 250 }}
+              src={user?.avatar}
+              alt={user?.fullName}
+            />
           </div>
         </Grid>
-        <Grid item md={8}>
+        <Grid item xs={6} sm={6} md={8}>
           <div className="details">
             <div className="profileDetails">
               {user?.displayName || user?.fullName}

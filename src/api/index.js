@@ -1,7 +1,13 @@
 import axios from "axios";
 import { URL, token } from "./config";
 
-export const serverURL = "https://one682.onrender.com";
+let serverURL = "";
+if (window.location.href.startsWith("http://localhost:3000/")) {
+  serverURL = "http://localhost:5000";
+} else {
+  serverURL = "https://one682.onrender.com";
+}
+export { serverURL };
 
 const axiosInstance = axios.create({
   baseURL: URL,

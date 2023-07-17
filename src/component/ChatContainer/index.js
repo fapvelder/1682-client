@@ -9,6 +9,7 @@ import { getMessage, sendMessages, serverURL } from "../../api";
 import Picker from "@emoji-mart/react";
 import dataEmoji from "@emoji-mart/data";
 import { SendOutlined } from "@ant-design/icons";
+import { Grid } from "@material-ui/core";
 export default function ChatContainer({ currentChatUser, onReload }) {
   const { state } = useContext(Store);
   const [message, setMessage] = useState([]);
@@ -139,23 +140,28 @@ export default function ChatContainer({ currentChatUser, onReload }) {
           )}
         </div>
 
-        <div className="msgSenderContainer">
-          <input
-            type="text"
-            name=""
-            id=""
-            placeholder="Write your message to your friend"
-            className="msgInput"
-            value={inputMessage}
-            onChange={(e) => setInputMessage(e.target.value)}
-            onKeyDown={handleKeyDown}
-          />
-          <div
+        <Grid container className="msgSenderContainer">
+          <Grid item xs={10} md={10}>
+            <input
+              type="text"
+              name=""
+              id=""
+              placeholder="Write your message to your friend"
+              className="msgInput"
+              value={inputMessage}
+              onChange={(e) => setInputMessage(e.target.value)}
+              onKeyDown={handleKeyDown}
+            />
+          </Grid>
+          <Grid
+            item
+            xs={1}
+            md={1}
             className="emoji"
             onClick={() => setIsPickerVisible(!isPickerVisible)}
           >
             🙂
-          </div>
+          </Grid>
           <div
             className="emojiPickerContainer"
             style={{ display: isPickerVisible ? "block" : "none" }}
@@ -167,10 +173,10 @@ export default function ChatContainer({ currentChatUser, onReload }) {
               }}
             />
           </div>
-          <div className="sendButton" onClick={sendMessage}>
+          <Grid item xs={1} md={1} className="sendButton" onClick={sendMessage}>
             <SendOutlined />
-          </div>
-        </div>
+          </Grid>
+        </Grid>
       </div>
     </div>
   );

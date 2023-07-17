@@ -93,64 +93,6 @@ export default function Homepage() {
           </Grid>
         </Grid>
       ))}
-      {/* <h2 className="content">
-        {language === "en" ? en.gaming_gift_cards : vi.gaming_gift_cards}
-      </h2> */}
-      {/* <Grid container className="mg-auto-80">
-        <CardContainer
-          title="App Store"
-          width="200px"
-          height="200px"
-          img="https://gameflip.com/img/banners/gc_itunes.jpg"
-        />
-        <CardContainer
-          title="Google Play"
-          width="200px"
-          height="200px"
-          img="https://gameflip.com/img/banners/gc_gplay.jpg"
-        />
-        <CardContainer
-          title="Play Station"
-          width="200px"
-          height="200px"
-          img="https://gameflip.com/img/banners/gc_playstation.jpg"
-        />
-        <CardContainer
-          title="X Box"
-          width="200px"
-          height="200px"
-          img="https://gameflip.com/img/banners/gc_xbox.jpg"
-        />
-        <CardContainer
-          title="Steam"
-          width="200px"
-          height="200px"
-          img="https://gameflip.com/img/banners/gc_steam.jpg"
-        />
-        <CardContainer
-          title="Nintendo"
-          width="200px"
-          height="200px"
-          img="https://gameflip.com/img/banners/gc_nintendo.jpg"
-        />
-        <CardContainer
-          title="Roblox"
-          width="200px"
-          height="200px"
-          img="https://gameflip.com/img/banners/gc_roblox.png"
-        />
-        <CardContainer
-          title="Riot Points"
-          width="200px"
-          height="200px"
-          img="https://gameflip.com/img/banners/gc_riot.png"
-        />
-      </Grid> */}
-      {/* <ProductList
-        title="Sticker banner asdasfhhh1 203000"
-        price="10.00"
-        img={banner1}
-      /> */}
     </Grid>
   );
 }

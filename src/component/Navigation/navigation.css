@@ -292,3 +292,116 @@ li.navbarList:hover:after {
   width: 100%;
   background: var(--text-color-hover);
 }
+#checkbox {
+  display: none;
+}
+.menu {
+  height: 100%;
+}
+.menuToggle {
+  position: fixed;
+  width: 0px;
+  color: black;
+  right: 0;
+  background-color: white;
+  top: 65px;
+  z-index: 9999;
+  transition: width 0.5s ease;
+}
+
+.layer-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1; /* Update the z-index to a lower value */
+}
+
+.content-nav {
+  position: relative;
+  z-index: 9999;
+}
+.toggleOpen {
+  animation: fadeInRight 0.5s ease forwards;
+}
+.toggleClose {
+  animation: fadeOutRight 1s ease forwards;
+}
+@keyframes fadeInRight {
+  from {
+    width: 0px;
+  }
+  to {
+    width: 90%;
+  }
+}
+
+@keyframes fadeOutRight {
+  from {
+    width: 90%;
+  }
+  to {
+    width: 0px;
+  }
+}
+
+.toggle {
+  position: relative;
+  width: 40px;
+  cursor: pointer;
+  margin: auto;
+  display: block;
+  height: calc(4px * 3 + 11px * 2);
+}
+
+.bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 4px;
+  border-radius: calc(4px / 2);
+  background: orange;
+  color: inherit;
+  opacity: 1;
+  transition: none 0.35s cubic-bezier(0.5, -0.35, 0.35, 1.5) 0s;
+}
+
+/***** Tornado Animation *****/
+
+.bar--top {
+  bottom: calc(50% + 11px + 4px / 2);
+  transition-property: bottom, transform;
+  transition-delay: calc(0s + 0.35s) * 0.6;
+}
+
+.bar--middle {
+  top: calc(50% - 4px / 2);
+  transition-property: opacity, transform;
+  transition-delay: calc(0s + 0.35s * 0.3);
+}
+
+.bar--bottom {
+  top: calc(50% + 11px + 4px / 2);
+  transition-property: top, transform;
+  transition-delay: 0s;
+}
+
+#checkbox:checked + .toggle .bar--top {
+  transform: rotate(-135deg);
+  transition-delay: 0s;
+  bottom: calc(50% - 4px / 2);
+}
+
+#checkbox:checked + .toggle .bar--middle {
+  opacity: 0;
+  transform: rotate(-135deg);
+  transition-delay: calc(0s + 0.35s * 0.3);
+}
+
+#checkbox:checked + .toggle .bar--bottom {
+  top: calc(50% - 4px / 2);
+  transform: rotate(-225deg);
+  transition-delay: calc(0s + 0.35s * 0.6);
+}

@@ -63,7 +63,7 @@ export default function CheckoutPage() {
       </Helmet>
       {loading && <Loading />}
 
-      <Grid item md={6}>
+      <Grid item xs={12} sm={6} md={6}>
         <h3>Checkout</h3>
         <Grid container className="border">
           <Grid
@@ -86,6 +86,8 @@ export default function CheckoutPage() {
           </Grid>
           <Grid
             item
+            xs={8}
+            sm={8}
             md={8}
             style={{
               display: "flex",
@@ -110,59 +112,59 @@ export default function CheckoutPage() {
         <Grid container>
           <div className="specificDetails text-start border">
             <Grid container className=" detailsRow">
-              <Grid item md={4}>
+              <Grid item xs={6} sm={6} md={4}>
                 Category
               </Grid>
-              <Grid item md={8}>
+              <Grid item xs={6} sm={6} md={8}>
                 {product?.category?.name}
               </Grid>
             </Grid>
             <Grid container className="detailsRow">
-              <Grid item md={4}>
+              <Grid item xs={6} sm={6} md={4}>
                 Title
               </Grid>
-              <Grid item md={8}>
+              <Grid item xs={6} sm={6} md={8}>
                 {product?.gameTitle}
               </Grid>
             </Grid>
 
             <Grid container className="detailsRow">
-              <Grid item md={4}>
+              <Grid item xs={6} sm={6} md={4}>
                 Delivery method
               </Grid>
-              <Grid item md={8}>
+              <Grid item xs={6} sm={6} md={8}>
                 {product?.deliveryIn} day(s)
               </Grid>
             </Grid>
             <Grid container className="detailsRow">
-              <Grid item md={4}>
+              <Grid item xs={6} sm={6} md={4}>
                 Region restriction
               </Grid>
-              <Grid item md={8}>
+              <Grid item xs={6} sm={6} md={8}>
                 Europe
               </Grid>
             </Grid>
             <Grid container className="detailsRow">
-              <Grid item md={4}>
+              <Grid item xs={6} sm={6} md={4}>
                 Returns
               </Grid>
-              <Grid item md={8}>
+              <Grid item xs={6} sm={6} md={8}>
                 No return. View our return policy
               </Grid>
             </Grid>
             <Grid container className="detailsRow">
-              <Grid item md={4}>
+              <Grid item xs={6} sm={6} md={4}>
                 Accept currency
               </Grid>
-              <Grid item md={8}>
+              <Grid item xs={6} sm={6} md={8}>
                 USD
               </Grid>
             </Grid>
             <Grid container className="detailsRow">
-              <Grid item md={4}>
+              <Grid item xs={6} sm={6} md={4}>
                 Protection
               </Grid>
-              <Grid item md={8}>
+              <Grid item xs={6} sm={6} md={8}>
                 You're protected under the GameBay Guarantee. Get the item as
                 described or your money back.
               </Grid>
@@ -170,7 +172,7 @@ export default function CheckoutPage() {
           </div>
         </Grid>
       </Grid>
-      <Grid item md={6} style={{ paddingLeft: 10 }}>
+      <Grid item xs={12} sm={6} md={6} style={{ paddingLeft: 10 }}>
         <h3>Order</h3>
         <Grid container className="border" style={{ padding: 10 }}>
           <h6>Wallet</h6>

@@ -81,26 +81,32 @@ export default function NotificationsPage() {
               style={{ padding: "20px 20px" }}
               onClick={() => navigate(notification?.url)}
             >
-              <Grid item md={1}>
+              <Grid item xs={2} sm={1} md={1}>
                 <img
                   src={chat}
                   style={{ width: 25, height: 25 }}
                   alt="comment"
                 />
               </Grid>
-              <Grid item md={10}>
+              <Grid item xs={9} sm={10} md={10}>
                 {notification?.message}
               </Grid>
-              <Grid item md={1} onClick={() => handleDelete(notification?._id)}>
+              <Grid
+                item
+                xs={1}
+                sm={1}
+                md={1}
+                onClick={() => handleDelete(notification?._id)}
+              >
                 <img
                   src={deleteImg}
                   style={{ width: 35, height: 25 }}
                   alt="comment"
                 />
               </Grid>
-              <Grid item md={1} />
+              <Grid item xs={1} sm={1} md={1} />
 
-              <Grid item md={11}>
+              <Grid item xs={11} sm={11} md={11}>
                 {moment(notification?.createdAt).fromNow()}
               </Grid>
             </Grid>

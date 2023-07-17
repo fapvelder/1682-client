@@ -101,7 +101,7 @@ export default function Contact() {
   return (
     <Grid container className="chatContainer pb-50">
       <Grid container className="mg-auto-80 bodyChat">
-        <Grid item md={3}>
+        <Grid item xs={12} sm={3} md={3}>
           <div className="listUsersContainer">
             {listUsers?.map(
               (user) =>
@@ -145,7 +145,7 @@ export default function Contact() {
             )}
           </div>
         </Grid>
-        <Grid item md={9}>
+        <Grid item xs={12} sm={9} md={9}>
           {currentChatUser !== "" ? (
             <ChatContainer
               reload={reload}
@@ -163,7 +163,9 @@ export default function Contact() {
       </Grid>
       {currentChatUser !== "" && (
         <Grid container>
-          <UserDetails currentChatUser={currentChatUser} />
+          <Grid item xs={12} sm={12} md={12}>
+            <UserDetails currentChatUser={currentChatUser} />
+          </Grid>
         </Grid>
       )}
     </Grid>

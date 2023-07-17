@@ -11,6 +11,7 @@ import { Store } from "../../../Store";
 import "./searchPage.css";
 import { Helmet } from "react-helmet-async";
 import Search from "../../../component/Search";
+import Responsive from "../../../component/ResponsiveCode/Responsive";
 const { Option } = Select;
 
 export default function SearchPage() {
@@ -105,6 +106,7 @@ export default function SearchPage() {
   const calculateDefaultSubCategory = () => {
     return state?.subCategory ? state?.subCategory : "";
   };
+  const { tablet, mobile, minipad } = Responsive();
   return (
     <Grid container style={{ padding: 20, paddingBottom: "50vh" }}>
       {loading && <Loading />}
@@ -112,13 +114,24 @@ export default function SearchPage() {
         <title>Search Product</title>
       </Helmet>
       <Grid container>
-        <Grid item md={3}>
-          <Grid container className="border" style={{ width: "90%" }}>
-            <Grid item md={8} className="text-start" style={{ padding: 10 }}>
+        <Grid item sm={12} md={3}>
+          <Grid
+            container
+            className="border"
+            style={{ width: "90%", marginBottom: 15 }}
+          >
+            <Grid
+              item
+              sm={10}
+              md={8}
+              className="text-start"
+              style={{ padding: 10 }}
+            >
               Filter By
             </Grid>
             <Grid
               item
+              sm={2}
               md={4}
               style={{ padding: 10, color: "grey", cursor: "pointer" }}
               onClick={() => handleClearAll()}
@@ -127,6 +140,7 @@ export default function SearchPage() {
             </Grid>
             <Grid
               item
+              sm={12}
               md={12}
               className="border text-start"
               style={{ padding: 10 }}
@@ -177,23 +191,7 @@ export default function SearchPage() {
                   </div>
                 </Grid>
               )}
-              {/* <Grid container style={{ width: "100%" }}>
-                <div>Platform</div>
-                <div style={{ width: "100%" }}>
-                  <Select
-                    onChange={(e) => setPlatform(e)}
-                    defaultValue=""
-                    style={{ width: "100%" }}
-                  >
-                    <Option value="">Any</Option>
-                    {platforms.map((platform) => (
-                      <Option key={platform._id} value={platform._id}>
-                        {platform.name}
-                      </Option>
-                    ))}
-                  </Select>
-                </div>
-              </Grid> */}
+
               <Grid container style={{ width: "100%" }}>
                 <div>Available</div>
                 <div style={{ width: "100%" }}>
@@ -216,7 +214,7 @@ export default function SearchPage() {
                     onChange={(e) => setMin(e)}
                     min={0}
                     placeholder="Min"
-                    style={{ width: "48%" }}
+                    style={{ width: mobile ? "48%" : tablet ? "49%" : "48%" }}
                   />
                   <span> - </span>
                   <InputNumber
@@ -224,19 +222,21 @@ export default function SearchPage() {
                     onChange={(e) => setMax(e)}
                     min={0}
                     placeholder="Max"
-                    style={{ width: "48%" }}
+                    style={{ width: mobile ? "48%" : tablet ? "49%" : "48%" }}
                   />
                 </div>
               </Grid>
             </Grid>
           </Grid>
         </Grid>
-        <Grid item md={9} className="text-start">
+        <Grid item md={9} className="text-start ">
           <Grid container style={{ gridGap: "20px 0px" }}>
             {products.length > 0 ? (
               products?.map((product, index) => (
                 <Grid
                   item
+                  xs={12}
+                  sm={6}
                   md={3}
                   lg={3}
                   key={index}
@@ -252,9 +252,11 @@ export default function SearchPage() {
                 </Grid>
               ))
             ) : (
-              <Grid container>
+              <Grid container style={{ marginTop: 15 }}>
                 <Grid
                   item
+                  xs={12}
+                  sm={12}
                   md={12}
                   style={{ display: "flex", justifyContent: "center" }}
                 >
@@ -262,6 +264,8 @@ export default function SearchPage() {
                 </Grid>
                 <Grid
                   item
+                  xs={12}
+                  sm={12}
                   md={12}
                   style={{ display: "flex", justifyContent: "center" }}
                 >

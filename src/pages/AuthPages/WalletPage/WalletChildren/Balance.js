@@ -13,18 +13,18 @@ export default function Balance() {
           <div>Your balance</div>
           <div className="balanceContainer">
             <Grid container className="bd-bt">
-              <Grid item md={6}>
+              <Grid item xs={6} sm={6} md={6}>
                 Available
               </Grid>
-              <Grid item md={6}>
+              <Grid item xs={6} sm={6} md={6}>
                 ${balance} USD
               </Grid>
             </Grid>
             <Grid container>
-              <Grid item md={6}>
+              <Grid item xs={6} sm={6} md={6}>
                 Pending
               </Grid>
-              <Grid item md={6}>
+              <Grid item xs={6} sm={6} md={6}>
                 $0.00 USD
               </Grid>
             </Grid>
@@ -34,18 +34,18 @@ export default function Balance() {
           <div>Cash from completed sales</div>
           <div className="balanceContainer">
             <Grid container className="bd-bt">
-              <Grid item md={6}>
+              <Grid item xs={6} sm={6} md={6}>
                 Available
               </Grid>
-              <Grid item md={6}>
+              <Grid item xs={6} sm={6} md={6}>
                 ${balance} USD
               </Grid>
             </Grid>
             <Grid container>
-              <Grid item md={6}>
+              <Grid item xs={6} sm={6} md={6}>
                 Pending
               </Grid>
-              <Grid item md={6}>
+              <Grid item xs={6} sm={6} md={6}>
                 $0.00 USD
               </Grid>
             </Grid>

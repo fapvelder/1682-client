@@ -19,9 +19,7 @@ export default function Ratings({
 }) {
   const [feedbacks, setFeedbacks] = useState([]);
   const [rating, setRating] = useState("");
-  const [ratingGood, setRatingGood] = useState([]);
-  const [ratingNeutral, setRatingNeutral] = useState([]);
-  const [ratingBad, setRatingBad] = useState([]);
+
   useEffect(() => {
     const getFeedback = () => {
       handleLoading(
@@ -35,24 +33,7 @@ export default function Ratings({
     };
     getFeedback();
   }, [handleLoading, slug, rating, setLoading, setReload]);
-  useEffect(() => {
-    const getFeedback = async () => {
-      const result = await getUserFeedback(slug, "");
-      if (result.data) {
-        result.data.map((fb) =>
-          fb.rating === "Good"
-            ? ratingGood.push(fb.rating)
-            : fb.rating === "Neutral"
-            ? ratingNeutral.push(fb.rating)
-            : fb.rating === "Bad" && ratingBad.push(fb.rating)
-        );
-      }
-    };
-    getFeedback();
-  }, [slug, ratingGood, ratingBad, ratingNeutral]);
-  console.log(ratingGood);
-  console.log(ratingNeutral);
-  console.log(ratingBad);
+
   return (
     <Grid container>
       {loading && <Loading />}
@@ -71,10 +52,10 @@ export default function Ratings({
       <Grid container>
         {feedbacks &&
           feedbacks?.map((fb) => (
-            <Grid item md={8} className="text-start" key={fb._id}>
+            <Grid item xs={8} sm={8} md={8} className="text-start" key={fb._id}>
               <Grid container style={{ borderTop: "1px solid #777" }}>
                 <Grid container className="mt-15">
-                  <Grid item md={1}>
+                  <Grid item xs={2} sm={2} md={1}>
                     <img
                       style={{ width: 30, height: 30 }}
                       src={
@@ -87,7 +68,7 @@ export default function Ratings({
                       alt={fb.rating}
                     />
                   </Grid>
-                  <Grid item md={11}>
+                  <Grid item xs={10} sm={10} md={11}>
                     <div>
                       <span>{fb.user.displayName || fb.user.fullName}</span>
                       <p style={{ fontSize: 12, color: "grey" }}>

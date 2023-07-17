@@ -141,8 +141,7 @@ function ChatGPT() {
                   </p>
                 </Grid>
               )}
-
-              <div container className="message-content">
+              <div className="message-content">
                 {message?.role === "assistant" ? (
                   <div>
                     <span
