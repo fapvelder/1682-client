@@ -43,6 +43,8 @@ export default function Listings({
               <Grid
                 key={index}
                 item
+                xs={12}
+                sm={6}
                 md={3}
                 onClick={() => navigate(`/item/${product._id}`)}
               >

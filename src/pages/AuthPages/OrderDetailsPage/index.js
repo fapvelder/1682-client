@@ -196,16 +196,16 @@ export default function OrderDetailsPage() {
         <title>Order Details</title>
       </Helmet>
       <Grid container>
-        <Grid item md={6} style={{ paddingRight: 10 }}>
+        <Grid item xs={12} sm={6} md={6} style={{ paddingRight: 10 }}>
           <Grid container className="border" style={{ padding: 10 }}>
-            <Grid item md={4}>
+            <Grid item xs={6} sm={6} md={4}>
               <img
                 style={{ width: 150, height: 150 }}
                 src={order?.product?.photos?.[0]}
                 alt=""
               />
             </Grid>
-            <Grid item md={8} className="text-start">
+            <Grid item xs={6} sm={6} md={8} className="text-start">
               <p>{order?.product?.title}</p>
               <img
                 style={{
@@ -236,26 +236,26 @@ export default function OrderDetailsPage() {
               <h3>Product Details</h3>
               <div className="specificDetails text-start">
                 <Grid container className=" detailsRow">
-                  <Grid item md={4}>
+                  <Grid item xs={6} sm={6} md={4}>
                     Category
                   </Grid>
-                  <Grid item md={8}>
+                  <Grid item xs={6} sm={6} md={8}>
                     {order?.product?.category?.name}
                   </Grid>
                 </Grid>
                 <Grid container className="detailsRow">
-                  <Grid item md={4}>
+                  <Grid item xs={6} sm={6} md={4}>
                     Title
                   </Grid>
-                  <Grid item md={8}>
+                  <Grid item xs={6} sm={6} md={8}>
                     {order?.product?.gameTitle}
                   </Grid>
                 </Grid>
                 <Grid container className="detailsRow">
-                  <Grid item md={4}>
+                  <Grid item xs={6} sm={6} md={4}>
                     Delivery method
                   </Grid>
-                  <Grid item md={8}>
+                  <Grid item xs={6} sm={6} md={8}>
                     {order?.product?.deliveryMethod === "Bot"
                       ? "Bot Trade"
                       : order?.product?.deliveryMethod === "Auto"
@@ -264,49 +264,49 @@ export default function OrderDetailsPage() {
                   </Grid>
                 </Grid>
                 <Grid container className="detailsRow">
-                  <Grid item md={4}>
+                  <Grid item xs={6} sm={6} md={4}>
                     Delivery in
                   </Grid>
                   {order?.product?.deliveryMethod === "Bot" ||
                   order?.product?.deliveryMethod === "Auto" ? (
-                    <Grid item md={8}>
+                    <Grid item xs={6} sm={6} md={8}>
                       Auto delivery
                     </Grid>
                   ) : (
-                    <Grid item md={8}>
+                    <Grid item xs={6} sm={6} md={8}>
                       {order?.product?.deliveryIn} day(s)
                     </Grid>
                   )}
                 </Grid>
                 <Grid container className="detailsRow">
-                  <Grid item md={4}>
+                  <Grid item xs={6} sm={6} md={4}>
                     Region restriction
                   </Grid>
-                  <Grid item md={8}>
+                  <Grid item xs={6} sm={6} md={8}>
                     Europe
                   </Grid>
                 </Grid>
                 <Grid container className="detailsRow">
-                  <Grid item md={4}>
+                  <Grid item xs={6} sm={6} md={4}>
                     Returns
                   </Grid>
-                  <Grid item md={8}>
+                  <Grid item xs={6} sm={6} md={8}>
                     No return. View our return policy
                   </Grid>
                 </Grid>
                 <Grid container className="detailsRow">
-                  <Grid item md={4}>
+                  <Grid item xs={6} sm={6} md={4}>
                     Accept currency
                   </Grid>
-                  <Grid item md={8}>
+                  <Grid item xs={6} sm={6} md={8}>
                     USD
                   </Grid>
                 </Grid>
                 <Grid container className="detailsRow">
-                  <Grid item md={4}>
+                  <Grid item xs={6} sm={6} md={4}>
                     Protection
                   </Grid>
-                  <Grid item md={8}>
+                  <Grid item xs={6} sm={6} md={8}>
                     You're protected under the GameBay Guarantee. Get the item
                     as described or your money back.
                   </Grid>
@@ -315,9 +315,16 @@ export default function OrderDetailsPage() {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item md={6} className="border " style={{ position: "relative" }}>
+        <Grid
+          item
+          xs={12}
+          sm={6}
+          md={6}
+          className="border "
+          style={{ position: "relative" }}
+        >
           <Grid container style={{ height: 150, padding: 20 }}>
-            <Grid item md={4}>
+            <Grid item xs={6} sm={6} md={4}>
               <img
                 src={
                   order?.status === "Completed"
@@ -330,17 +337,26 @@ export default function OrderDetailsPage() {
                 style={{ width: "150px", height: "150px" }}
               />
             </Grid>
-            <Grid item md={8} className="text-start" style={{ fontSize: 22 }}>
+            <Grid
+              item
+              xs={6}
+              sm={6}
+              md={8}
+              className="text-start"
+              style={{ fontSize: 22 }}
+            >
               Transaction is {order?.status}
             </Grid>
           </Grid>
           {order?.product?.deliveryMethod === "Bot" ? (
             <Grid container style={{ padding: 20, marginTop: 15 }}>
-              <Grid item md={12} className="text-start">
+              <Grid item xs={12} sm={12} md={12} className="text-start">
                 <h3>Start bot trade</h3>
               </Grid>
               <Grid
                 item
+                xs={12}
+                sm={12}
                 md={12}
                 style={{ display: "flex", justifyContent: "center" }}
               >
@@ -361,10 +377,17 @@ export default function OrderDetailsPage() {
             </Grid>
           ) : order?.product?.deliveryMethod === "Auto" ? (
             <Grid container style={{ padding: 20, marginTop: 15 }}>
-              <Grid item md={12} className="text-start">
+              <Grid item xs={12} sm={12} md={12} className="text-start">
                 <h3>Key or Code</h3>
               </Grid>
-              <Grid item md={12} className="border" style={{ padding: 10 }}>
+              <Grid
+                item
+                xs={12}
+                sm={12}
+                md={12}
+                className="border"
+                style={{ padding: 10 }}
+              >
                 {order?.product?.digitalCode}
               </Grid>
             </Grid>
@@ -374,7 +397,7 @@ export default function OrderDetailsPage() {
               <Grid container style={{ padding: 20, marginTop: 15 }}>
                 {order.product.category.name === "Game Items" &&
                   order?.buyer?.profile?.steam?.steamTradeURL && (
-                    <Grid item md={12} className="text-start">
+                    <Grid item xs={12} sm={12} md={12} className="text-start">
                       <h3>Buyer Steam Trade Offer URL</h3>
 
                       <Input value={order.buyer.profile.steam.steamTradeURL} />
@@ -390,11 +413,11 @@ export default function OrderDetailsPage() {
                       </div>
                     </Grid>
                   )}
-                <Grid item md={12} className="text-start">
+                <Grid item xs={12} sm={12} md={12} className="text-start">
                   <h3>Wait for seller to send item</h3>
                 </Grid>
 
-                <Grid item md={12}>
+                <Grid item xs={12} sm={12} md={12}>
                   <Countdown
                     title="Seller must send the item"
                     value={
@@ -427,15 +450,29 @@ export default function OrderDetailsPage() {
               </Grid>
             ) : (
               <Grid container style={{ padding: 20, marginTop: 15 }}>
-                <Grid item md={12} className="text-start">
+                <Grid item xs={12} sm={12} md={12} className="text-start">
                   <h3>Seller has sent the item</h3>
                 </Grid>
                 {order?.product?.category?.name !== "Game Items" ? (
-                  <Grid item md={12} className="border" style={{ padding: 10 }}>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={12}
+                    md={12}
+                    className="border"
+                    style={{ padding: 10 }}
+                  >
                     {order?.product?.digitalCode}
                   </Grid>
                 ) : (
-                  <Grid item md={12} className="border" style={{ padding: 10 }}>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={12}
+                    md={12}
+                    className="border"
+                    style={{ padding: 10 }}
+                  >
                     Please check your trade offer
                   </Grid>
                 )}
@@ -446,7 +483,7 @@ export default function OrderDetailsPage() {
             <h3>Order Details</h3>
           </Grid>
           <Grid container style={{ padding: 20 }}>
-            <Grid item md={12} className="border text-start">
+            <Grid item xs={12} sm={12} md={12} className="border text-start">
               <Grid
                 container
                 className="detailsRow"
@@ -533,7 +570,6 @@ export default function OrderDetailsPage() {
               </Grid>
             </Grid>
           )}
-          {}
           {order?.status !== "Completed" &&
             state?.data?._id === order?.buyer?._id &&
             (presentTime >= deliveryTime ? (

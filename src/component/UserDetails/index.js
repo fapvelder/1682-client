@@ -27,9 +27,9 @@ export default function UserDetails({
     <Grid
       container
       className="userDetailsContainer border"
-      style={{ width: width, height: "170px" }}
+      style={{ width: width, height: "170px", padding: 10 }}
     >
-      <Grid item md={3}>
+      <Grid item xs={6} sm={6} md={3}>
         <img
           className="cursorPointer"
           onClick={() => navigate(`/profile/${currentChatUser.slug}`)}
@@ -37,7 +37,7 @@ export default function UserDetails({
           alt={currentChatUser?.fullName}
         />
       </Grid>
-      <Grid item md={9}>
+      <Grid item xs={6} sm={6} md={9}>
         <div className="text-start">
           <div
             style={{

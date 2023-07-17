@@ -12,6 +12,7 @@ import handleLoading from "../../../../component/HandleLoading";
 import useLoading from "../../../../component/HandleLoading/useLoading";
 import Loading from "../../../../component/Loading";
 import axios from "axios";
+import Responsive from "../../../../component/ResponsiveCode/Responsive";
 export default function GameItems() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const params = useParams();
@@ -132,15 +133,19 @@ export default function GameItems() {
     };
     getPrice();
   }, [steamInventory, reload, gameTitle]);
+  const { tablet, mobile, minipad } = Responsive();
+
   return (
     <Grid container className="selling-item pb-50">
       {loading && <Loading />}
       <div className="mg-auto-80">
-        <h3 className="mt-15" ref={element}>
-          Start Selling - {gameTitle}
-        </h3>
-        <Grid container style={{ gridGap: "99px" }} className="selectSkin">
-          <Grid item md={7} className="inventorySection">
+        <h3 className="mt-15">Start Selling - {gameTitle}</h3>
+        <Grid
+          container
+          style={{ gridGap: minipad ? "40px" : "70px" }}
+          className="selectSkin"
+        >
+          <Grid item xs={12} sm={7} md={7} className="inventorySection">
             <h3>
               <span>Your Inventory</span>
             </h3>
@@ -154,6 +159,7 @@ export default function GameItems() {
                 priceInventory.map((item) => (
                   <Grid
                     item
+                    xs={6}
                     sm={4}
                     md={3}
                     key={item.key}
@@ -179,7 +185,7 @@ export default function GameItems() {
                 ))}
             </Grid>
           </Grid>
-          <Grid item md={4} className="skinSelectSection">
+          <Grid item xs={12} sm={4} md={4} className="skinSelectSection">
             <h3>
               <span>Skin to sell </span>
             </h3>
@@ -205,10 +211,14 @@ export default function GameItems() {
               </Grid>
               <Divider />
               {selectedItem && (
-                <Grid container className="text-start">
+                <Grid container className="text-start" ref={element}>
                   <div className="chooseSection">
                     <div className="chooseItem">
-                      <img src={`${url}${selectedItem.icon_url}`} alt="" />
+                      <img
+                        style={{ width: "90%" }}
+                        src={`${url}${selectedItem.icon_url}`}
+                        alt=""
+                      />
                     </div>
                     <div style={{ padding: 10 }}>
                       <div>{selectedItem.name}</div>

@@ -27,6 +27,7 @@ import useLoading from "../../../../component/HandleLoading/useLoading";
 import handleLoading from "../../../../component/HandleLoading";
 import axios from "axios";
 import steamLogin from "../../../../component/img/steamlogin.png";
+import Responsive from "../../../../component/ResponsiveCode/Responsive";
 const { Option } = Select;
 export default function Account({ user }) {
   const navigate = useNavigate();
@@ -167,6 +168,8 @@ export default function Account({ user }) {
     // const userData = JSON.parse(decodeURIComponent(user));
     // setSteamID(userData?._json.steamid);
   }, [location]);
+  const { tablet, mobile, minipad } = Responsive();
+
   return (
     <Grid container className="account">
       {loading && <Loading />}
@@ -177,30 +180,30 @@ export default function Account({ user }) {
       </h4>
       <Grid container className="text-start ">
         <Grid container className="mt-15">
-          <Grid item md={2}>
+          <Grid item xs={2} sm={2} md={2}>
             {userLanguage === "en"
               ? en.settings.account.name
               : vi.settings.account.name}
           </Grid>
-          <Grid item md={10}>
+          <Grid item xs={10} sm={10} md={10}>
             {user?.fullName}
           </Grid>
         </Grid>
         <Grid container className="mt-15">
-          <Grid item md={2}>
+          <Grid item xs={2} sm={2} md={2}>
             {userLanguage === "en"
               ? en.settings.account.phone_number
               : vi.settings.account.phone_number}
           </Grid>
-          <Grid item md={10}>
+          <Grid item xs={10} sm={10} md={10}>
             {user?.phoneNumber || "No phone number"}
           </Grid>
         </Grid>
         <Grid container className="mt-15">
-          <Grid item md={2}>
+          <Grid item xs={2} sm={2} md={2}>
             Email
           </Grid>
-          <Grid item md={4}>
+          <Grid item xs={4} sm={4} md={4}>
             <Input className="inputDisabled" value={user?.email} disabled />
           </Grid>
         </Grid>
@@ -213,12 +216,12 @@ export default function Account({ user }) {
       </h4>
       <Grid container className="text-start">
         <Grid container className="mt-15">
-          <Grid item md={2}>
+          <Grid item xs={2} sm={2} md={2}>
             {userLanguage === "en"
               ? en.settings.account.avatar
               : vi.settings.account.avatar}
           </Grid>
-          <Grid item md={10}>
+          <Grid item xs={10} sm={10} md={10}>
             <input
               type="file"
               id="image"
@@ -278,17 +281,17 @@ export default function Account({ user }) {
         </Grid>
 
         <Grid container className="mt-15">
-          <Grid item md={2} style={{ marginTop: 5 }}>
+          <Grid item xs={4} sm={2} md={2} style={{ marginTop: 5 }}>
             {userLanguage === "en"
               ? en.settings.account.display_as
               : vi.settings.account.display_as}
           </Grid>
-          <Grid item md={6} style={{ marginTop: 5 }}>
+          <Grid item xs={8} sm={6} md={6} style={{ marginTop: 5 }}>
             <div className="inputGroup">
               <Input
                 className="customInputAntd"
                 placeholder={user?.displayName}
-                style={{ width: 500 }}
+                style={{ width: mobile ? "60%" : minipad ? "70%" : "80%" }}
                 onClick={() => setToggleEditInput(true)}
                 onChange={(e) => setDisplayAs(e.target.value)}
               />
@@ -322,12 +325,12 @@ export default function Account({ user }) {
         </Grid>
 
         <Grid container className="mt-15">
-          <Grid item md={2} style={{ marginTop: 5 }}>
+          <Grid item xs={4} sm={2} md={2} style={{ marginTop: 5 }}>
             {userLanguage === "en"
               ? en.settings.account.bio
               : vi.settings.account.bio}
           </Grid>
-          <Grid item md={6} style={{ marginTop: 5 }}>
+          <Grid item xs={8} sm={6} md={6} style={{ marginTop: 5 }}>
             <div className="inputGroup">
               <TextArea
                 className="customInputAntd"
@@ -336,7 +339,7 @@ export default function Account({ user }) {
                   minRows: 3,
                   maxRows: 5,
                 }}
-                style={{ width: 500 }}
+                style={{ width: mobile ? "60%" : minipad ? "70%" : "80%" }}
                 onClick={() => setToggleEdit(true)}
                 onChange={(e) => setBio(e.target.value)}
               />
@@ -372,17 +375,12 @@ export default function Account({ user }) {
 
       <Grid container className="text-start">
         <Grid container className="mt-15">
-          <Grid item md={3}>
+          <Grid item xs={4} sm={3} md={3}>
             {userLanguage === "en"
               ? en.settings.account.languages.language
               : vi.settings.account.languages.language}
           </Grid>
-          <Grid item md={3}>
-            {userLanguage === "en"
-              ? en.settings.account.languages.language
-              : vi.settings.account.languages.language}
-          </Grid>
-          <Grid item md={6}>
+          <Grid item xs={8} sm={6} md={6}>
             {userLanguage === "en"
               ? en.settings.account.languages.proficiency
               : vi.settings.account.languages.proficiency}
@@ -396,14 +394,13 @@ export default function Account({ user }) {
               key={communication._id}
               style={{ marginTop: 10, marginBottom: 10 }}
             >
-              <Grid item md={3} />
-              <Grid item md={3}>
+              <Grid item xs={5} sm={3} md={3}>
                 {communication?.language}
               </Grid>
-              <Grid item md={2}>
+              <Grid item xs={6} sm={2} md={2}>
                 {communication?.proficiency}
               </Grid>
-              <Grid item md={4}>
+              <Grid item xs={1} sm={4} md={4}>
                 <div
                   onClick={() => deleteCommunicationHandler(communication._id)}
                 >
@@ -416,8 +413,7 @@ export default function Account({ user }) {
             </Grid>
           ))}
         <Grid container className="mt-15">
-          <Grid item md={3} />
-          <Grid item md={3}>
+          <Grid item xs={5} sm={3} md={3}>
             <Select
               defaultValue={"Language"}
               onChange={(e) => setLanguage(e)}
@@ -429,7 +425,7 @@ export default function Account({ user }) {
               <Option value="Japanese">Japanese</Option>
             </Select>
           </Grid>
-          <Grid item md={2}>
+          <Grid item xs={6} sm={2} md={2}>
             <Select
               defaultValue={"Proficiency"}
               onChange={(e) => setProficiency(e)}
@@ -441,7 +437,7 @@ export default function Account({ user }) {
               <Option value="Basic">Basic</Option>
             </Select>
           </Grid>
-          <Grid item md={4}>
+          <Grid item xs={12} sm={4} md={4}>
             <Button
               className="defaultButton"
               onClick={() => addCommunicationHandler()}
@@ -464,7 +460,7 @@ export default function Account({ user }) {
         <Button onClick={() => getUserSteam()}>Get User Steam</Button> */}
       {state?.data?.profile?.steam?.steamID ? (
         <Grid container className="mt-15">
-          <Grid item md={8}>
+          <Grid item xs={12} sm={8} md={8}>
             <div className="steamConnect">
               <p className="text-start ml-15 mt-15">
                 {userLanguage === "en"
@@ -523,7 +519,7 @@ export default function Account({ user }) {
         </Grid>
       ) : (
         <Grid container className="mt-15">
-          <Grid item md={8}>
+          <Grid item xs={12} sm={8} md={8}>
             <div className="steamConnect">
               <p className="text-start ml-15 mt-15">
                 Connect your Steam account with GameBay. You can only connect

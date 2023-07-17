@@ -66,7 +66,7 @@
 }
 .chooseItem {
   background: url(../../../../component/img/item_background.jpg);
-  width: 300px;
+  width: 100%;
   height: 300px;
   margin: auto !important;
   border: 1px solid var(--border-color);

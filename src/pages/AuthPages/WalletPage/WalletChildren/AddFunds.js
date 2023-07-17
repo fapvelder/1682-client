@@ -102,6 +102,8 @@ export default function AddFund() {
             {funds?.map((item, index) => (
               <Grid
                 item
+                xs={4}
+                sm={2}
                 md={2}
                 key={index}
                 className={`funds-item ${active === index && "active"}`}
@@ -114,8 +116,8 @@ export default function AddFund() {
             ))}
           </Grid>
           <Grid container className="mt-15">
-            <Grid item md={6} className="paypalPayment">
-              <Grid item md={12}>
+            <Grid item xs={12} sm={6} md={6} className="paypalPayment">
+              <Grid item xs={12} sm={12} md={12}>
                 <div>Funding Amount:</div>
                 <div>
                   <InputNumber
@@ -128,13 +130,13 @@ export default function AddFund() {
                 </div>
                 <div>Funding amount must be between $5.00 and $2000.00</div>
               </Grid>
-              <Grid item md={12} className="checkbox pb-50">
+              <Grid item xs={12} sm={12} md={12} className="checkbox pb-50">
                 <Checkbox onChange={handleCheckboxChange}>
                   I understand that funds added to my wallet can only be used
                   for purchases and cannot be withdrawn, refunded, or paid out.
                 </Checkbox>
               </Grid>
-              <Grid item md={12}>
+              <Grid item xs={12} sm={12} md={12}>
                 <Button
                   disabled={!isChecked}
                   onClick={() => handlePayment()}
@@ -145,7 +147,7 @@ export default function AddFund() {
               </Grid>
             </Grid>
             {transactions && transactions.length > 0 && (
-              <Grid item md={6}>
+              <Grid item xs={12} sm={6} md={6}>
                 <h2>Recent transactions</h2>
 
                 <table className="bordered-table">
@@ -175,45 +177,47 @@ export default function AddFund() {
       ) : (
         <Grid container>
           <Grid container>
-            <Grid item md={6}>
+            <Grid item xs={12} sm={6} md={6}>
               <h1>Add funds order</h1>
               <Grid container className="addFundsOrder">
                 <Grid container className="bd-bt">
-                  <Grid item md={10}>
+                  <Grid item xs={10} sm={10} md={10}>
                     Funding Amount
                   </Grid>
-                  <Grid item md={2}>
+                  <Grid item xs={2} sm={2} md={2}>
                     ${value} USD
                   </Grid>
                 </Grid>
                 <Grid container className="bd-bt">
-                  <Grid item md={10}>
+                  <Grid item xs={10} sm={10} md={10}>
                     Processing Fee
                   </Grid>
-                  <Grid item md={2}>
+                  <Grid item xs={2} sm={2} md={2}>
                     $0 USD
                   </Grid>
                 </Grid>
                 <Grid container>
-                  <Grid item md={10}>
+                  <Grid item xs={10} sm={10} md={10}>
                     Total Cost
                   </Grid>
-                  <Grid item md={2}>
+                  <Grid item xs={2} sm={2} md={2}>
                     ${value} USD
                   </Grid>
                 </Grid>
               </Grid>
             </Grid>
-            <Grid item md={6}>
-              <Grid item md={12}>
+            <Grid item xs={12} sm={6} md={6}>
+              <Grid item xs={12} sm={12} md={12}>
                 Total charge: ${value} USD
               </Grid>
-              <Grid item md={12}>
+              <Grid item xs={12} sm={12} md={12}>
                 <div>Pay with</div>
                 <Grid container style={{ gridGap: 40, padding: 20 }}>
                   {payments.map((payment, index) => (
                     <Grid
                       item
+                      xs={3}
+                      sm={3}
                       md={3}
                       key={index}
                       className={`payment ${

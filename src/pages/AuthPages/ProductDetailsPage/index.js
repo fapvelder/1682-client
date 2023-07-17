@@ -10,6 +10,7 @@ import {
   createComment,
   getProductComments,
   getProductDetails,
+  serverURL,
 } from "../../../api";
 import moment from "moment";
 import { Store } from "../../../Store";
@@ -47,7 +48,7 @@ export default function ProductDetails() {
       handleLoading(
         async () => {
           await createComment(userID, id, comment);
-          const socket = io("http://localhost:5000");
+          const socket = io(serverURL);
           socket.emit("send-notify", {
             userID: product?.listingBy?._id,
             type: "Comment",
@@ -71,13 +72,13 @@ export default function ProductDetails() {
       </Helmet>
       {loading && <Loading />}
       <Grid container className="generalContainer">
-        <Grid item md={6}>
+        <Grid item sm={6} md={6}>
           <div className="general">
             <Grid container className="text-start ml-15">
-              <Grid item md={12}>
+              <Grid item sm={12} md={12}>
                 <p>{product.title}</p>
               </Grid>
-              <Grid item md={12}>
+              <Grid item sm={12} md={12}>
                 <p>
                   {product?.category?.name} / {product?.platform?.name}
                 </p>
@@ -85,12 +86,14 @@ export default function ProductDetails() {
               <Divider />
             </Grid>
             <Grid container>
-              <div style={{ position: "relative" }}>
+              <div
+                style={{ position: "relative", width: "100%", height: "100%" }}
+              >
                 <img
                   style={{
                     marginTop: 15,
-                    width: 698,
-                    height: 680,
+                    width: "100%",
+                    height: "100%",
                     objectFit: "cover",
                   }}
                   src={product?.photos?.[0]}
@@ -113,7 +116,7 @@ export default function ProductDetails() {
             </Grid>
           </div>
         </Grid>
-        <Grid item md={6}>
+        <Grid item sm={6} md={6}>
           <div className="specific">
             <Grid container className="priceItem">
               <span>
@@ -162,59 +165,59 @@ export default function ProductDetails() {
             <Grid container>
               <div className="specificDetails text-start border">
                 <Grid container className=" detailsRow">
-                  <Grid item md={4}>
+                  <Grid item xs={6} md={4}>
                     Category
                   </Grid>
-                  <Grid item md={8}>
+                  <Grid item xs={6} md={8}>
                     {product?.category?.name}
                   </Grid>
                 </Grid>
                 <Grid container className="detailsRow">
-                  <Grid item md={4}>
+                  <Grid item xs={6} md={4}>
                     Title
                   </Grid>
-                  <Grid item md={8}>
+                  <Grid item xs={6} md={8}>
                     {product?.gameTitle}
                   </Grid>
                 </Grid>
 
                 <Grid container className="detailsRow">
-                  <Grid item md={4}>
+                  <Grid item xs={6} md={4}>
                     Delivery method
                   </Grid>
-                  <Grid item md={8}>
+                  <Grid item xs={6} md={8}>
                     {product?.deliveryIn} day(s)
                   </Grid>
                 </Grid>
                 <Grid container className="detailsRow">
-                  <Grid item md={4}>
+                  <Grid item xs={6} md={4}>
                     Region restriction
                   </Grid>
-                  <Grid item md={8}>
+                  <Grid item xs={6} md={8}>
                     Europe
                   </Grid>
                 </Grid>
                 <Grid container className="detailsRow">
-                  <Grid item md={4}>
+                  <Grid item xs={6} md={4}>
                     Returns
                   </Grid>
-                  <Grid item md={8}>
+                  <Grid item xs={6} md={8}>
                     No return. View our return policy
                   </Grid>
                 </Grid>
                 <Grid container className="detailsRow">
-                  <Grid item md={4}>
+                  <Grid item xs={6} md={4}>
                     Accept currency
                   </Grid>
-                  <Grid item md={8}>
+                  <Grid item xs={6} md={8}>
                     USD
                   </Grid>
                 </Grid>
                 <Grid container className="detailsRow">
-                  <Grid item md={4}>
+                  <Grid item xs={6} md={4}>
                     Protection
                   </Grid>
-                  <Grid item md={8}>
+                  <Grid item xs={6} md={8}>
                     You're protected under the GameBay Guarantee. Get the item
                     as described or your money back.
                   </Grid>
@@ -237,9 +240,9 @@ export default function ProductDetails() {
 
                 <Grid container>
                   {comments?.map((comment) => (
-                    <div className="listComments border">
+                    <div key={comment._id} className="listComments border">
                       <Grid container>
-                        <Grid item md={3}>
+                        <Grid item xs={6} sm={6} md={3}>
                           <div
                             className="imageComment"
                             style={{ cursor: "pointer" }}
@@ -250,7 +253,7 @@ export default function ProductDetails() {
                             <img src={comment.commenter.avatar} alt="" />
                           </div>
                         </Grid>
-                        <Grid item md={9}>
+                        <Grid item xs={6} sm={6} md={9}>
                           <div className="text-start">
                             <p
                               style={{ cursor: "pointer", color: "orange" }}

@@ -18,6 +18,7 @@
 .specific {
   width: 95%;
   height: 100%;
+  padding: 10px;
 }
 .general .ant-divider-horizontal {
   background-color: var(--divider-color);

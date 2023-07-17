@@ -25,6 +25,7 @@ import useLoading from "../../../../component/HandleLoading/useLoading";
 import Loading from "../../../../component/Loading";
 import { toast } from "react-toastify";
 import { LoadingOutlined } from "@ant-design/icons";
+import Responsive from "../../../../component/ResponsiveCode/Responsive";
 
 const { Option } = Select;
 export default function ListingItem() {
@@ -213,6 +214,7 @@ export default function ListingItem() {
       );
     }
   };
+  const { mobile } = Responsive();
 
   return (
     <Grid container className="pb-50">
@@ -293,7 +295,7 @@ export default function ListingItem() {
               <span>Category</span>
             </h3>
             <Grid container style={{ padding: 15 }}>
-              <Grid item md={8}>
+              <Grid item xs={12} sm={8} md={8}>
                 <Grid
                   container
                   className="category"
@@ -301,27 +303,27 @@ export default function ListingItem() {
                 >
                   {gameTitle && (
                     <Grid container className="bd-bt">
-                      <Grid item md={4}>
+                      <Grid item xs={4} sm={4} md={4}>
                         Title
                       </Grid>
-                      <Grid item md={7}>
+                      <Grid item xs={7} sm={7} md={7}>
                         {gameTitle}
                       </Grid>
                     </Grid>
                   )}
                   <Grid container className="bd-bt">
-                    <Grid item md={4}>
+                    <Grid item xs={4} sm={4} md={4}>
                       Category
                     </Grid>
-                    <Grid item md={7}>
+                    <Grid item xs={7} sm={7} md={7}>
                       {category}
                     </Grid>
                   </Grid>
                   <Grid container>
-                    <Grid item md={4}>
+                    <Grid item xs={4} sm={4} md={4}>
                       Platform
                     </Grid>
-                    <Grid item md={7}>
+                    <Grid item xs={7} sm={7} md={7}>
                       {subCategory}
                     </Grid>
                   </Grid>
@@ -402,7 +404,7 @@ export default function ListingItem() {
                 <Select
                   defaultValue="Public"
                   onChange={(e) => setVisibility(e)}
-                  style={{ width: "20%" }}
+                  style={{ width: mobile ? "80%" : "20%" }}
                 >
                   <Option value="Public">Public</Option>
                   <Option value="Unlisted">Unlisted</Option>

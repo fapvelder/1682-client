@@ -85,6 +85,7 @@ export default function SellItem() {
         <Grid container className="mg-auto-80 selectCategory">
           <Grid
             item
+            sm={12}
             md={12}
             className="categorySection"
             style={{ marginTop: 50 }}
@@ -96,7 +97,10 @@ export default function SellItem() {
               {categories.map((element) => (
                 <Grid
                   item
-                  md={2}
+                  xs={12}
+                  sm={6}
+                  md={3}
+                  lg={2}
                   key={element.id}
                   className={"select"}
                   onClick={() => handleClickCategory(element.id)}
@@ -117,7 +121,10 @@ export default function SellItem() {
           </Grid>
           <Grid
             item
+            xs={12}
+            sm={12}
             md={12}
+            lg={12}
             className="brandSection"
             style={{ display: subCategories ? "block" : "none", marginTop: 50 }}
           >
@@ -128,7 +135,10 @@ export default function SellItem() {
               {brands.map((element) => (
                 <Grid
                   item
-                  md={2}
+                  xs={12}
+                  sm={6}
+                  md={3}
+                  lg={2}
                   key={element.id}
                   className={"select"}
                   // onClick={() => console.log(`/${}`)}
@@ -148,7 +158,7 @@ export default function SellItem() {
               ))}
             </Grid>
           </Grid>
-          <Grid item md={12}>
+          <Grid item sm={12} md={12}>
             <p className="mt-15">
               By listing on GameBay, you confirm that you legally own the
               item(s) or that you have the full rights to sell the item(s). You
