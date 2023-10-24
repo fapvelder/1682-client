@@ -22,8 +22,8 @@
   height: 80vh;
   overflow: auto;
   overflow-y: scroll;
-  scrollbar-width: thin;
-  scrollbar-color: #888888 #f4f4f4;
+  scrollbar-width: thin !important;
+  scrollbar-color: #888888 #f4f4f4 !important;
   padding-top: 15px;
 }
 

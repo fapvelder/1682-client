@@ -8,8 +8,11 @@ import AddFunds from "./WalletChildren/AddFunds.js";
 import Withdraw from "./WalletChildren/Withdraw.js";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
+import en from "../../../component/languages/en.json";
+import vi from "../../../component/languages/vi.json";
 export default function Wallet() {
   const { state } = useContext(Store);
+  const language = state?.language || "en";
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -27,18 +30,23 @@ export default function Wallet() {
   const items = [
     {
       key: "1",
-      label: `Balance`,
-      children: <Balance />,
+      label:
+        language === "en" ? en.wallet.balance.title : vi.wallet.balance.title,
+      children: <Balance language={language} vi={vi} en={en} />,
     },
     {
       key: "2",
-      label: `Add Funds`,
-      children: <AddFunds />,
+      label:
+        language === "en"
+          ? en.wallet.add_funds.title
+          : vi.wallet.add_funds.title,
+      children: <AddFunds language={language} vi={vi} en={en} />,
     },
     {
       key: "3",
-      label: `Withdraw`,
-      children: <Withdraw />,
+      label:
+        language === "en" ? en.wallet.withdraw.title : vi.wallet.withdraw.title,
+      children: <Withdraw language={language} vi={vi} en={en} />,
     },
   ];
   return (

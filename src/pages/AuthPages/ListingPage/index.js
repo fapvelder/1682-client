@@ -8,18 +8,26 @@ import { useNavigate } from "react-router-dom";
 import "./listingPage.css";
 import completed from "../../../component/img/completed.png";
 import soldBanner from "../../../component/img/sold.png";
+import vi from "../../../component/languages/vi.json";
+import en from "../../../component/languages/en.json";
 import { Tabs } from "antd";
 
 const { TabPane } = Tabs;
 
-const statusOptions = ["All", "Completed", "Sold", "On Sale"]; // Available status options
-
 export default function ListingsPage() {
   const { state } = useContext(Store);
+  const language = state?.language || "en";
   const navigate = useNavigate();
   const [listings, setListings] = useState([]);
   const [products, setProducts] = useState([]);
+  const allStatus = {
+    All: { vi: "Tất cả", en: "All" },
+    Completed: { vi: "Hoàn tất", en: "Completed" },
+    Sold: { vi: "Đã bán", en: "Sold" },
+    "On Sale": { vi: "Đang bán", en: "On Sale" },
+  };
   const [selectedStatus, setSelectedStatus] = useState("All"); // Default selected status
+  const statusOptions = ["All", "Completed", "Sold", "On Sale"];
 
   useEffect(() => {
     const getAllOrders = async () => {
@@ -58,7 +66,9 @@ export default function ListingsPage() {
   return (
     <Grid container className="mg-auto-80" style={{ paddingBottom: "50vh" }}>
       <Helmet>
-        <title>Purchases</title>
+        <title>
+          {language === "en" ? en.listings.title : vi.listings.title}
+        </title>
       </Helmet>
       <Grid container className="border mt-15" style={{ padding: 20 }}>
         <Tabs
@@ -67,7 +77,10 @@ export default function ListingsPage() {
           onChange={handleStatusChange}
         >
           {statusOptions.map((status, index) => (
-            <TabPane tab={status} key={status} />
+            <TabPane
+              tab={allStatus[status][language]}
+              key={allStatus[status]["en"]}
+            />
           ))}
         </Tabs>
         {filteredProducts.length > 0 ? (
@@ -142,10 +155,15 @@ export default function ListingsPage() {
                   <div>
                     <div>{product.title}</div>
                     <div style={{ color: colorStatus[product.status] }}>
-                      {product.status}
+                      {allStatus[product.status][language]}
                     </div>
                     <div>${product.price} USD</div>
-                    <div>Bought from {moment(product.createdAt).fromNow()}</div>
+                    <div>
+                      {language === "en"
+                        ? en.listings.bought
+                        : vi.listings.bought}{" "}
+                      {moment(product.createdAt).fromNow()}
+                    </div>
                   </div>
                 </div>
                 {listing && (
@@ -155,7 +173,12 @@ export default function ListingsPage() {
                       alignItems: "center",
                     }}
                   >
-                    <span style={{ marginRight: "5px" }}>Sold by:</span>
+                    <span style={{ marginRight: "5px" }}>
+                      {language === "en"
+                        ? en.listings.sold_by
+                        : vi.listings.sold_by}
+                      :
+                    </span>
                     <p
                       style={{
                         color: "blue",
@@ -172,7 +195,11 @@ export default function ListingsPage() {
             );
           })
         ) : (
-          <Grid container>No Products</Grid>
+          <Grid container>
+            {language === "en"
+              ? en.listings.no_products
+              : vi.listings.no_products}
+          </Grid>
         )}
       </Grid>
     </Grid>

@@ -12,6 +12,8 @@ import "./searchPage.css";
 import { Helmet } from "react-helmet-async";
 import Search from "../../../component/Search";
 import Responsive from "../../../component/ResponsiveCode/Responsive";
+import en from "../../../component/languages/en.json";
+import vi from "../../../component/languages/vi.json";
 const { Option } = Select;
 
 export default function SearchPage() {
@@ -31,6 +33,8 @@ export default function SearchPage() {
   const [pageSize, setPageSize] = useState(8);
   const [totalPages, setTotalPages] = useState(1);
   const { loading, setLoading, reload, setReload } = useLoading();
+  const language = state.language || "en";
+
   useEffect(() => {
     const fetchSearchProducts = async () => {
       handleLoading(
@@ -107,11 +111,32 @@ export default function SearchPage() {
     return state?.subCategory ? state?.subCategory : "";
   };
   const { tablet, mobile, minipad } = Responsive();
+  const categoryNames = {
+    "Game Items": {
+      en: "Game Items",
+      vi: "Vật phẩm ảo",
+    },
+    "Gift Cards": {
+      en: "Gift Cards",
+      vi: "Thẻ quà tặng",
+    },
+    Games: {
+      en: "Games",
+      vi: "Trò chơi",
+    },
+    Movies: {
+      en: "Movies",
+      vi: "Phim",
+    },
+  };
+
   return (
     <Grid container style={{ padding: 20, paddingBottom: "50vh" }}>
       {loading && <Loading />}
       <Helmet>
-        <title>Search Product</title>
+        <title>
+          {language === "en" ? en.search_product : vi.search_product}
+        </title>
       </Helmet>
       <Grid container>
         <Grid item sm={12} md={3}>
@@ -127,7 +152,7 @@ export default function SearchPage() {
               className="text-start"
               style={{ padding: 10 }}
             >
-              Filter By
+              {language === "en" ? en.filter_by : vi.filter_by}
             </Grid>
             <Grid
               item
@@ -136,7 +161,7 @@ export default function SearchPage() {
               style={{ padding: 10, color: "grey", cursor: "pointer" }}
               onClick={() => handleClearAll()}
             >
-              Clear all
+              {language === "en" ? en.clear_all : vi.clear_all}
             </Grid>
             <Grid
               item
@@ -146,7 +171,7 @@ export default function SearchPage() {
               style={{ padding: 10 }}
             >
               <Grid container style={{ width: "100%" }}>
-                <div>Category</div>
+                <div> {language === "en" ? en.category : vi.category}</div>
                 <div style={{ width: "100%" }}>
                   <Select
                     onChange={(e) => {
@@ -156,10 +181,13 @@ export default function SearchPage() {
                     value={calculateDefaultCategory()}
                     style={{ width: "100%" }}
                   >
-                    <Option value="">Any</Option>
+                    <Option value="">
+                      {" "}
+                      {language === "en" ? en.any : vi.any}
+                    </Option>
                     {categories.map((category) => (
                       <Option key={category._id} value={category._id}>
-                        {category.name}
+                        {categoryNames[category.name][language]}
                       </Option>
                     ))}
                   </Select>
@@ -167,14 +195,18 @@ export default function SearchPage() {
               </Grid>
               {state.category && (
                 <Grid container style={{ width: "100%" }}>
-                  <div>Sub-Category</div>
+                  <div>
+                    {language === "en" ? en.sub_category : vi.sub_category}
+                  </div>
                   <div style={{ width: "100%" }}>
                     <Select
                       onChange={(e) => handleChangeSubCategory(e)}
                       value={calculateDefaultSubCategory()}
                       style={{ width: "100%" }}
                     >
-                      <Option value="">Any</Option>
+                      <Option value="">
+                        {language === "en" ? en.any : vi.any}
+                      </Option>
                       {categories
                         .filter((category) => category._id === state.category)
                         .map((category) =>
@@ -191,29 +223,36 @@ export default function SearchPage() {
                   </div>
                 </Grid>
               )}
-
               <Grid container style={{ width: "100%" }}>
-                <div>Available</div>
+                <div>{language === "en" ? en.available : vi.available}</div>
                 <div style={{ width: "100%" }}>
                   <Select
                     onChange={(e) => setAvailable(e)}
                     defaultValue=""
                     style={{ width: "100%" }}
                   >
-                    <Option value="">Any</Option>
-                    <Option value="true">On Sale</Option>
-                    <Option value="false">Sold</Option>
+                    <Option value="">
+                      {language === "en" ? en.any : vi.any}
+                    </Option>
+                    <Option value="true">
+                      {language === "en" ? en.on_sale : vi.on_sale}
+                    </Option>
+                    <Option value="false">
+                      {language === "en" ? en.sold : vi.sold}
+                    </Option>
                   </Select>
                 </div>
               </Grid>
               <Grid container style={{ width: "100%" }}>
-                <div>Custom Price</div>
+                <div>
+                  {language === "en" ? en.custom_price : vi.custom_price}
+                </div>
                 <div style={{ width: "100%" }}>
                   <InputNumber
                     value={min}
                     onChange={(e) => setMin(e)}
                     min={0}
-                    placeholder="Min"
+                    placeholder={language === "en" ? en.min : vi.min}
                     style={{ width: mobile ? "48%" : tablet ? "49%" : "48%" }}
                   />
                   <span> - </span>
@@ -221,7 +260,7 @@ export default function SearchPage() {
                     value={max}
                     onChange={(e) => setMax(e)}
                     min={0}
-                    placeholder="Max"
+                    placeholder={language === "en" ? en.max : vi.max}
                     style={{ width: mobile ? "48%" : tablet ? "49%" : "48%" }}
                   />
                 </div>
@@ -260,7 +299,9 @@ export default function SearchPage() {
                   md={12}
                   style={{ display: "flex", justifyContent: "center" }}
                 >
-                  <h2>We don't find any products you search for...</h2>
+                  <h2>
+                    {language === "en" ? en.no_product.no1 : vi.no_product.no1}
+                  </h2>
                 </Grid>
                 <Grid
                   item
@@ -269,7 +310,9 @@ export default function SearchPage() {
                   md={12}
                   style={{ display: "flex", justifyContent: "center" }}
                 >
-                  <h4>Please try another products</h4>
+                  <h4>
+                    {language === "en" ? en.no_product.no2 : vi.no_product.no2}
+                  </h4>
                 </Grid>
 
                 <Grid
@@ -278,7 +321,11 @@ export default function SearchPage() {
                   style={{ display: "flex", justifyContent: "center" }}
                 >
                   <div>
-                    <Search placeholder={"Search"} />
+                    <Search
+                      categoryNames={categoryNames}
+                      placeholder={language === "en" ? en.search : vi.search}
+                      language={language}
+                    />{" "}
                   </div>
                 </Grid>
               </Grid>

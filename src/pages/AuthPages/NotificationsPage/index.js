@@ -23,12 +23,13 @@ export default function NotificationsPage() {
   const navigate = useNavigate();
   const [notifications, setNotifications] = useState([]);
   const userID = state?.data?._id;
-
+  const language = state?.language || "en";
   useEffect(() => {
     const socket = io(serverURL);
     const getUserNotifications = async () => {
       const result = await getNotifications(userID);
       setNotifications(result.data);
+      console.log(result.data);
     };
     getUserNotifications();
 
@@ -45,6 +46,7 @@ export default function NotificationsPage() {
           ...prevNotifications,
           newNotification,
         ]);
+        console.log(newNotification);
       }
     });
   }, [userID]);
@@ -89,7 +91,7 @@ export default function NotificationsPage() {
                 />
               </Grid>
               <Grid item xs={9} sm={10} md={10}>
-                {notification?.message}
+                {notification?.message[language]}
               </Grid>
               <Grid
                 item
@@ -105,7 +107,6 @@ export default function NotificationsPage() {
                 />
               </Grid>
               <Grid item xs={1} sm={1} md={1} />
-
               <Grid item xs={11} sm={11} md={11}>
                 {moment(notification?.createdAt).fromNow()}
               </Grid>

@@ -5,7 +5,7 @@ import { Button } from "antd";
 import handleLoading from "../../../component/HandleLoading";
 import useLoading from "../../../component/HandleLoading/useLoading";
 import Loading from "../../../component/Loading";
-import { getUserByID, withdrawItem } from "../../../api";
+import { getUserByID, serverURL, withdrawItem } from "../../../api";
 import { toast } from "react-toastify";
 import { getError } from "../../../utils";
 import { io } from "socket.io-client";
@@ -16,7 +16,7 @@ export default function InventoryPage() {
   const [tradeOffer, setTradeOffer] = useState("");
   const { loading, setLoading, reload, setReload } = useLoading();
   useEffect(() => {
-    const socket = io();
+    const socket = io(serverURL);
     // Listen for the 'tradeOfferStatus' event
     socket.on("tradeOfferStatus", (data) => {
       if (data.messageSuccess) {
@@ -33,7 +33,7 @@ export default function InventoryPage() {
     };
   }, []);
   useEffect(() => {
-    const socket = io();
+    const socket = io(serverURL);
     // Listen for the 'tradeOfferStatus' event
     socket.on("tradeOfferURL", (data) => {
       if (data.tradeOfferURL) {

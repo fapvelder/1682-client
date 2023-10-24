@@ -16,7 +16,7 @@ import paypalTrans from "../../../../component/img/paypaltrans.png";
 import vnpayTrans from "../../../../component/img/vnpayTrans.png";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import moment from "moment";
-export default function AddFund() {
+export default function AddFund({ language, vi, en }) {
   const { state } = useContext(Store);
   const userID = state?.data?._id;
   const [value, setValue] = useState(5);
@@ -118,7 +118,12 @@ export default function AddFund() {
           <Grid container className="mt-15">
             <Grid item xs={12} sm={6} md={6} className="paypalPayment">
               <Grid item xs={12} sm={12} md={12}>
-                <div>Funding Amount:</div>
+                <div>
+                  {language === "en"
+                    ? en.wallet.add_funds.funding_amount
+                    : vi.wallet.add_funds.funding_amount}
+                  :
+                </div>
                 <div>
                   <InputNumber
                     value={value}
@@ -128,12 +133,17 @@ export default function AddFund() {
                   />{" "}
                   USD
                 </div>
-                <div>Funding amount must be between $5.00 and $2000.00</div>
+                <div>
+                  {language === "en"
+                    ? en.wallet.add_funds.funding_desc
+                    : vi.wallet.add_funds.funding_desc}
+                </div>
               </Grid>
               <Grid item xs={12} sm={12} md={12} className="checkbox pb-50">
                 <Checkbox onChange={handleCheckboxChange}>
-                  I understand that funds added to my wallet can only be used
-                  for purchases and cannot be withdrawn, refunded, or paid out.
+                  {language === "en"
+                    ? en.wallet.add_funds.check
+                    : vi.wallet.add_funds.check}
                 </Checkbox>
               </Grid>
               <Grid item xs={12} sm={12} md={12}>
@@ -142,27 +152,50 @@ export default function AddFund() {
                   onClick={() => handlePayment()}
                   className="defaultButton"
                 >
-                  Continue
+                  {language === "en"
+                    ? en.wallet.add_funds.continue
+                    : vi.wallet.add_funds.continue}
                 </Button>
               </Grid>
             </Grid>
             {transactions && transactions.length > 0 && (
               <Grid item xs={12} sm={6} md={6}>
-                <h2>Recent transactions</h2>
+                <h2>
+                  {" "}
+                  {language === "en"
+                    ? en.wallet.add_funds.recent_transactions
+                    : vi.wallet.add_funds.recent_transactions}
+                </h2>
 
                 <table className="bordered-table">
                   <thead>
                     <tr>
-                      <th>Time</th>
-                      <th>Method</th>
-                      <th>Amount</th>
-                      <th>Status</th>
+                      <th>
+                        {language === "en"
+                          ? en.wallet.add_funds.time
+                          : vi.wallet.add_funds.time}
+                      </th>
+                      <th>
+                        {language === "en"
+                          ? en.wallet.add_funds.method
+                          : vi.wallet.add_funds.method}
+                      </th>
+                      <th>
+                        {language === "en"
+                          ? en.wallet.add_funds.amount
+                          : vi.wallet.add_funds.amount}
+                      </th>
+                      <th>
+                        {language === "en"
+                          ? en.wallet.add_funds.status
+                          : vi.wallet.add_funds.status}
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     {transactions?.map((trans) => (
                       <tr key={trans._id}>
-                        <td>{moment(trans.date).fromNow()}</td>
+                        <td>{moment(trans.date).format("LLL")}</td>
                         <td>{trans.paymentMethod}</td>
                         <td>{trans.amount}</td>
                         <td>{trans.status}</td>
@@ -178,11 +211,18 @@ export default function AddFund() {
         <Grid container>
           <Grid container>
             <Grid item xs={12} sm={6} md={6}>
-              <h1>Add funds order</h1>
+              <h1>
+                {" "}
+                {language === "en"
+                  ? en.wallet.add_funds.fund_order
+                  : vi.wallet.add_funds.fund_order}
+              </h1>
               <Grid container className="addFundsOrder">
                 <Grid container className="bd-bt">
                   <Grid item xs={10} sm={10} md={10}>
-                    Funding Amount
+                    {language === "en"
+                      ? en.wallet.add_funds.funding_amount
+                      : vi.wallet.add_funds.funding_amount}
                   </Grid>
                   <Grid item xs={2} sm={2} md={2}>
                     ${value} USD
@@ -190,7 +230,9 @@ export default function AddFund() {
                 </Grid>
                 <Grid container className="bd-bt">
                   <Grid item xs={10} sm={10} md={10}>
-                    Processing Fee
+                    {language === "en"
+                      ? en.wallet.add_funds.processing_fee
+                      : vi.wallet.add_funds.processing_fee}
                   </Grid>
                   <Grid item xs={2} sm={2} md={2}>
                     $0 USD
@@ -198,7 +240,9 @@ export default function AddFund() {
                 </Grid>
                 <Grid container>
                   <Grid item xs={10} sm={10} md={10}>
-                    Total Cost
+                    {language === "en"
+                      ? en.wallet.add_funds.total_cost
+                      : vi.wallet.add_funds.total_cost}
                   </Grid>
                   <Grid item xs={2} sm={2} md={2}>
                     ${value} USD
@@ -208,10 +252,18 @@ export default function AddFund() {
             </Grid>
             <Grid item xs={12} sm={6} md={6}>
               <Grid item xs={12} sm={12} md={12}>
-                Total charge: ${value} USD
+                {language === "en"
+                  ? en.wallet.add_funds.total_charge
+                  : vi.wallet.add_funds.total_charge}
+                : ${value} USD
               </Grid>
               <Grid item xs={12} sm={12} md={12}>
-                <div>Pay with</div>
+                <div>
+                  {" "}
+                  {language === "en"
+                    ? en.wallet.add_funds.pay_with
+                    : vi.wallet.add_funds.pay_with}
+                </div>
                 <Grid container style={{ gridGap: 40, padding: 20 }}>
                   {payments.map((payment, index) => (
                     <Grid
@@ -243,12 +295,19 @@ export default function AddFund() {
                     paymentMethod === "VNPay" && (
                       <Grid container>
                         <div>
-                          <div>Note*: 1$ is equivalent with 24.000 VNĐ</div>
+                          <div>
+                            {" "}
+                            {language === "en"
+                              ? en.wallet.add_funds.note
+                              : vi.wallet.add_funds.note}
+                          </div>
                           <Button
                             onClick={() => handleVNPay()}
                             className="defaultButton"
                           >
-                            Pay by Bank with VNPay
+                            {language === "en"
+                              ? en.wallet.add_funds.vnpay
+                              : vi.wallet.add_funds.vnpay}
                           </Button>
                         </div>
                       </Grid>

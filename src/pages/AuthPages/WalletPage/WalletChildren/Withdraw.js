@@ -10,7 +10,7 @@ import paypalTrans from "../../../../component/img/paypaltrans.png";
 import handleLoading from "../../../../component/HandleLoading";
 import useLoading from "../../../../component/HandleLoading/useLoading";
 import Loading from "../../../../component/Loading";
-export default function Withdraw() {
+export default function Withdraw({ language, vi, en }) {
   const { loading, setLoading, reload, setReload } = useLoading();
   const [email, setEmail] = useState("");
   const [amount, setAmount] = useState("");
@@ -71,12 +71,20 @@ export default function Withdraw() {
   };
   return (
     <Grid container className="withdraw pb-50">
-      Available Cash for Payout: ${balance} USD
+      {language === "en"
+        ? en.wallet.withdraw.payout
+        : vi.wallet.withdraw.payout}
+      : ${balance} USD
       <Grid container className="customSection">
         {loading && <Loading />}
 
         <Grid item md={6}>
-          <div>Payout Choices</div>
+          <div>
+            {" "}
+            {language === "en"
+              ? en.wallet.withdraw.payout_choices
+              : vi.wallet.withdraw.payout_choices}
+          </div>
           <img
             className="payoutChoices"
             onClick={() => setPayment("Paypal")}
@@ -84,8 +92,9 @@ export default function Withdraw() {
             alt=""
           />
           <div className="mt-15">
-            This payout option is only available when the balance is $5.00 or
-            higher
+            {language === "en"
+              ? en.wallet.withdraw.payout_desc
+              : vi.wallet.withdraw.payout_desc}
           </div>
           {payment === "Paypal" && (
             <div>
@@ -99,7 +108,11 @@ export default function Withdraw() {
               </div>
               <div className="inputGroup mt-15">
                 <Input
-                  placeholder="Email received"
+                  placeholder={
+                    language === "en"
+                      ? en.wallet.withdraw.email_received
+                      : vi.wallet.withdraw.email_received
+                  }
                   className="customInputAntd"
                   style={{
                     width: "40%",
@@ -117,14 +130,19 @@ export default function Withdraw() {
                     email.includes("@") && "visible"
                   }`}
                 >
-                  {" "}
-                  Get Code
+                  {language === "en"
+                    ? en.wallet.withdraw.get_code
+                    : vi.wallet.withdraw.get_code}
                 </button>
                 {/* <Button onClick={sendSecret}>Send Secret</Button> */}
               </div>
               <div className="mt-15">
                 <Input
-                  placeholder="Secret"
+                  placeholder={
+                    language === "en"
+                      ? en.wallet.withdraw.secret
+                      : vi.wallet.withdraw.secret
+                  }
                   style={{ width: "40%" }}
                   onChange={(e) => setSecret(e.target.value)}
                 />
@@ -133,7 +151,9 @@ export default function Withdraw() {
                 <Grid container className="withdrawFee">
                   <Grid container className="customWithdrawFee bd-bt">
                     <Grid item md={11}>
-                      Withdrawal fee
+                      {language === "en"
+                        ? en.wallet.withdraw.withdrawal_fee
+                        : vi.wallet.withdraw.withdrawal_fee}
                     </Grid>
                     <Grid item md={1}>
                       {withdrawalFee}
@@ -142,7 +162,9 @@ export default function Withdraw() {
 
                   <Grid container className="customWithdrawFee bd-bt">
                     <Grid item md={11}>
-                      What you will receive
+                      {language === "en"
+                        ? en.wallet.withdraw.will_receive
+                        : vi.wallet.withdraw.will_receive}
                     </Grid>
                     <Grid item md={1}>
                       {amount}
@@ -150,7 +172,9 @@ export default function Withdraw() {
                   </Grid>
                   <Grid container className="customWithdrawFee">
                     <Grid item md={11}>
-                      Remaining balance
+                      {language === "en"
+                        ? en.wallet.withdraw.remaining
+                        : vi.wallet.withdraw.remaining}
                     </Grid>
                     <Grid item md={1}>
                       {remainBalance}
@@ -159,7 +183,12 @@ export default function Withdraw() {
                 </Grid>
               </div>
               <div className="mt-15">
-                <Button onClick={handlePayout}>Confirm payout</Button>
+                <Button onClick={handlePayout}>
+                  {" "}
+                  {language === "en"
+                    ? en.wallet.withdraw.confirm
+                    : vi.wallet.withdraw.confirm}
+                </Button>
               </div>
             </div>
           )}
@@ -167,7 +196,12 @@ export default function Withdraw() {
         {payment === "Paypal" && (
           <Grid item md={6}>
             <div>
-              <div>Fee rate</div>
+              <div>
+                {" "}
+                {language === "en"
+                  ? en.wallet.withdraw.fee_rate
+                  : vi.wallet.withdraw.fee_rate}
+              </div>
               <div style={{ display: "flex", justifyContent: "center" }}>
                 {payment}
               </div>
@@ -176,7 +210,9 @@ export default function Withdraw() {
                   $0.00 to $5.00
                 </Grid>
                 <Grid item md={2}>
-                  Not available
+                  {language === "en"
+                    ? en.wallet.withdraw.not_available
+                    : vi.wallet.withdraw.not_available}
                 </Grid>
               </Grid>
               <Grid container className="customWithdrawFee bd-bt">

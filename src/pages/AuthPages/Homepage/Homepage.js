@@ -20,8 +20,12 @@ export default function Homepage() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const navigate = useNavigate();
   const banners = [banner1, banner2];
-  const captions = ["Welcome to GameBay", "Join our subscription"];
   const language = state.language || "en";
+  const captions = [
+    language === "en" ? en.caption1 : vi.caption1,
+    language === "en" ? en.caption2 : vi.caption2,
+  ];
+
   const [categories, setCategories] = useState([]);
   let src = [ingame, giftcards, games, movie];
   useEffect(() => {
@@ -39,10 +43,29 @@ export default function Homepage() {
       ctxDispatch({ type: "SET_SUBCATEGORY", payload: subCategory });
     }
   };
+  const categoryNames = {
+    "Game Items": {
+      en: "Game Items",
+      vi: "Vật phẩm ảo",
+    },
+    "Gift Cards": {
+      en: "Gift Cards",
+      vi: "Thẻ quà tặng",
+    },
+    Games: {
+      en: "Games",
+      vi: "Trò chơi",
+    },
+    Movies: {
+      en: "Movies",
+      vi: "Phim",
+    },
+  };
+
   return (
     <Grid container className="pb-50">
       <Helmet>
-        <title> GameBay | Buy & Sell Games, Gift Cards & More </title>
+        <title>{language === "en" ? en.title : vi.title}</title>
       </Helmet>
       <div style={{ width: "100vw", height: "100%" }}>
         <Carousel autoplay>
@@ -67,7 +90,7 @@ export default function Homepage() {
         {categories.map((category, index) => (
           <CardContainer
             key={index}
-            title={category.name}
+            title={categoryNames[category.name][language]}
             img={src[index]}
             handleSearch={handleSearch}
             category={category._id}
@@ -76,7 +99,7 @@ export default function Homepage() {
       </Grid>
       {categories.map((category, index) => (
         <Grid container key={category._id}>
-          <h2 className="content">{category.name}</h2>
+          <h2 className="content">{categoryNames[category.name][language]}</h2>
           <Grid container className="mg-auto-80">
             {category.subCategory.map((subCategory) => (
               <CardContainer
