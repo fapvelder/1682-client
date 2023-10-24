@@ -6,13 +6,14 @@ import { getItemSteam, getUserByID } from "../../../../api";
 import { Store } from "../../../../Store";
 import "./gameItems.css";
 import { toast } from "react-toastify";
-
 import { getError } from "../../../../utils.js";
 import handleLoading from "../../../../component/HandleLoading";
 import useLoading from "../../../../component/HandleLoading/useLoading";
 import Loading from "../../../../component/Loading";
 import axios from "axios";
 import Responsive from "../../../../component/ResponsiveCode/Responsive";
+import vi from "../../../../component/languages/vi.json";
+import en from "../../../../component/languages/en.json";
 export default function GameItems() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const params = useParams();
@@ -24,7 +25,7 @@ export default function GameItems() {
   const { loading, setLoading, reload, setReload } = useLoading();
   const steam = state?.data?.profile?.steam;
   const url = "https://community.cloudflare.steamstatic.com/economy/image/";
-
+  const language = state?.language || "en";
   const [steamInventory, setSteamInventory] = useState([]);
   const [priceInventory, setPriceInventory] = useState([]);
   const [selectedItem, setSelectedItem] = useState("");
@@ -126,7 +127,7 @@ export default function GameItems() {
             assetID: item.assetid,
             classID: item.classid,
             // price: gameTitle === "CS:GO" ? price[index] : "No suggested price",
-            price: gameTitle === "CS:GO" ? "1$" : "No suggested price",
+            // price: gameTitle === "CS:GO" ? "1$" : "No suggested price",
           }))
         );
       }
@@ -134,12 +135,14 @@ export default function GameItems() {
     getPrice();
   }, [steamInventory, reload, gameTitle]);
   const { tablet, mobile, minipad } = Responsive();
-
   return (
     <Grid container className="selling-item pb-50">
       {loading && <Loading />}
       <div className="mg-auto-80">
-        <h3 className="mt-15">Start Selling - {gameTitle}</h3>
+        <h3 className="mt-15">
+          {language === "en" ? en.start_selling.title : vi.start_selling.title}{" "}
+          - {gameTitle}
+        </h3>
         <Grid
           container
           style={{ gridGap: minipad ? "40px" : "70px" }}
@@ -147,12 +150,18 @@ export default function GameItems() {
         >
           <Grid item xs={12} sm={7} md={7} className="inventorySection">
             <h3>
-              <span>Your Inventory</span>
+              <span>
+                {language === "en"
+                  ? en.start_selling.items.your_inventory
+                  : vi.start_selling.items.your_inventory}
+              </span>
             </h3>
             <Grid container>
               <Grid container style={{ marginBottom: 20, padding: 10 }}>
                 <Button onClick={() => refreshInventory()}>
-                  Refresh Inventory
+                  {language === "en"
+                    ? en.start_selling.items.refresh_inventory
+                    : vi.start_selling.items.refresh_inventory}
                 </Button>
               </Grid>
               {steamInventory &&
@@ -173,12 +182,21 @@ export default function GameItems() {
                       <p
                         className="text-start ml-15"
                         style={{
+                          paddingBottom: 15,
                           fontSize: gameTitle === "Steam Items" && 10,
                         }}
                       >
                         {item?.price}
                       </p>
-                      <img src={`${url}${item.icon_url}`} alt="" />
+                      <div
+                        style={{
+                          alignItems: "center",
+                          display: "flex",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <img src={`${url}${item.icon_url}`} alt="" />
+                      </div>
                     </div>
                     <p>{item?.name}</p>
                   </Grid>
@@ -187,7 +205,11 @@ export default function GameItems() {
           </Grid>
           <Grid item xs={12} sm={4} md={4} className="skinSelectSection">
             <h3>
-              <span>Skin to sell </span>
+              <span>
+                {language === "en"
+                  ? en.start_selling.items.skin_sell
+                  : vi.start_selling.items.skin_sell}{" "}
+              </span>
             </h3>
             <Grid container>
               <Grid
@@ -198,14 +220,22 @@ export default function GameItems() {
                   justifyContent: "space-between",
                 }}
               >
-                <div> {selectedItem ? 1 : 0} item(s) selected </div>
+                <div>
+                  {" "}
+                  {selectedItem ? 1 : 0}{" "}
+                  {language === "en"
+                    ? en.start_selling.items.items_selected
+                    : vi.start_selling.items.items_selected}{" "}
+                </div>
                 <div>
                   <Button
                     className="defaultButton ml-15"
                     disabled={selectedItem ? false : true}
                     onClick={() => handleContinue(selectedItem)}
                   >
-                    Continue
+                    {language === "en"
+                      ? en.start_selling.items.continue
+                      : vi.start_selling.items.continue}
                   </Button>
                 </div>
               </Grid>
@@ -222,9 +252,9 @@ export default function GameItems() {
                     </div>
                     <div style={{ padding: 10 }}>
                       <div>{selectedItem.name}</div>
-                      <div style={{ color: "#E32636" }}>
+                      {/* <div style={{ color: "#E32636" }}>
                         Suggested Price: {selectedItem.price}
-                      </div>
+                      </div> */}
                       <div>
                         {selectedItem?.description?.map((item, index) => (
                           <div key={index}>

@@ -26,10 +26,14 @@ import pending from "../../../component/img/pending.png";
 import cancelled from "../../../component/img/cancelled.png";
 import { Helmet } from "react-helmet-async";
 import { Statistic } from "antd";
+import SpecificDetails from "../../../component/SpecificDetails";
+import vi from "../../../component/languages/vi.json";
+import en from "../../../component/languages/en.json";
 const { Countdown } = Statistic;
 export default function OrderDetailsPage() {
   const { id } = useParams();
   const { state } = useContext(Store);
+  const language = state?.language || "en";
   const { loading, setLoading, reload, setReload } = useLoading();
   const navigate = useNavigate();
   const [order, setOrder] = useState("");
@@ -80,9 +84,9 @@ export default function OrderDetailsPage() {
   }, [id, reload]);
 
   useEffect(() => {
-    const socket = io();
-    // Listen for the 'tradeOfferStatus' event
+    const socket = io(serverURL);
     socket.on("tradeOfferURL", (data) => {
+      console.log(data);
       if (data.tradeOfferURL) {
         window.open(data.tradeOfferURL);
       }
@@ -193,7 +197,9 @@ export default function OrderDetailsPage() {
   return (
     <Grid container className="pb-50" style={{ padding: 10 }}>
       <Helmet>
-        <title>Order Details</title>
+        <title>
+          {language === "en" ? en.order_details.title : vi.order_details.title}
+        </title>
       </Helmet>
       <Grid container>
         <Grid item xs={12} sm={6} md={6} style={{ paddingRight: 10 }}>
@@ -218,7 +224,11 @@ export default function OrderDetailsPage() {
                 src={order?.seller?.avatar}
                 alt=""
               />
-              <span style={{ margin: "0px 10px" }}>Sold by:</span>
+              <span style={{ margin: "0px 10px" }}>
+                {language === "en"
+                  ? en.order_details.sold
+                  : vi.order_details.sold}
+              </span>
               <span
                 style={{
                   color: "blue",
@@ -231,89 +241,7 @@ export default function OrderDetailsPage() {
               </span>
             </Grid>
           </Grid>
-          <Grid container className="border mt-15" style={{ padding: 20 }}>
-            <Grid container style={{ height: "100%" }}>
-              <h3>Product Details</h3>
-              <div className="specificDetails text-start">
-                <Grid container className=" detailsRow">
-                  <Grid item xs={6} sm={6} md={4}>
-                    Category
-                  </Grid>
-                  <Grid item xs={6} sm={6} md={8}>
-                    {order?.product?.category?.name}
-                  </Grid>
-                </Grid>
-                <Grid container className="detailsRow">
-                  <Grid item xs={6} sm={6} md={4}>
-                    Title
-                  </Grid>
-                  <Grid item xs={6} sm={6} md={8}>
-                    {order?.product?.gameTitle}
-                  </Grid>
-                </Grid>
-                <Grid container className="detailsRow">
-                  <Grid item xs={6} sm={6} md={4}>
-                    Delivery method
-                  </Grid>
-                  <Grid item xs={6} sm={6} md={8}>
-                    {order?.product?.deliveryMethod === "Bot"
-                      ? "Bot Trade"
-                      : order?.product?.deliveryMethod === "Auto"
-                      ? "Digital Code"
-                      : `Transfer`}{" "}
-                  </Grid>
-                </Grid>
-                <Grid container className="detailsRow">
-                  <Grid item xs={6} sm={6} md={4}>
-                    Delivery in
-                  </Grid>
-                  {order?.product?.deliveryMethod === "Bot" ||
-                  order?.product?.deliveryMethod === "Auto" ? (
-                    <Grid item xs={6} sm={6} md={8}>
-                      Auto delivery
-                    </Grid>
-                  ) : (
-                    <Grid item xs={6} sm={6} md={8}>
-                      {order?.product?.deliveryIn} day(s)
-                    </Grid>
-                  )}
-                </Grid>
-                <Grid container className="detailsRow">
-                  <Grid item xs={6} sm={6} md={4}>
-                    Region restriction
-                  </Grid>
-                  <Grid item xs={6} sm={6} md={8}>
-                    Europe
-                  </Grid>
-                </Grid>
-                <Grid container className="detailsRow">
-                  <Grid item xs={6} sm={6} md={4}>
-                    Returns
-                  </Grid>
-                  <Grid item xs={6} sm={6} md={8}>
-                    No return. View our return policy
-                  </Grid>
-                </Grid>
-                <Grid container className="detailsRow">
-                  <Grid item xs={6} sm={6} md={4}>
-                    Accept currency
-                  </Grid>
-                  <Grid item xs={6} sm={6} md={8}>
-                    USD
-                  </Grid>
-                </Grid>
-                <Grid container className="detailsRow">
-                  <Grid item xs={6} sm={6} md={4}>
-                    Protection
-                  </Grid>
-                  <Grid item xs={6} sm={6} md={8}>
-                    You're protected under the GameBay Guarantee. Get the item
-                    as described or your money back.
-                  </Grid>
-                </Grid>
-              </div>
-            </Grid>
-          </Grid>
+          <SpecificDetails product={order?.product} />
         </Grid>
         <Grid
           item
@@ -345,13 +273,20 @@ export default function OrderDetailsPage() {
               className="text-start"
               style={{ fontSize: 22 }}
             >
-              Transaction is {order?.status}
+              {language === "en"
+                ? en.order_details.transaction
+                : vi.order_details.transaction}{" "}
+              {order?.status}
             </Grid>
           </Grid>
           {order?.product?.deliveryMethod === "Bot" ? (
             <Grid container style={{ padding: 20, marginTop: 15 }}>
               <Grid item xs={12} sm={12} md={12} className="text-start">
-                <h3>Start bot trade</h3>
+                <h3>
+                  {language === "en"
+                    ? en.order_details.start
+                    : vi.order_details.start}
+                </h3>
               </Grid>
               <Grid
                 item
@@ -366,11 +301,15 @@ export default function OrderDetailsPage() {
                     onClick={() => handleTrade()}
                     className="defaultButton"
                   >
-                    Click here to start bot trade
+                    {language === "en"
+                      ? en.order_details.click
+                      : vi.order_details.click}
                   </Button>
                 ) : (
                   <div style={{ height: 50 }}>
-                    You has accepted the trade offer.
+                    {language === "en"
+                      ? en.order_details.accepted
+                      : vi.order_details.accepted}
                   </div>
                 )}
               </Grid>
@@ -378,7 +317,11 @@ export default function OrderDetailsPage() {
           ) : order?.product?.deliveryMethod === "Auto" ? (
             <Grid container style={{ padding: 20, marginTop: 15 }}>
               <Grid item xs={12} sm={12} md={12} className="text-start">
-                <h3>Key or Code</h3>
+                <h3>
+                  {language === "en"
+                    ? en.order_details.code
+                    : vi.order_details.code}
+                </h3>
               </Grid>
               <Grid
                 item
@@ -398,7 +341,11 @@ export default function OrderDetailsPage() {
                 {order.product.category.name === "Game Items" &&
                   order?.buyer?.profile?.steam?.steamTradeURL && (
                     <Grid item xs={12} sm={12} md={12} className="text-start">
-                      <h3>Buyer Steam Trade Offer URL</h3>
+                      <h3>
+                        {language === "en"
+                          ? en.order_details.trade_offer
+                          : vi.order_details.trade_offer}
+                      </h3>
 
                       <Input value={order.buyer.profile.steam.steamTradeURL} />
                       <div style={{ display: "flex", justifyContent: "end" }}>
@@ -408,18 +355,28 @@ export default function OrderDetailsPage() {
                             window.open(order.buyer.profile.steam.steamTradeURL)
                           }
                         >
-                          Open it
+                          {language === "en"
+                            ? en.order_details.open
+                            : vi.order_details.open}
                         </Button>
                       </div>
                     </Grid>
                   )}
                 <Grid item xs={12} sm={12} md={12} className="text-start">
-                  <h3>Wait for seller to send item</h3>
+                  <h3>
+                    {language === "en"
+                      ? en.order_details.wait
+                      : vi.order_details.wait}
+                  </h3>
                 </Grid>
 
                 <Grid item xs={12} sm={12} md={12}>
                   <Countdown
-                    title="Seller must send the item"
+                    title={
+                      language === "en"
+                        ? en.order_details.must
+                        : vi.order_details.must
+                    }
                     value={
                       new Date(order?.createdAt).getTime() +
                       24 * 60 * 60 * 1000 * order?.product?.deliveryIn
@@ -432,7 +389,9 @@ export default function OrderDetailsPage() {
                       className="defaultButton"
                       onClick={() => handleSendItem()}
                     >
-                      I have sent the item
+                      {language === "en"
+                        ? en.order_details.have_sent
+                        : vi.order_details.have_sent}{" "}
                     </Button>
                   ) : (
                     order?.seller?._id === state?.data?._id &&
@@ -442,7 +401,9 @@ export default function OrderDetailsPage() {
                         onClick={() => showModal()}
                         // onClick={() => handleSendItem()}
                       >
-                        Send Code
+                        {language === "en"
+                          ? en.order_details.send_code
+                          : vi.order_details.send_code}
                       </Button>
                     )
                   )}
@@ -451,7 +412,11 @@ export default function OrderDetailsPage() {
             ) : (
               <Grid container style={{ padding: 20, marginTop: 15 }}>
                 <Grid item xs={12} sm={12} md={12} className="text-start">
-                  <h3>Seller has sent the item</h3>
+                  <h3>
+                    {language === "en"
+                      ? en.order_details.seller_sent
+                      : vi.order_details.seller_sent}
+                  </h3>
                 </Grid>
                 {order?.product?.category?.name !== "Game Items" ? (
                   <Grid
@@ -473,14 +438,20 @@ export default function OrderDetailsPage() {
                     className="border"
                     style={{ padding: 10 }}
                   >
-                    Please check your trade offer
+                    {language === "en"
+                      ? en.order_details.check
+                      : vi.order_details.check}
                   </Grid>
                 )}
               </Grid>
             ))
           )}
           <Grid container style={{ padding: 20 }}>
-            <h3>Order Details</h3>
+            <h3>
+              {language === "en"
+                ? en.order_details.title
+                : vi.order_details.title}
+            </h3>
           </Grid>
           <Grid container style={{ padding: 20 }}>
             <Grid item xs={12} sm={12} md={12} className="border text-start">
@@ -489,7 +460,11 @@ export default function OrderDetailsPage() {
                 className="detailsRow"
                 style={{ display: "flex", justifyContent: "space-between" }}
               >
-                <div>OrderID</div>
+                <div>
+                  {language === "en"
+                    ? en.order_details.order
+                    : vi.order_details.order}
+                </div>
                 <div>{order?._id}</div>
               </Grid>
               <Grid
@@ -505,7 +480,11 @@ export default function OrderDetailsPage() {
                 className="detailsRow"
                 style={{ display: "flex", justifyContent: "space-between" }}
               >
-                <div>Price</div>
+                <div>
+                  {language === "en"
+                    ? en.order_details.price
+                    : vi.order_details.price}
+                </div>
                 <div>{order?.product?.price}</div>
               </Grid>
             </Grid>
@@ -516,7 +495,11 @@ export default function OrderDetailsPage() {
                 container
                 style={{ display: "flex", justifyContent: "center" }}
               >
-                <p>Please help us rating how was his/her service</p>
+                <p>
+                  {language === "en"
+                    ? en.order_details.rating
+                    : vi.order_details.rating}
+                </p>
               </Grid>
               <Grid
                 container
@@ -547,13 +530,21 @@ export default function OrderDetailsPage() {
                 )}
               </Grid>
               <Grid container className="mt-15">
-                <p>Give us feedback about the seller:</p>
+                <p>
+                  {language === "en"
+                    ? en.order_details.feedback
+                    : vi.order_details.feedback}
+                </p>
               </Grid>
               <TextArea
                 autoSize={{ minRows: 5, maxRows: 5 }}
                 onChange={(e) => setFeedback(e.target.value)}
                 value={feedback}
-                placeholder="Optional feedback"
+                placeholder={
+                  language === "en"
+                    ? en.order_details.optional
+                    : vi.order_details.optional
+                }
               />
 
               <Grid
@@ -565,7 +556,9 @@ export default function OrderDetailsPage() {
                   className="defaultButton mt-15"
                   onClick={() => handleFeedback()}
                 >
-                  Send Feedback
+                  {language === "en"
+                    ? en.order_details.send_feedback
+                    : vi.order_details.send_feedback}
                 </Button>
               </Grid>
             </Grid>
@@ -584,13 +577,17 @@ export default function OrderDetailsPage() {
                   className="defaultButton"
                   onClick={() => handleCancelOrder()}
                 >
-                  Cancel
+                  {language === "en"
+                    ? en.order_details.cancel
+                    : vi.order_details.cancel}
                 </Button>
                 <Button
                   className="defaultButton"
                   onClick={() => handleCompleteOrder()}
                 >
-                  Complete
+                  {language === "en"
+                    ? en.order_details.complete
+                    : vi.order_details.complete}
                 </Button>
               </div>
             ) : (
@@ -601,14 +598,20 @@ export default function OrderDetailsPage() {
                   className="defaultButton"
                   onClick={() => handleCompleteOrder()}
                 >
-                  Complete
+                  {language === "en"
+                    ? en.order_details.complete
+                    : vi.order_details.complete}
                 </Button>
               </div>
             ))}
         </Grid>
       </Grid>
       <Modal
-        title="Send the digital or key code"
+        title={
+          language === "en"
+            ? en.order_details.send_code
+            : vi.order_details.send_code
+        }
         open={isModalOpen}
         onOk={() => handleSendItem()}
         onCancel={handleCancel}

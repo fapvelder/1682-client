@@ -19,11 +19,14 @@ import useLoading from "../../../component/HandleLoading/useLoading.js";
 import Loading from "../../../component/Loading/index.js";
 import { io } from "socket.io-client";
 import soldBanner from "../../../component/img/sold.png";
-
+import vi from "../../../component/languages/vi.json";
+import en from "../../../component/languages/en.json";
+import SpecificDetails from "../../../component/SpecificDetails";
 export default function ProductDetails() {
   const params = useParams();
   const navigate = useNavigate();
   const { state } = useContext(Store);
+  const language = state?.language || "en";
   const { loading, setLoading, reload, setReload } = useLoading();
   const [product, setProduct] = useState("");
   const [comment, setComment] = useState("");
@@ -120,7 +123,7 @@ export default function ProductDetails() {
           <div className="specific">
             <Grid container className="priceItem">
               <span>
-                <p>Digital Code</p>
+                <p>{product?.category?.name}</p>
                 <p>{moment(product?.createdAt).fromNow()}</p>
               </span>
               <span>${product?.price} USD</span>
@@ -135,7 +138,12 @@ export default function ProductDetails() {
                   <Button disabled>Sold</Button>
                 )
               ) : product.isAvailable ? (
-                <Button className="defaultButton">Edit</Button>
+                <Button
+                  className="defaultButton"
+                  onClick={() => navigate(`/edit/${product._id}`)}
+                >
+                  Edit
+                </Button>
               ) : (
                 <Button disabled>Sold</Button>
               )}
@@ -162,68 +170,8 @@ export default function ProductDetails() {
                 width={"100%"}
               />
             </Grid>
-            <Grid container>
-              <div className="specificDetails text-start border">
-                <Grid container className=" detailsRow">
-                  <Grid item xs={6} md={4}>
-                    Category
-                  </Grid>
-                  <Grid item xs={6} md={8}>
-                    {product?.category?.name}
-                  </Grid>
-                </Grid>
-                <Grid container className="detailsRow">
-                  <Grid item xs={6} md={4}>
-                    Title
-                  </Grid>
-                  <Grid item xs={6} md={8}>
-                    {product?.gameTitle}
-                  </Grid>
-                </Grid>
+            <SpecificDetails product={product} />
 
-                <Grid container className="detailsRow">
-                  <Grid item xs={6} md={4}>
-                    Delivery method
-                  </Grid>
-                  <Grid item xs={6} md={8}>
-                    {product?.deliveryIn} day(s)
-                  </Grid>
-                </Grid>
-                <Grid container className="detailsRow">
-                  <Grid item xs={6} md={4}>
-                    Region restriction
-                  </Grid>
-                  <Grid item xs={6} md={8}>
-                    Europe
-                  </Grid>
-                </Grid>
-                <Grid container className="detailsRow">
-                  <Grid item xs={6} md={4}>
-                    Returns
-                  </Grid>
-                  <Grid item xs={6} md={8}>
-                    No return. View our return policy
-                  </Grid>
-                </Grid>
-                <Grid container className="detailsRow">
-                  <Grid item xs={6} md={4}>
-                    Accept currency
-                  </Grid>
-                  <Grid item xs={6} md={8}>
-                    USD
-                  </Grid>
-                </Grid>
-                <Grid container className="detailsRow">
-                  <Grid item xs={6} md={4}>
-                    Protection
-                  </Grid>
-                  <Grid item xs={6} md={8}>
-                    You're protected under the GameBay Guarantee. Get the item
-                    as described or your money back.
-                  </Grid>
-                </Grid>
-              </div>
-            </Grid>
             <Grid container style={{ display: "flex", justifyContent: "end" }}>
               <Button className="defaultButton reportBtn">
                 <i className="fas fa-flag" />

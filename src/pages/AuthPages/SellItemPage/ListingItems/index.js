@@ -26,6 +26,8 @@ import Loading from "../../../../component/Loading";
 import { toast } from "react-toastify";
 import { LoadingOutlined } from "@ant-design/icons";
 import Responsive from "../../../../component/ResponsiveCode/Responsive";
+import vi from "../../../../component/languages/vi.json";
+import en from "../../../../component/languages/en.json";
 
 const { Option } = Select;
 export default function ListingItem() {
@@ -43,9 +45,7 @@ export default function ListingItem() {
   const [subCategory, setSubCategory] = useState("");
   const [suggestedPrice, setSuggestedPrice] = useState("");
   const [gameTitle, setGameTitle] = useState("");
-  const [editedTitle, setEditedTitle] = useState(title);
-  const [editedDescription, setEditedDescription] = useState(description);
-
+  const language = state?.language || "en";
   useEffect(() => {
     if (location?.state) {
       let state = location?.state;
@@ -128,9 +128,16 @@ export default function ListingItem() {
     const appID = item?.appid;
     const version = item?.contextid;
     const classID = item?.classID;
+    const assetID = item?.assetID;
     handleLoading(
       async () => {
-        const response = await depositItem(userID, appID, version, classID);
+        const response = await depositItem(
+          userID,
+          appID,
+          version,
+          classID,
+          assetID
+        );
         setTradeOffer(response.data.tradeOfferUrl);
         setID(response.data.id);
         setCurrent(1);
@@ -223,13 +230,18 @@ export default function ListingItem() {
         <Grid container className="mg-auto-80 selectCustom">
           <Grid container className="customSection">
             <h3>
-              <span>Screenshots / Photos</span>
+              <span>
+                {language === "en"
+                  ? en.start_selling.listings.screenshots
+                  : vi.start_selling.listings.screenshots}
+              </span>
             </h3>
             <Grid container>
               <div style={{ padding: 10 }}>
                 <p>
-                  Your screenshots should clearly show what you are selling.
-                  640x640 is recommended.
+                  {language === "en"
+                    ? en.start_selling.listings.descPhoto
+                    : vi.start_selling.listings.descPhoto}
                 </p>
                 {url ? (
                   <div className="item-background">
@@ -262,18 +274,29 @@ export default function ListingItem() {
           </Grid>
           <Grid container className="customSection">
             <h3>
-              <span>Description</span>
+              <span>
+                {" "}
+                {language === "en"
+                  ? en.start_selling.listings.description
+                  : vi.start_selling.listings.description}
+              </span>
             </h3>
             <Grid container>
               <div style={{ padding: 15 }}>
                 <p>
-                  The listing title and description must be accurate and as
-                  informative as possible (no random or lottery-like listing).
-                  Misleading description is a violation of our terms of service.
+                  {language === "en"
+                    ? en.start_selling.listings.desc
+                    : vi.start_selling.listings.desc}
                 </p>
                 <Input
                   value={title}
-                  placeholder={title ? title : "Game title or listing title"}
+                  placeholder={
+                    title
+                      ? title
+                      : language === "en"
+                      ? en.start_selling.listings.placeholder_title
+                      : vi.start_selling.listings.placeholder_title
+                  }
                   onChange={(e) => setTitle(e.target.value)}
                 />
                 <TextArea
@@ -281,7 +304,9 @@ export default function ListingItem() {
                   placeholder={
                     description
                       ? description
-                      : "Item description or Listing details"
+                      : language === "en"
+                      ? en.start_selling.listings.placeholder_desc
+                      : vi.start_selling.listings.placeholder_desc
                   }
                   onChange={(e) => setDescription(e.target.value)}
                   style={{ marginTop: 10 }}
@@ -292,7 +317,12 @@ export default function ListingItem() {
           </Grid>
           <Grid container className="customSection">
             <h3>
-              <span>Category</span>
+              <span>
+                {" "}
+                {language === "en"
+                  ? en.start_selling.listings.category
+                  : vi.start_selling.listings.category}
+              </span>
             </h3>
             <Grid container style={{ padding: 15 }}>
               <Grid item xs={12} sm={8} md={8}>
@@ -304,7 +334,9 @@ export default function ListingItem() {
                   {gameTitle && (
                     <Grid container className="bd-bt">
                       <Grid item xs={4} sm={4} md={4}>
-                        Title
+                        {language === "en"
+                          ? en.start_selling.listings.title
+                          : vi.start_selling.listings.title}
                       </Grid>
                       <Grid item xs={7} sm={7} md={7}>
                         {gameTitle}
@@ -313,7 +345,9 @@ export default function ListingItem() {
                   )}
                   <Grid container className="bd-bt">
                     <Grid item xs={4} sm={4} md={4}>
-                      Category
+                      {language === "en"
+                        ? en.start_selling.listings.category
+                        : vi.start_selling.listings.category}
                     </Grid>
                     <Grid item xs={7} sm={7} md={7}>
                       {category}
@@ -321,7 +355,9 @@ export default function ListingItem() {
                   </Grid>
                   <Grid container>
                     <Grid item xs={4} sm={4} md={4}>
-                      Platform
+                      {language === "en"
+                        ? en.start_selling.listings.platform
+                        : vi.start_selling.listings.platform}
                     </Grid>
                     <Grid item xs={7} sm={7} md={7}>
                       {subCategory}
@@ -333,7 +369,12 @@ export default function ListingItem() {
           </Grid>
           <Grid container className="customSection">
             <h3>
-              <span>Delivery Method</span>
+              <span>
+                {" "}
+                {language === "en"
+                  ? en.start_selling.listings.delivery_method
+                  : vi.start_selling.listings.delivery_method}
+              </span>
             </h3>
             <Grid container>
               <Radio.Group
@@ -344,16 +385,22 @@ export default function ListingItem() {
                 <Space direction="vertical">
                   {category === "Game Items" ? (
                     <Radio value="Bot" onClick={showModal}>
-                      Automatic delivery via Bot{" "}
+                      {language === "en"
+                        ? en.start_selling.listings.automatic_bot
+                        : vi.start_selling.listings.automatic_bot}
                     </Radio>
                   ) : (
                     <Radio value="Auto" onClick={showModalCode}>
-                      Automatic delivery
+                      {language === "en"
+                        ? en.start_selling.listings.automatic
+                        : vi.start_selling.listings.automatic}
                     </Radio>
                   )}
 
                   <Radio value="Transfer" style={{ marginTop: 20 }}>
-                    I will coordinate with buyer to transfer.
+                    {language === "en"
+                      ? en.start_selling.listings.transfer
+                      : vi.start_selling.listings.transfer}
                   </Radio>
                   {deliveryMethod === "Transfer" && (
                     <Radio.Group
@@ -361,9 +408,24 @@ export default function ListingItem() {
                       onChange={(e) => setDeliveryIn(e.target.value)}
                     >
                       <Space direction="vertical">
-                        <Radio value="1">1 days</Radio>
-                        <Radio value="2">2 days</Radio>
-                        <Radio value="3">3 days</Radio>
+                        <Radio value="1">
+                          1{" "}
+                          {language === "en"
+                            ? en.start_selling.listings.days
+                            : vi.start_selling.listings.days}
+                        </Radio>
+                        <Radio value="2">
+                          2{" "}
+                          {language === "en"
+                            ? en.start_selling.listings.days
+                            : vi.start_selling.listings.days}
+                        </Radio>
+                        <Radio value="3">
+                          3{" "}
+                          {language === "en"
+                            ? en.start_selling.listings.days
+                            : vi.start_selling.listings.days}
+                        </Radio>
                       </Space>
                     </Radio.Group>
                   )}
@@ -373,11 +435,24 @@ export default function ListingItem() {
           </Grid>
           <Grid container className="customSection">
             <h3>
-              <span>Price</span>
+              <span>
+                {" "}
+                {language === "en"
+                  ? en.start_selling.listings.price
+                  : vi.start_selling.listings.price}
+              </span>
             </h3>
             <Grid container>
               <div style={{ padding: 15 }}>
-                {suggestedPrice && <p>Suggested Price: {suggestedPrice} </p>}
+                {suggestedPrice && (
+                  <p>
+                    {" "}
+                    {language === "en"
+                      ? en.start_selling.listings.suggested_price
+                      : vi.start_selling.listings.suggested_price}
+                    : {suggestedPrice}{" "}
+                  </p>
+                )}
                 <Form.Item>
                   <InputNumber
                     defaultValue={0}
@@ -390,14 +465,23 @@ export default function ListingItem() {
                   />
                 </Form.Item>
 
-                <p>Our marketplace is for items priced between $1 and $2500</p>
-                <p>Compare to similar listings</p>
+                <p>
+                  {" "}
+                  {language === "en"
+                    ? en.start_selling.listings.descPrice
+                    : vi.start_selling.listings.descPrice}
+                </p>
               </div>
             </Grid>
           </Grid>
           <Grid container className="customSection">
             <h3>
-              <span>Visibility</span>
+              <span>
+                {" "}
+                {language === "en"
+                  ? en.start_selling.listings.visibility
+                  : vi.start_selling.listings.visibility}
+              </span>
             </h3>
             <Grid container>
               <div style={{ padding: 15 }}>
@@ -406,25 +490,41 @@ export default function ListingItem() {
                   onChange={(e) => setVisibility(e)}
                   style={{ width: mobile ? "80%" : "20%" }}
                 >
-                  <Option value="Public">Public</Option>
-                  <Option value="Unlisted">Unlisted</Option>
+                  <Option value="Public">
+                    {language === "en"
+                      ? en.start_selling.listings.public
+                      : vi.start_selling.listings.public}
+                  </Option>
+                  <Option value="Unlisted">
+                    {language === "en"
+                      ? en.start_selling.listings.Unlisted
+                      : vi.start_selling.listings.Unlisted}
+                  </Option>
                 </Select>
                 <p>
-                  Public listings can be seen and searched by anyone using
-                  GameBay. Unlisted listings can be seen and shared by anyone
-                  with the link.
+                  {language === "en"
+                    ? en.start_selling.listings.descVisi
+                    : vi.start_selling.listings.descVisi}
                 </p>
               </div>
             </Grid>
           </Grid>
           <Grid container className="customSection">
             <h3>
-              <span>Estimate Fees & Proceeds</span>
+              <span>
+                {" "}
+                {language === "en"
+                  ? en.start_selling.listings.estimate
+                  : vi.start_selling.listings.estimate}
+              </span>
             </h3>
             <Grid container style={{ padding: 15 }}>
               <Grid container>
                 <Grid item md={4}>
-                  Digital transfer fee:
+                  {language === "en"
+                    ? en.start_selling.listings.digital_fee
+                    : vi.start_selling.listings.digital_fee}
+                  :
                 </Grid>
                 <Grid item md={8}>
                   {digitalFee ? `$${digitalFee} USD` : "$0.00 USD"}
@@ -432,7 +532,10 @@ export default function ListingItem() {
               </Grid>
               <Grid container>
                 <Grid item md={4}>
-                  Commission fee:
+                  {language === "en"
+                    ? en.start_selling.listings.commission_fee
+                    : vi.start_selling.listings.commission_fee}
+                  :
                 </Grid>
                 <Grid item md={8}>
                   {commissionFee ? `$${commissionFee} USD` : "$0.00 USD"}
@@ -440,7 +543,10 @@ export default function ListingItem() {
               </Grid>
               <Grid container>
                 <Grid item md={4}>
-                  You make:
+                  {language === "en"
+                    ? en.start_selling.listings.you_make
+                    : vi.start_selling.listings.you_make}
+                  :
                 </Grid>
                 <Grid item md={8}>
                   {finalIncome ? `$${finalIncome} USD` : "$0.00 USD"}
@@ -455,7 +561,9 @@ export default function ListingItem() {
               onClick={() => createListingItem()}
             >
               {" "}
-              Done
+              {language === "en"
+                ? en.start_selling.listings.done
+                : vi.start_selling.listings.done}
             </Button>
           </Grid>
         </Grid>

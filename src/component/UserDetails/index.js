@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./UserDetails.css";
 import { Grid } from "@material-ui/core";
 import moment from "moment";
@@ -6,13 +6,17 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "antd";
 import handleLoading from "../HandleLoading";
 import { getUserFeedback } from "../../api";
-
+import vi from "../../component/languages/vi.json";
+import en from "../../component/languages/en.json";
+import { Store } from "../../Store";
 export default function UserDetails({
   currentChatUser,
   contact,
   width = "80%",
 }) {
+  const { state } = useContext(Store);
   const [rating, setRating] = useState("");
+  const language = state?.language || "en";
   useEffect(() => {
     const getUserFeedbacks = async () => {
       if (currentChatUser?.slug) {
@@ -59,21 +63,41 @@ export default function UserDetails({
                 onClick={() => navigate(`/chat/${currentChatUser?.slug}`)}
               >
                 <i className="fas fa-comments" style={{ cursor: "pointer" }} />
-                &nbsp; Contact
+                &nbsp;{" "}
+                {language === "en"
+                  ? en.user_details.contact
+                  : vi.user_details.contact}
               </Button>
             )}
           </div>
           <p>
-            Member since {moment(currentChatUser?.since).format("MMM YYYY")}
+            &nbsp;{" "}
+            {language === "en" ? en.user_details.since : vi.user_details.since}
+            {moment(currentChatUser?.since).format("MMM YYYY")}
           </p>
           <p>
-            Seller Rating:{" "}
-            {rating.length > 0 ? `${rating.length} Ratings` : "Not available"}
+            &nbsp;{" "}
+            {language === "en"
+              ? en.user_details.seller_rating
+              : vi.user_details.seller_rating}
+            :{" "}
+            {rating.length > 0
+              ? `${rating.length} ${
+                  language === "en"
+                    ? en.user_details.ratings
+                    : vi.user_details.ratings
+                }`
+              : language === "en"
+              ? en.user_details.not_available
+              : vi.user_details.not_available}
           </p>
           {currentChatUser?.profile?.communication &&
             currentChatUser?.profile?.communication.length > 0 && (
               <p>
-                Languages:{" "}
+                {language === "en"
+                  ? en.user_details.languages
+                  : vi.user_details.languages}
+                :{" "}
                 {currentChatUser?.profile?.communication?.map((item, index) => (
                   <React.Fragment key={item._id}>
                     {`${item.language} (${item?.proficiency})`}

@@ -3,18 +3,24 @@ import React, { useContext } from "react";
 import "./balance.css";
 import { Store } from "../../../../Store";
 
-export default function Balance() {
+export default function Balance({ language, vi, en }) {
   const { state } = useContext(Store);
   const balance = state?.data?.wallet.toFixed(2);
   return (
     <Grid container className="pb-50">
       <Grid container>
         <div className="customContainer">
-          <div>Your balance</div>
+          <div>
+            {language === "en"
+              ? en.wallet.balance.your_balance
+              : vi.wallet.balance.your_balance}
+          </div>
           <div className="balanceContainer">
             <Grid container className="bd-bt">
               <Grid item xs={6} sm={6} md={6}>
-                Available
+                {language === "en"
+                  ? en.wallet.balance.available
+                  : vi.wallet.balance.available}
               </Grid>
               <Grid item xs={6} sm={6} md={6}>
                 ${balance} USD
@@ -22,7 +28,9 @@ export default function Balance() {
             </Grid>
             <Grid container>
               <Grid item xs={6} sm={6} md={6}>
-                Pending
+                {language === "en"
+                  ? en.wallet.balance.pending
+                  : vi.wallet.balance.pending}
               </Grid>
               <Grid item xs={6} sm={6} md={6}>
                 $0.00 USD
@@ -30,7 +38,7 @@ export default function Balance() {
             </Grid>
           </div>
         </div>
-        <div className="customContainer" style={{ marginTop: 20 }}>
+        {/* <div className="customContainer" style={{ marginTop: 20 }}>
           <div>Cash from completed sales</div>
           <div className="balanceContainer">
             <Grid container className="bd-bt">
@@ -50,7 +58,7 @@ export default function Balance() {
               </Grid>
             </Grid>
           </div>
-        </div>
+        </div> */}
       </Grid>
     </Grid>
   );

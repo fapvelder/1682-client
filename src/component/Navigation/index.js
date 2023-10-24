@@ -1,16 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Badge, Layout, Menu } from "antd";
-import Icon, { RightOutlined } from "@ant-design/icons";
+import { Badge } from "antd";
+import { RightOutlined } from "@ant-design/icons";
 import { Store } from "../../Store";
-import Container from "react-bootstrap/Container";
-import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
-import NavDropdown from "react-bootstrap/NavDropdown";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Search from "../Search";
 import "./navigation.css";
-import { Grid, useMediaQuery } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import en from "../languages/en.json";
 import vi from "../languages/vi.json";
 import Flag from "../languages/flag.js";
@@ -30,18 +26,47 @@ import { toast } from "react-toastify";
 import { getError } from "../../utils";
 import io from "socket.io-client";
 import Responsive from "../ResponsiveCode/Responsive";
+import { token } from "../../api/config";
 export default function Navigation() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const navigate = useNavigate();
   const user = state?.data;
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [language, setLanguage] = useState("en");
   const theme = localStorage.getItem("theme");
   const [notificationCount, setNotificationCount] = useState(0);
   const [messageCount, setMessageCount] = useState(0);
   const [categories, setCategories] = useState([]);
   const [navOpen, setNavOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedProfile, setSelectedProfile] = useState(false);
-
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const navThemeText =
+    language === "en"
+      ? theme === "dark"
+        ? " Dark Mode"
+        : " Light Mode"
+      : theme === "dark"
+      ? " Chế độ tối"
+      : " Chế độ sáng";
+  const { tablet, mobile, minipad } = Responsive();
+  const categoryNames = {
+    "Game Items": {
+      en: "Game Items",
+      vi: "Vật phẩm ảo",
+    },
+    "Gift Cards": {
+      en: "Gift Cards",
+      vi: "Thẻ quà tặng",
+    },
+    Games: {
+      en: "Games",
+      vi: "Trò chơi",
+    },
+    Movies: {
+      en: "Movies",
+      vi: "Phim",
+    },
+  };
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
   };
@@ -96,14 +121,6 @@ export default function Navigation() {
       };
     }
   }, [user]);
-
-  const logoutHandler = async () => {
-    ctxDispatch({ type: "USER_LOGOUT" });
-    localStorage.removeItem("token");
-    window.location.href = "/login";
-    await logout();
-  };
-
   useEffect(() => {
     const getUser = async () => {
       const userID = jwtDecode(state.token)._id;
@@ -113,32 +130,37 @@ export default function Navigation() {
           ctxDispatch({ type: "SET_DATA", payload: result.data });
           const date =
             jwtDecode(state.token).exp - Math.floor(Date.now() / 1000);
-
           if (date < 3600) {
             const response = await refresh();
             localStorage.setItem("token", response.data.token);
           }
         } catch (err) {
           toast.error(getError(err));
-          console.log(err);
           getError(err) === "Invalid token" && logoutHandler();
         }
       } else {
         logoutHandler();
       }
     };
-    getUser();
+    if (token) {
+      getUser();
+    }
   }, [state.token, ctxDispatch]);
+  useEffect(() => {
+    ctxDispatch({ type: "SET_LANGUAGE", payload: language });
+  }, [language, ctxDispatch]);
+  const logoutHandler = async () => {
+    ctxDispatch({ type: "USER_LOGOUT" });
+    localStorage.removeItem("token");
+    window.location.href = "/login";
+    await logout();
+  };
 
-  const [language, setLanguage] = useState("en");
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
     localStorage.setItem("theme", isDarkMode ? "dark" : "light");
   };
-  useEffect(() => {
-    ctxDispatch({ type: "SET_LANGUAGE", payload: language });
-  }, [language, ctxDispatch]);
+
   // Hide navbar when route === /login
   const withOutNavbarRoutes = [
     "/login",
@@ -150,23 +172,12 @@ export default function Navigation() {
   if (withOutNavbarRoutes.some((item) => pathname.includes(item))) return null;
   //
 
-  const navThemeText =
-    language === "en"
-      ? theme === "dark"
-        ? " Dark Mode"
-        : " Light Mode"
-      : theme === "dark"
-      ? " Chế độ tối"
-      : " Chế độ sáng";
-  const { tablet, mobile, minipad } = Responsive();
-
   return (
     <div className={`navigation`} style={{ marginBottom: 65 }}>
       <div
         onClick={handleCheckboxChange}
         className={`${navOpen && "layer-nav"}`}
       />
-      {/* Add a layer */}
       <Grid container className="navContainer">
         <Grid item xs={4} sm={4} md={4} lg={1}>
           <Link to="/">
@@ -178,7 +189,11 @@ export default function Navigation() {
           </Link>
         </Grid>
         <Grid item xs={6} sm={4} md={4} lg={3}>
-          <Search placeholder={language === "en" ? en.search : vi.search} />
+          <Search
+            categoryNames={categoryNames}
+            placeholder={language === "en" ? en.search : vi.search}
+            language={language}
+          />
         </Grid>
         {!minipad && !mobile ? (
           <Grid item xs={2} sm={4} md={4} lg={7}>
@@ -198,7 +213,9 @@ export default function Navigation() {
                     className="navbarList"
                     key={category._id}
                   >
-                    <section className="listCategory">{category.name}</section>
+                    <section className="listCategory">
+                      {categoryNames[category.name][language]}
+                    </section>
                     <ul className="dropdown">
                       <section
                         style={{
@@ -210,7 +227,7 @@ export default function Navigation() {
                       >
                         <div style={{ width: 200, marginTop: 5 }}>
                           <li onClick={() => handleSearch(category._id)}>
-                            All
+                            {language === "en" ? en.All : vi.All}
                           </li>
                           {category.subCategory.map((subCategory) => (
                             <span
@@ -255,9 +272,11 @@ export default function Navigation() {
                     {navThemeText}
                   </Link>
                 </li>
-                <li className="navbarList">
-                  <Link to="/dashboard">Dashboard</Link>
-                </li>
+                {user?.role === "Admin" && (
+                  <li className="navbarList">
+                    <Link to="/dashboard">Dashboard</Link>
+                  </li>
+                )}
               </ul>
             </div>
           </Grid>
@@ -350,6 +369,12 @@ export default function Navigation() {
                             ? en.nav_profile.Selling
                             : vi.nav_profile.Selling}
                         </div>
+                        {/* <div
+                          style={{ padding: "10px 0" }}
+                          onClick={() => navigate("/trade")}
+                        >
+                          Trade items (No translate yet)
+                        </div> */}
                         <div
                           style={{ padding: "10px 0" }}
                           onClick={() => {
@@ -492,6 +517,11 @@ export default function Navigation() {
                               {language === "en"
                                 ? en.nav_profile.Selling
                                 : vi.nav_profile.Selling}
+                            </Link>
+                          </li>
+                          <li>
+                            <Link to={"/trade-items"}>
+                              Trade item (No translate)
                             </Link>
                           </li>
                           <li>

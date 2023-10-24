@@ -7,14 +7,23 @@ import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import completed from "../../../component/img/completed.png";
 import { Tabs } from "antd";
-
+import vi from "../../../component/languages/vi.json";
+import en from "../../../component/languages/en.json";
 const { TabPane } = Tabs;
 
 export default function PurchasePage() {
   const { state } = useContext(Store);
   const navigate = useNavigate();
+  const language = state?.language || "en";
   const [purchases, setPurchases] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState("All");
+  const allStatus = {
+    All: { vi: "Tất cả", en: "All" },
+    Completed: { vi: "Hoàn tất", en: "Completed" },
+    Pending: { vi: "Đang chờ", en: "Pending" },
+    Cancelled: { vi: "Đã hủy", en: "Cancelled" },
+  };
+  const statusOptions = ["All", "Completed", "Pending", "Cancelled"];
 
   useEffect(() => {
     const getAllOrders = async () => {
@@ -45,7 +54,9 @@ export default function PurchasePage() {
   return (
     <Grid container className="mg-auto-80" style={{ paddingBottom: "50vh" }}>
       <Helmet>
-        <title>Purchases</title>
+        <title>
+          {language === "en" ? en.purchases.title : vi.purchases.title}
+        </title>
       </Helmet>
       <Grid container className="border mt-15" style={{ padding: 20 }}>
         <Tabs
@@ -53,10 +64,12 @@ export default function PurchasePage() {
           activeKey={selectedStatus}
           onChange={handleTabChange}
         >
-          <TabPane tab="All" key="All" />
-          <TabPane tab="Completed" key="Completed" />
-          <TabPane tab="Pending" key="Pending" />
-          <TabPane tab="Cancelled" key="Cancelled" />
+          {statusOptions.map((status, index) => (
+            <TabPane
+              tab={allStatus[status][language]}
+              key={allStatus[status]["en"]}
+            />
+          ))}
         </Tabs>
         {filteredPurchases.length > 0 ? (
           filteredPurchases.map((purchase) => (
@@ -100,10 +113,15 @@ export default function PurchasePage() {
                 <div>
                   <div>{purchase?.product?.title}</div>
                   <div style={{ color: colorStatus[purchase?.status] }}>
-                    {purchase?.status}
+                    {allStatus[purchase?.status][language]}
                   </div>
                   <div>${purchase?.product?.price} USD</div>
-                  <div>Bought from {moment(purchase?.createdAt).fromNow()}</div>
+                  <div>
+                    {language === "en"
+                      ? en.purchases.bought
+                      : vi.purchases.bought}{" "}
+                    {moment(purchase?.createdAt).fromNow()}
+                  </div>
                 </div>
               </div>
               <div
@@ -113,7 +131,12 @@ export default function PurchasePage() {
                 }}
                 onClick={() => navigate(`/profile/${purchase.seller.slug}`)}
               >
-                <span style={{ marginRight: "5px" }}>Sold by:</span>
+                <span style={{ marginRight: "5px" }}>
+                  {language === "en"
+                    ? en.purchases.sold_by
+                    : vi.purchases.sold_by}
+                  :
+                </span>
                 <p
                   style={{
                     color: "blue",
@@ -127,7 +150,11 @@ export default function PurchasePage() {
             </Grid>
           ))
         ) : (
-          <div>You have no purchases yet</div>
+          <div>
+            {language === "en"
+              ? en.purchases.no_purchases
+              : vi.purchases.no_purchases}
+          </div>
         )}
       </Grid>
     </Grid>

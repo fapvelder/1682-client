@@ -31,6 +31,7 @@
   --border-color: #ddd;
   --background-pagination: white;
   --color-pagination: #3a3a3a;
+  --cs-color: #dddddd;
   height: 100vh;
   width: 100vw !important;
   color: black;
@@ -68,6 +69,7 @@
   --border-color: #ddd;
   --background-pagination: #3a3a3a;
   --color-pagination: #fff;
+  --cs-color: #333333;
   height: 100vh;
   width: 100vw !important;
   color: white;

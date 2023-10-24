@@ -148,6 +148,8 @@ export const deleteSubCategory = (categoryID, subCategoryID) =>
   });
 
 //Steam
+export const getItemInventory = (userID) =>
+  axiosInstance.post("/steam/inventory/", { userID });
 export const getSteam = () => axiosInstance.get("/steam/auth/steam/return");
 export const getItemSteam = (userID, steamID) =>
   axiosInstance.put("/steam/item", { userID, steamID });
@@ -155,8 +157,14 @@ export const deleteSteamID = (steamID) =>
   axiosInstance.post("/steam/delete", { steamID });
 export const updateSteamURL = (userID, steamURL) =>
   axiosInstance.put("/steam/update/steamURL", { userID, steamURL });
-export const depositItem = (userID, appID, version, classID) =>
-  axiosInstance.post("/steam/getItem", { userID, appID, version, classID });
+export const depositItem = (userID, appID, version, classID, assetID) =>
+  axiosInstance.post("/steam/getItem", {
+    userID,
+    appID,
+    version,
+    classID,
+    assetID,
+  });
 export const checkOfferStatus = (offerID) =>
   axiosInstance.post("/steam/checkStatus", { offerID });
 export const withdrawItem = (userID, appID, version, classID, receiverID) =>
@@ -166,6 +174,24 @@ export const withdrawItem = (userID, appID, version, classID, receiverID) =>
     version,
     classID,
     receiverID,
+  });
+export const tradeCSGO = (
+  userID,
+  appID,
+  version,
+  adminItems,
+  userItems,
+  totalAdmin,
+  totalUser
+) =>
+  axiosInstance.post("/steam/trade/csgo", {
+    userID,
+    appID,
+    version,
+    adminItems,
+    userItems,
+    totalAdmin,
+    totalUser,
   });
 //Products
 export const createListing = (
@@ -203,6 +229,22 @@ export const getUserProducts = (slug) =>
   axiosInstance.post("/products/user", { slug });
 export const getProductDetails = (_id) =>
   axiosInstance.post("/products/details", { _id });
+export const editProduct = (
+  userID,
+  productID,
+  title,
+  description,
+  price,
+  visibility
+) =>
+  axiosInstance.post("/products/edit", {
+    userID,
+    productID,
+    title,
+    description,
+    price,
+    visibility,
+  });
 export const searchProduct = (
   search,
   category,

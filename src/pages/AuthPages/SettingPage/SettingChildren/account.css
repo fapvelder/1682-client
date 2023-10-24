@@ -92,6 +92,7 @@
 }
 button.borderRight {
   cursor: pointer;
+  padding-left: 5px;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
 }
@@ -117,8 +118,8 @@ button.leftButton {
 }
 .customInputAntd {
   /* border: 1px solid   black; */
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
+  border-top-right-radius: 5;
+  border-bottom-right-radius: 5;
 }
 .customLeftInputAntd {
   /* border-top-left-radius: 0;

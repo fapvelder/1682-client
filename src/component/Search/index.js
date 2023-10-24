@@ -6,8 +6,10 @@ import useLoading from "../HandleLoading/useLoading";
 import { fetchCategories, searchProduct } from "../../api";
 import { useNavigate } from "react-router-dom";
 import { Store } from "../../Store";
+import en from "../languages/en.json";
+import vi from "../languages/vi.json";
 const { Option } = Select;
-export default function Search({ placeholder }) {
+export default function Search({ placeholder, categoryNames, language }) {
   const navigate = useNavigate();
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const [search, setSearch] = useState("");
@@ -58,12 +60,13 @@ export default function Search({ placeholder }) {
               handleChangeCategory(e);
             }}
           >
-            <Option value="">All</Option>
-            {categories.map((category) => (
-              <Option key={category._id} value={category._id}>
-                {category.name}
-              </Option>
-            ))}
+            <Option value=""> {language === "en" ? en.All : vi.All}</Option>
+            {categoryNames &&
+              categories?.map((category) => (
+                <Option key={category._id} value={category._id}>
+                  {categoryNames[category.name][language]}
+                </Option>
+              ))}
           </Select>
         }
       />

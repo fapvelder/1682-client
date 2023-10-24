@@ -2,6 +2,7 @@ import UserRoute from "../component/ProtectedRoute/UserRoute";
 import AdminDashboard from "../pages/AdminPages/AdminDashboard";
 import Chat from "../pages/AuthPages/ChatPage/Chat";
 import CheckoutPage from "../pages/AuthPages/CheckoutPage";
+import EditPage from "../pages/AuthPages/EditPage";
 import Homepage from "../pages/AuthPages/Homepage/Homepage";
 import InventoryPage from "../pages/AuthPages/InventoryPage";
 import ListingsPage from "../pages/AuthPages/ListingPage";
@@ -16,6 +17,7 @@ import SellItem from "../pages/AuthPages/SellItemPage";
 import GameItems from "../pages/AuthPages/SellItemPage/GameItems";
 import ListingItem from "../pages/AuthPages/SellItemPage/ListingItems";
 import Setting from "../pages/AuthPages/SettingPage";
+import TradeItemsPage from "../pages/AuthPages/TradePage";
 import Wallet from "../pages/AuthPages/WalletPage";
 import ForgotPassword from "../pages/NotAuthPages/ForgotPasswordPage/ForgotPassword";
 import ResetPassword from "../pages/NotAuthPages/ForgotPasswordPage/ResetPassword";
@@ -26,11 +28,7 @@ import Register from "../pages/NotAuthPages/RegisterPage/Register";
 export const routes = [
   {
     path: "/",
-    element: (
-      // <UserRoute>
-      <Homepage />
-      // </UserRoute>
-    ),
+    element: <Homepage />,
   },
   {
     path: "*",
@@ -38,11 +36,19 @@ export const routes = [
   },
   {
     path: "/chat",
-    element: <Chat />,
+    element: (
+      <UserRoute>
+        <Chat />
+      </UserRoute>
+    ),
   },
   {
     path: "/chat/:slug",
-    element: <Chat />,
+    element: (
+      <UserRoute>
+        <Chat />
+      </UserRoute>
+    ),
   },
   {
     path: "/login",
@@ -58,7 +64,11 @@ export const routes = [
   },
   {
     path: "/settings",
-    element: <Setting />,
+    element: (
+      <UserRoute>
+        <Setting />
+      </UserRoute>
+    ),
   },
   {
     path: "/forgot-password",
@@ -70,7 +80,11 @@ export const routes = [
   },
   {
     path: "/dashboard",
-    element: <AdminDashboard />,
+    element: (
+      <UserRoute>
+        <AdminDashboard />
+      </UserRoute>
+    ),
   },
   {
     path: "/item",
@@ -82,11 +96,28 @@ export const routes = [
     ],
   },
   {
+    path: "/edit",
+    children: [
+      {
+        path: ":productID",
+        element: (
+          <UserRoute>
+            <EditPage />
+          </UserRoute>
+        ),
+      },
+    ],
+  },
+  {
     path: "/sell-item",
     children: [
       {
         path: "",
-        element: <SellItem />,
+        element: (
+          <UserRoute>
+            <SellItem />
+          </UserRoute>
+        ),
       },
 
       {
@@ -107,38 +138,78 @@ export const routes = [
   },
   {
     path: "/listing",
-    element: <ListingItem />,
+    element: (
+      <UserRoute>
+        <ListingItem />
+      </UserRoute>
+    ),
   },
   {
     path: "/wallet",
-    element: <Wallet />,
+    element: (
+      <UserRoute>
+        <Wallet />
+      </UserRoute>
+    ),
   },
   {
     path: "/inventory",
-    element: <InventoryPage />,
+    element: (
+      <UserRoute>
+        <InventoryPage />
+      </UserRoute>
+    ),
   },
   {
     path: "/checkout/:id",
-    element: <CheckoutPage />,
+    element: (
+      <UserRoute>
+        <CheckoutPage />
+      </UserRoute>
+    ),
   },
   {
     path: "/purchases/",
-    element: <PurchasePage />,
+    element: (
+      <UserRoute>
+        <PurchasePage />
+      </UserRoute>
+    ),
   },
   {
     path: "/listings/",
-    element: <ListingsPage />,
+    element: (
+      <UserRoute>
+        <ListingsPage />
+      </UserRoute>
+    ),
   },
   {
     path: "/order-details/:id",
-    element: <OrderDetailsPage />,
+    element: (
+      <UserRoute>
+        <OrderDetailsPage />
+      </UserRoute>
+    ),
   },
   {
     path: "/notifications",
-    element: <NotificationsPage />,
+    element: (
+      <UserRoute>
+        <NotificationsPage />
+      </UserRoute>
+    ),
   },
   {
     path: "/search/:keyword",
     element: <SearchPage />,
+  },
+  {
+    path: "/trade-items",
+    element: (
+      <UserRoute>
+        <TradeItemsPage />
+      </UserRoute>
+    ),
   },
 ];

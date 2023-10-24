@@ -9,11 +9,11 @@ export default function UserRoute({ children }) {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const user = state?.data;
-        if (user?.role) {
+        const token = localStorage.getItem("token");
+        if (token) {
           setNavigate(children);
         } else {
-          setNavigate(<Navigate to="/" />);
+          setNavigate(<Navigate to="/login" />);
         }
       } catch (err) {
         toast.error(getError(err));
