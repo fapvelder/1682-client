@@ -12,6 +12,7 @@ import {
   getSteam,
   getUserByID,
   serverURL,
+  signInSteam,
   updateSteamURL,
   uploadAvatar,
 } from "../../../../api";
@@ -130,7 +131,9 @@ export default function Account({ user }) {
       "Update avatar successfully"
     );
   };
-
+  const signIn = async () => {
+    window.open(`${serverURL}/steam/auth/steam/return/`);
+  };
   const deleteSteam = async () => {
     handleLoading(
       async () => {
@@ -527,13 +530,15 @@ export default function Account({ user }) {
                 Steam account at any time later.
               </p>
 
-              <Link to={`${serverURL}/steam/auth/steam/return/`}>
+              {/* <Link to={`${serverURL}/steam/auth/steam/return/`}> */}
+              <div onClick={() => signIn()}>
                 <img
                   src={steamLogin}
                   alt="Steam Logo"
                   style={{ marginRight: "5px", width: "250px", height: "30px" }}
                 />
-              </Link>
+              </div>
+              {/* </Link> */}
             </div>
           </Grid>
         </Grid>

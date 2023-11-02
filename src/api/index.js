@@ -148,6 +148,7 @@ export const deleteSubCategory = (categoryID, subCategoryID) =>
   });
 
 //Steam
+export const signInSteam = () => axios.get("/steam/auth/steam/return/");
 export const getItemInventory = (userID) =>
   axiosInstance.post("/steam/inventory/", { userID });
 export const getSteam = () => axiosInstance.get("/steam/auth/steam/return");

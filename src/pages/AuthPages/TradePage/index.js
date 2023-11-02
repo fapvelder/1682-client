@@ -16,18 +16,28 @@ import {
   ReloadOutlined,
   PlusCircleOutlined,
 } from "@ant-design/icons";
-import { getItemInventory, serverURL, tradeCSGO } from "../../../api";
+import {
+  getItemInventory,
+  getUserByID,
+  serverURL,
+  tradeCSGO,
+} from "../../../api";
 import axios from "axios";
 import handleLoading from "../../../component/HandleLoading";
 import { io } from "socket.io-client";
 import { toast } from "react-toastify";
+import useLoading from "../../../component/HandleLoading/useLoading";
+import { getError } from "../../../utils";
 
 const { Panel } = Collapse;
 export default function TradeItemsPage() {
   const navigate = useNavigate();
   const { state, dispatch: ctxDispatch } = useContext(Store);
-  const [language, setLanguage] = useState("en");
+  const { loading, setLoading, reload, setReload } = useLoading();
+  const language = state.language || "en";
   const [add, setAdd] = useState(false);
+  const [min, setMin] = useState(0);
+  const [max, setMax] = useState(1000);
   const [filter, setFilter] = useState([]);
   const [totalUser, setTotalUser] = useState(0);
   const [totalAdmin, setTotalAdmin] = useState(0);
@@ -38,6 +48,8 @@ export default function TradeItemsPage() {
   const [adminOffer, setAdminOffer] = useState([]);
   const userID = state?.data?._id;
   const balance = state?.data?.wallet;
+  const prices = userItems?.map((item) => item.price);
+
   const onPositionChange = (newExpandIconPosition) => {
     setExpandIconPosition(newExpandIconPosition);
   };
@@ -73,7 +85,20 @@ export default function TradeItemsPage() {
       setAdminOffer(updatedOffer);
     }
   };
-
+  useEffect(() => {
+    const getUser = async () => {
+      const user = state?.data;
+      if (user) {
+        try {
+          const result = await getUserByID(user._id);
+          ctxDispatch({ type: "SET_DATA", payload: result.data });
+        } catch (err) {
+          toast.error(getError(err));
+        }
+      }
+    };
+    getUser();
+  }, [ctxDispatch, reload]);
   useEffect(() => {
     const setItems = async () => {
       if (state?.data?.tradeItem) {
@@ -207,9 +232,15 @@ export default function TradeItemsPage() {
       setFilter([...filter, tag]);
     }
   };
-  console.log(filter);
   const getItems = async () => {
-    await getItemInventory(userID);
+    handleLoading(
+      async () => {
+        await getItemInventory(userID);
+      },
+      setLoading,
+      setReload,
+      "Updated item successfully"
+    );
   };
   const trade = async () => {
     await tradeCSGO(
@@ -226,7 +257,9 @@ export default function TradeItemsPage() {
   return (
     <Grid container>
       <Helmet>
-        <title>Trade Items</title>
+        <title>
+          {language === "en" ? en.trade_item.title : vi.trade_item.title}
+        </title>
       </Helmet>
       <Grid
         container
@@ -248,7 +281,12 @@ export default function TradeItemsPage() {
                 <Panel
                   header={
                     <div className="custom-panel-header">
-                      <div>You offer</div>
+                      <div>
+                        {" "}
+                        {language === "en"
+                          ? en.trade_item.you_offer
+                          : vi.trade_item.you_offer}
+                      </div>
                       <div>$ {totalUser}</div>
                     </div>
                   }
@@ -271,7 +309,12 @@ export default function TradeItemsPage() {
                       ))}
                     </Grid>
                   ) : (
-                    <p className="item-choose text">What you are offering</p>
+                    <p className="item-choose text">
+                      {" "}
+                      {language === "en"
+                        ? en.trade_item.offer_desc
+                        : vi.trade_item.offer_desc}
+                    </p>
                   )}
                 </Panel>
               </Collapse>
@@ -359,7 +402,9 @@ export default function TradeItemsPage() {
                     opacity: 0.5,
                   }}
                 >
-                  Balance
+                  {language === "en"
+                    ? en.trade_item.balance
+                    : vi.trade_item.balance}
                 </div>
                 <div style={{ display: "flex", justifyContent: "start" }}>
                   $ {balance?.toFixed(2)}
@@ -396,7 +441,7 @@ export default function TradeItemsPage() {
               style={{ width: "80%" }}
               onClick={() => trade()}
             >
-              Trade
+              {language === "en" ? en.trade_item.trade : vi.trade_item.trade}
             </Button>
           </Grid>
           <Grid
@@ -417,9 +462,30 @@ export default function TradeItemsPage() {
                 isActive ? <PlusOutlined /> : <MinusOutlined />
               }
             >
-              <Panel header={<div className="text">Price</div>} key="1">
-                <InputNumber style={{ width: "45%" }} /> -{" "}
-                <InputNumber style={{ width: "45%" }} />
+              <Panel
+                header={
+                  <div className="text">
+                    {" "}
+                    {language === "en"
+                      ? en.trade_item.price
+                      : vi.trade_item.price}
+                  </div>
+                }
+                key="1"
+              >
+                <InputNumber
+                  defaultValue={min}
+                  style={{ width: "45%" }}
+                  min={0}
+                  onChange={(e) => setMin(e)}
+                />{" "}
+                -{" "}
+                <InputNumber
+                  defaultValue={max}
+                  style={{ width: "45%" }}
+                  onChange={(e) => setMax(e)}
+                  min={1}
+                />
               </Panel>
             </Collapse>
           </Grid>
@@ -443,7 +509,14 @@ export default function TradeItemsPage() {
             >
               <Panel
                 className="text"
-                header={<div className="text">Type</div>}
+                header={
+                  <div className="text">
+                    {" "}
+                    {language === "en"
+                      ? en.trade_item.type
+                      : vi.trade_item.type}
+                  </div>
+                }
                 key="1"
               >
                 <div className="display-start ">
@@ -451,7 +524,9 @@ export default function TradeItemsPage() {
                     className="text"
                     onChange={() => handleCheckboxChange("Knife")}
                   >
-                    Knives
+                    {language === "en"
+                      ? en.trade_item.knives
+                      : vi.trade_item.knives}
                   </Checkbox>
                 </div>
                 <div className="display-start ">
@@ -460,7 +535,9 @@ export default function TradeItemsPage() {
                     className="text"
                     onChange={() => handleCheckboxChange("Glove")}
                   >
-                    Gloves
+                    {language === "en"
+                      ? en.trade_item.gloves
+                      : vi.trade_item.gloves}
                   </Checkbox>
                 </div>
                 <div className="display-start ">
@@ -468,7 +545,9 @@ export default function TradeItemsPage() {
                     className="text"
                     onChange={() => handleCheckboxChange("Pistol")}
                   >
-                    Pistols
+                    {language === "en"
+                      ? en.trade_item.pistols
+                      : vi.trade_item.pistols}
                   </Checkbox>
                 </div>
                 <div className="display-start ">
@@ -476,7 +555,9 @@ export default function TradeItemsPage() {
                     className="text"
                     onChange={() => handleCheckboxChange("SMG")}
                   >
-                    SMGs
+                    {language === "en"
+                      ? en.trade_item.smgs
+                      : vi.trade_item.smgs}
                   </Checkbox>
                 </div>
                 <div className="display-start ">
@@ -484,7 +565,9 @@ export default function TradeItemsPage() {
                     className="text"
                     onChange={() => handleCheckboxChange("Rifle")}
                   >
-                    Assault Rifles
+                    {language === "en"
+                      ? en.trade_item.assault_rifles
+                      : vi.trade_item.assault_rifles}
                   </Checkbox>
                 </div>
                 <div className="display-start ">
@@ -492,7 +575,9 @@ export default function TradeItemsPage() {
                     className="text"
                     onChange={() => handleCheckboxChange("Sniper Rifle")}
                   >
-                    Sniper Rifles
+                    {language === "en"
+                      ? en.trade_item.sniper_rifles
+                      : vi.trade_item.sniper_rifles}
                   </Checkbox>
                 </div>
                 <div className="display-start ">
@@ -500,7 +585,9 @@ export default function TradeItemsPage() {
                     className="text"
                     onChange={() => handleCheckboxChange("Shotgun")}
                   >
-                    Shotguns
+                    {language === "en"
+                      ? en.trade_item.shotguns
+                      : vi.trade_item.shotguns}
                   </Checkbox>
                 </div>
                 <div className="display-start ">
@@ -508,7 +595,9 @@ export default function TradeItemsPage() {
                     className="text"
                     onChange={() => handleCheckboxChange("Machinegun")}
                   >
-                    Machine guns
+                    {language === "en"
+                      ? en.trade_item.machine_guns
+                      : vi.trade_item.machine_guns}
                   </Checkbox>
                 </div>
                 <div className="display-start ">
@@ -516,7 +605,9 @@ export default function TradeItemsPage() {
                     className="text"
                     onChange={() => handleCheckboxChange("Key")}
                   >
-                    Keys
+                    {language === "en"
+                      ? en.trade_item.keys
+                      : vi.trade_item.keys}
                   </Checkbox>
                 </div>
               </Panel>
@@ -596,7 +687,11 @@ export default function TradeItemsPage() {
                 <Panel
                   header={
                     <div className="custom-panel-header">
-                      <div>You get</div>
+                      <div>
+                        {language === "en"
+                          ? en.trade_item.you_get
+                          : vi.trade_item.you_get}
+                      </div>
                       <div>$ {totalAdmin}</div>
                     </div>
                   }
@@ -620,7 +715,9 @@ export default function TradeItemsPage() {
                     </Grid>
                   ) : (
                     <p className="item-choose text">
-                      Explore and choose the best skins
+                      {language === "en"
+                        ? en.trade_item.get_desc
+                        : vi.trade_item.get_desc}
                     </p>
                   )}
                 </Panel>
@@ -670,11 +767,39 @@ export default function TradeItemsPage() {
               >
                 {filter.length > 0
                   ? adminItems
-                      ?.filter((item) =>
-                        item.tags.some((item) =>
-                          filter.includes(item.localized_tag_name)
-                        )
-                      )
+                      ?.filter((item) => {
+                        const itemPrice = parseFloat(
+                          item.price.replace("$", "")
+                        );
+                        const meetsPriceCondition =
+                          itemPrice >= min && itemPrice <= max;
+                        const meetsTagCondition = item.tags.some((tag) =>
+                          filter.includes(tag.localized_tag_name)
+                        );
+
+                        return meetsPriceCondition && meetsTagCondition;
+                      })
+                      ?.map((item) => (
+                        <CSItem
+                          key={item.id} // Ensure each rendered component has a unique key
+                          item={item}
+                          width={23}
+                          image={item.photo}
+                          exterior={"FT"}
+                          // float="0.2596"
+                          price={item.price}
+                          onButtonClick={handleCSItemAdminClick}
+                        />
+                      ))
+                  : adminItems
+                      ?.filter((item) => {
+                        const itemPrice = parseFloat(
+                          item.price.replace("$", "")
+                        );
+                        const meetsPriceCondition =
+                          itemPrice >= min && itemPrice <= max;
+                        return meetsPriceCondition;
+                      })
                       ?.map((item) => (
                         <CSItem
                           item={item}
@@ -685,18 +810,7 @@ export default function TradeItemsPage() {
                           price={item.price}
                           onButtonClick={handleCSItemAdminClick}
                         />
-                      ))
-                  : adminItems?.map((item) => (
-                      <CSItem
-                        item={item}
-                        width={23}
-                        image={item.photo}
-                        exterior={"FT"}
-                        // float="0.2596"
-                        price={item.price}
-                        onButtonClick={handleCSItemAdminClick}
-                      />
-                    ))}
+                      ))}
               </Grid>
             </Grid>
           </Grid>

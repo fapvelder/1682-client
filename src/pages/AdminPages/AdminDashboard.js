@@ -7,15 +7,29 @@ import Platform from "./AdminChildren/Platform";
 import Category from "./AdminChildren/Category";
 import User from "./AdminChildren/User";
 import { Grid } from "@material-ui/core";
+import UserItems from "./AdminChildren/UserItems";
 export default function AdminDashboard() {
-  const children = [<User />, <Role />, <Platform />, <Category />];
+  const children = [
+    <User />,
+    <Role />,
+    <Platform />,
+    <Category />,
+    <UserItems />,
+  ];
   const tabName = [
     <span>User</span>,
     <span>Role</span>,
     <span>Platform </span>,
     <span>Category </span>,
+    <span>User Items </span>,
   ];
-  const icons = [<UserOutlined />, <UserOutlined />, <UserOutlined />];
+  const icons = [
+    <UserOutlined />,
+    <UserOutlined />,
+    <UserOutlined />,
+    <UserOutlined />,
+    <UserOutlined />,
+  ];
 
   return (
     <Grid container className="pb-50">

@@ -12,6 +12,7 @@ import { SendOutlined } from "@ant-design/icons";
 import { Grid } from "@material-ui/core";
 export default function ChatContainer({ currentChatUser, onReload }) {
   const { state } = useContext(Store);
+  const theme = localStorage.getItem("theme");
   const [message, setMessage] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
   const [arrivalMessage, setArrivalMessage] = useState(null);
@@ -158,13 +159,18 @@ export default function ChatContainer({ currentChatUser, onReload }) {
             xs={1}
             md={1}
             className="emoji"
+            style={{
+              marginTop: 5,
+            }}
             onClick={() => setIsPickerVisible(!isPickerVisible)}
           >
             🙂
           </Grid>
           <div
             className="emojiPickerContainer"
-            style={{ display: isPickerVisible ? "block" : "none" }}
+            style={{
+              display: isPickerVisible ? "block" : "none",
+            }}
           >
             <Picker
               data={dataEmoji}
@@ -174,7 +180,11 @@ export default function ChatContainer({ currentChatUser, onReload }) {
             />
           </div>
           <Grid item xs={1} md={1} className="sendButton" onClick={sendMessage}>
-            <SendOutlined />
+            <SendOutlined
+              style={{
+                color: theme === "dark" ? "white" : "black",
+              }}
+            />
           </Grid>
         </Grid>
       </div>

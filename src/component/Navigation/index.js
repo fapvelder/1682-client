@@ -521,7 +521,9 @@ export default function Navigation() {
                           </li>
                           <li>
                             <Link to={"/trade-items"}>
-                              Trade item (No translate)
+                              {language === "en"
+                                ? en.trade_item.title
+                                : vi.trade_item.title}
                             </Link>
                           </li>
                           <li>

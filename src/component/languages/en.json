@@ -304,5 +304,27 @@
     "bad": "Bad",
     "text_bad": "We apologize for any inconvenience. Please provide more details about your experience."
   },
+  "trade_item": {
+    "title": "Trade Item",
+    "balance": "Balance",
+    "you_offer": "You offer",
+    "you_get": "You get",
+    "offer_desc": "What you are offering",
+    "get_desc": "Explore and choose the best skins",
+    "search": "Search...",
+    "type": "Type",
+    "knives": "Knives",
+    "gloves": "Gloves",
+    "pistols": "Pistols",
+    "smgs": "Submachine Guns",
+    "assault_rifles": "Assault Rifles",
+    "shotguns": "Shotguns",
+    "sniper_rifles": "Sniper Rifles",
+    "machine_guns": "Machine guns",
+    "keys": "Keys",
+    "exterior": "Exterior",
+    "price": "Price",
+    "trade": "Trade"
+  },
   "sign_out": "Sign out"
 }

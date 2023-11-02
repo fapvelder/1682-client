@@ -299,6 +299,28 @@
     "bad": "Bad",
     "text_bad": "We apologize for any inconvenience. Please provide more details about your experience."
   },
+  "trade_item": {
+    "title": "Giao dịch vật phẩm",
+    "balance": "Số dư",
+    "you_offer": "Bạn đề nghị",
+    "you_get": "Bạn nhận được",
+    "offer_desc": "Những món đồ bạn đề nghị",
+    "get_desc": "Khám phá và chọn vật phẩm tốt nhất",
+    "search": "Tìm kiếm...",
+    "type": "Loại",
+    "knives": "Dao",
+    "gloves": "Găng Tay",
+    "pistols": "Súng Lục",
+    "smgs": "Súng Tiểu Liên",
+    "assault_rifles": "Súng Trường",
+    "shotguns": "Súng Săn",
+    "sniper_rifles": "Súng Ngắm",
+    "machine_guns": "Súng Máy",
+    "keys": "Chìa Kkhóa",
+    "exterior": "Bề Ngoài",
+    "price": "Giá",
+    "trade": "Giao dịch"
+  },
   "setting": {},
   "sign_out": "Đăng xuất"
 }
