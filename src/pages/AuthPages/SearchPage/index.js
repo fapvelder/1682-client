@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { fetchCategories, fetchPlatforms, searchProduct } from "../../../api";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Grid } from "@material-ui/core";
@@ -19,6 +19,8 @@ const { Option } = Select;
 export default function SearchPage() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const stateSearch = useLocation();
+  const scrollRef = useRef();
+
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -34,7 +36,9 @@ export default function SearchPage() {
   const [totalPages, setTotalPages] = useState(1);
   const { loading, setLoading, reload, setReload } = useLoading();
   const language = state.language || "en";
-
+  useEffect(() => {
+    scrollRef?.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+  }, []);
   useEffect(() => {
     const fetchSearchProducts = async () => {
       handleLoading(
@@ -131,14 +135,14 @@ export default function SearchPage() {
   };
 
   return (
-    <Grid container style={{ padding: 20, paddingBottom: "50vh" }}>
+    <Grid container style={{ padding: 20, paddingBottom: "15vh" }}>
       {loading && <Loading />}
       <Helmet>
         <title>
           {language === "en" ? en.search_product : vi.search_product}
         </title>
       </Helmet>
-      <Grid container>
+      <Grid container ref={scrollRef}>
         <Grid item sm={12} md={3}>
           <Grid
             container

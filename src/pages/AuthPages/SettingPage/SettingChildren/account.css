@@ -116,6 +116,12 @@ button.leftButton {
 .inputAntd {
   border: 1px solid var(--border-color);
 }
+.customInputAntd-1 {
+  /* border: 1px solid black; */
+  margin-right: -5px;
+  border-top-right-radius: 5;
+  border-bottom-right-radius: 5;
+}
 .customInputAntd {
   /* border: 1px solid   black; */
   border-top-right-radius: 5;

@@ -20,7 +20,7 @@ function App() {
   return (
     <div className={`App ${theme}`}>
       <Navigation />
-      <ChatGPT />
+      {/* <ChatGPT /> */}
       <ToastContainer position="bottom-center" limit={5} />
       {allRoutes}
       <Footer />

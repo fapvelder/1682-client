@@ -131,8 +131,11 @@ export default function Account({ user }) {
       "Update avatar successfully"
     );
   };
+  console.log(state);
   const signIn = async () => {
-    window.open(`${serverURL}/steam/auth/steam/return/`);
+    const userID = state?.data?._id;
+    // await signInSteam();
+    window.open(`${serverURL}/steam/auth/steam/return/?userID=${userID}`);
   };
   const deleteSteam = async () => {
     handleLoading(
@@ -292,7 +295,7 @@ export default function Account({ user }) {
           <Grid item xs={8} sm={6} md={6} style={{ marginTop: 5 }}>
             <div className="inputGroup">
               <Input
-                className="customInputAntd"
+                className="customInputAntd-1"
                 placeholder={user?.displayName}
                 style={{ width: mobile ? "60%" : minipad ? "70%" : "80%" }}
                 onClick={() => setToggleEditInput(true)}
@@ -336,7 +339,7 @@ export default function Account({ user }) {
           <Grid item xs={8} sm={6} md={6} style={{ marginTop: 5 }}>
             <div className="inputGroup">
               <TextArea
-                className="customInputAntd"
+                className="customInputAntd-1"
                 placeholder={user?.profile?.bio}
                 autoSize={{
                   minRows: 3,

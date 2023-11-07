@@ -199,10 +199,10 @@ export default function TradeItemsPage() {
     const socket = io(serverURL);
     socket.on("tradeOfferURL", (data) => {
       if (data.tradeOfferURL) {
+        console.log(data);
         window.open(data.tradeOfferURL);
       }
     });
-    // Clean up the socket connection when the component unmounts
     return () => {
       socket.disconnect();
     };

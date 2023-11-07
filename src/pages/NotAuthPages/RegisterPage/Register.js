@@ -1,7 +1,7 @@
 import { Button, Divider, Form, Input } from "antd";
 import { Helmet } from "react-helmet-async";
 import { useLocation, useNavigate, Link } from "react-router-dom";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { getError } from "../../../utils";
 import jwtDecode from "jwt-decode";
@@ -40,32 +40,35 @@ const Register = () => {
     console.log("Failed:", errorInfo);
   };
 
-  const handleCallbackResponse = async (response) => {
-    let user = jwtDecode(response.credential);
-    let email = user.email;
-    let isVerified = user.email_verified;
-    let fullName = user.name;
-    let avatar = user.picture;
-    let password = email + fullName;
-    if (isVerified) {
-      try {
-        const { data } = await registerGoogleUser(
-          fullName,
-          email,
-          avatar,
-          password
-        );
-        ctxDispatch({ type: "USER_LOGIN", payload: data });
-        localStorage.setItem("token", data.token);
-        navigate(redirect || "/");
-        navigate(0);
-      } catch (err) {
-        toast.error(getError(err));
+  const handleCallbackResponse = useCallback(
+    async (response) => {
+      let user = jwtDecode(response.credential);
+      let email = user.email;
+      let isVerified = user.email_verified;
+      let fullName = user.name;
+      let avatar = user.picture;
+      let password = email + fullName;
+      if (isVerified) {
+        try {
+          const { data } = await registerGoogleUser(
+            fullName,
+            email,
+            avatar,
+            password
+          );
+          ctxDispatch({ type: "USER_LOGIN", payload: data });
+          localStorage.setItem("token", data.token);
+          navigate(redirect || "/");
+          navigate(0);
+        } catch (err) {
+          toast.error(getError(err));
+        }
+      } else {
+        toast.error("Your email is not verified");
       }
-    } else {
-      toast.error("Your email is not verified");
-    }
-  };
+    },
+    [ctxDispatch, navigate, redirect]
+  );
   useEffect(() => {
     const googleService = () => {
       window?.google?.accounts?.id?.initialize({
@@ -83,8 +86,8 @@ const Register = () => {
       });
       window?.google?.accounts?.id?.prompt();
     };
-    setTimeout(googleService, 1000);
-  });
+    setTimeout(googleService, 100);
+  }, [handleCallbackResponse]);
 
   return (
     <div className="register">

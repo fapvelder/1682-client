@@ -1,16 +1,17 @@
 import { Grid } from "@material-ui/core";
 import { Button, Input } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { resetPassword } from "../../../api";
 import { getError } from "../../../utils";
 import useLoading from "../../../component/HandleLoading/useLoading";
 import handleLoading from "../../../component/HandleLoading";
 import Loading from "../../../component/Loading";
-
+import { EyeTwoTone, EyeInvisibleOutlined } from "@ant-design/icons";
 export default function ResetPassword() {
+  const navigate = useNavigate();
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const { token } = useParams();
@@ -21,6 +22,7 @@ export default function ResetPassword() {
       handleLoading(
         async () => {
           await resetPassword(token, newPassword);
+          navigate("/login");
         },
         setLoading,
         setReload,
@@ -30,6 +32,7 @@ export default function ResetPassword() {
       toast.error("Please make sure both passwords match");
     }
   };
+
   return (
     <Grid container className="mg-auto-80">
       {loading && <Loading />}
@@ -67,18 +70,26 @@ export default function ResetPassword() {
               />
               <p style={{ marginBottom: 15 }}>Input to change password</p>
 
-              <Input.Password
-                placeholder={"Input your new password"}
-                style={{ width: "80%", marginBottom: 15 }}
-                onChange={(e) => setNewPassword(e.target.value)}
-                value={newPassword}
-              />
-              <Input.Password
-                style={{ width: "80%", marginBottom: 15 }}
-                placeholder={"Input confirm password"}
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
+              <div>
+                {" "}
+                <Input.Password
+                  placeholder={"Input your new password"}
+                  style={{ width: "80%", marginBottom: 15 }}
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  autoComplete="off"
+                />
+              </div>
+              <div>
+                <Input.Password
+                  style={{ width: "80%", marginBottom: 15 }}
+                  placeholder={"Input confirm password"}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  autoComplete="off"
+                />
+              </div>
+
               <Button
                 style={{ width: "80%", marginBottom: 15 }}
                 onClick={(e) => submitHandler(e)}

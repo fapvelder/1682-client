@@ -37,6 +37,7 @@ export default function Homepage() {
   }, []);
   const handleSearch = (categoryID, subCategory) => {
     navigate("/search/product");
+
     ctxDispatch({ type: "SET_CATEGORY", payload: categoryID });
     ctxDispatch({ type: "SET_SUBCATEGORY", payload: "" });
     if (subCategory) {

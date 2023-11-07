@@ -80,11 +80,11 @@ export default function GameItems() {
     if (steam) {
       if (gameTitle === "CS:GO") {
         setSteamInventory(
-          steam?.steamInventory[1]?.filter((item) => item?.tradable)
+          steam?.steamInventory?.[1]?.filter((item) => item?.tradable)
         );
       } else if (gameTitle === "Steam Items") {
         setSteamInventory(
-          steam?.steamInventory[0]?.filter((item) => item?.tradable)
+          steam?.steamInventory?.[0]?.filter((item) => item?.tradable)
         );
       } else {
         navigate("/settings", { state: { warn: "steam" } });

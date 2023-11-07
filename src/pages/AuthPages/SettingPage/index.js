@@ -29,11 +29,11 @@ export default function Setting() {
       label: `Account`,
       children: <Account user={user} />,
     },
-    {
-      key: "2",
-      label: `Payment`,
-      children: <Payment />,
-    },
+    // {
+    //   key: "2",
+    //   label: `Payment`,
+    //   children: <Payment />,
+    // },
   ];
   return (
     <Grid container>
