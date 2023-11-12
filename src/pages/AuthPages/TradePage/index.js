@@ -46,6 +46,8 @@ export default function TradeItemsPage() {
   const [adminItems, setAdminItems] = useState([]);
   const [userOffer, setUserOffer] = useState([]);
   const [adminOffer, setAdminOffer] = useState([]);
+  const [searchQueryUser, setSearchQueryUser] = useState("");
+  const [searchQueryAdmin, setSearchQueryAdmin] = useState("");
   const userID = state?.data?._id;
   const balance = state?.data?.wallet;
   const prices = userItems?.map((item) => item.price);
@@ -126,12 +128,13 @@ export default function TradeItemsPage() {
         const priceAdmin = responsesAdmin?.map(
           (response) => response?.data?.data?.median_price
         );
-
         setUserItems(
           state?.data?.tradeItem?.user?.descriptions
             ?.filter((item, index) => item.tradable === 1)
             .map((item, index) => ({
+              key: index,
               appid: item.appid,
+              name: item.name,
               classid: item.classid,
               assetid: item.assetid,
               photo: url + item.icon_url,
@@ -140,6 +143,14 @@ export default function TradeItemsPage() {
               tags: item.tags,
               price: priceUser[index] ? priceUser[index] : "No suggested price",
             }))
+            .sort((a, b) => {
+              const priceA = parseFloat(a.price.replace(/[^\d.]/g, ""));
+              const priceB = parseFloat(b.price.replace(/[^\d.]/g, ""));
+              return priceB - priceA;
+            })
+            .filter((item) =>
+              item.name.toLowerCase().includes(searchQueryUser.toLowerCase())
+            )
         );
 
         setAdminItems(
@@ -154,7 +165,9 @@ export default function TradeItemsPage() {
                 priceAdmin[index] = "No suggested price";
               }
               return {
+                key: index,
                 appid: item.appid,
+                name: item.name,
                 classid: item.classid,
                 assetid: item.assetid,
                 photo: url + item.icon_url,
@@ -166,11 +179,19 @@ export default function TradeItemsPage() {
                   : "No suggested price",
               };
             })
+            .sort((a, b) => {
+              const priceA = parseFloat(a.price.replace(/[^\d.]/g, ""));
+              const priceB = parseFloat(b.price.replace(/[^\d.]/g, ""));
+              return priceB - priceA;
+            })
+            .filter((item) =>
+              item.name.toLowerCase().includes(searchQueryAdmin.toLowerCase())
+            )
         );
       }
     };
     setItems();
-  }, [state?.data?.tradeItem]);
+  }, [searchQueryUser, searchQueryAdmin, state?.data?.tradeItem]);
   useEffect(() => {
     const getPrice = () => {
       let total = userOffer
@@ -296,6 +317,7 @@ export default function TradeItemsPage() {
                     <Grid container className="offer" style={{ gridGap: 10 }}>
                       {userOffer?.map((item) => (
                         <CSItem
+                          key={item.key}
                           item={item}
                           width={18}
                           image={item.photo}
@@ -334,7 +356,7 @@ export default function TradeItemsPage() {
                   <Input
                     className="customInputAntd"
                     // value={search}
-                    // onChange={(e) => setSearch(e.target.value)}
+                    onChange={(e) => setSearchQueryUser(e.target.value)}
                     placeholder={language === "en" ? en.search : vi.search}
                     style={{ width: "90%" }}
                     // onKeyDown={handleKeyDown}
@@ -363,6 +385,7 @@ export default function TradeItemsPage() {
               >
                 {userItems?.map((item) => (
                   <CSItem
+                    key={item.key}
                     item={item}
                     width={23}
                     image={item.photo}
@@ -370,6 +393,7 @@ export default function TradeItemsPage() {
                     // float="0.2596"
                     price={item.price}
                     onButtonClick={handleCSItemUserClick}
+                    name={item.name}
                   />
                 ))}
               </Grid>
@@ -701,6 +725,7 @@ export default function TradeItemsPage() {
                     <Grid container className="offer" style={{ gridGap: 10 }}>
                       {adminOffer?.map((item) => (
                         <CSItem
+                          key={item.key}
                           item={item}
                           width={18}
                           image={item.photo}
@@ -737,8 +762,8 @@ export default function TradeItemsPage() {
                 <div className="inputGroup search-inventory">
                   <Input
                     className="customInputAntd"
-                    // value={search}
-                    // onChange={(e) => setSearch(e.target.value)}
+                    value={searchQueryAdmin}
+                    onChange={(e) => setSearchQueryAdmin(e.target.value)}
                     placeholder={language === "en" ? en.search : vi.search}
                     style={{ width: "90%" }}
                     // onKeyDown={handleKeyDown}
@@ -788,6 +813,7 @@ export default function TradeItemsPage() {
                           exterior={"FT"}
                           // float="0.2596"
                           price={item.price}
+                          name={item.name}
                           onButtonClick={handleCSItemAdminClick}
                         />
                       ))
@@ -802,12 +828,14 @@ export default function TradeItemsPage() {
                       })
                       ?.map((item) => (
                         <CSItem
+                          key={item.key}
                           item={item}
                           width={23}
                           image={item.photo}
                           exterior={"FT"}
                           // float="0.2596"
                           price={item.price}
+                          name={item.name}
                           onButtonClick={handleCSItemAdminClick}
                         />
                       ))}

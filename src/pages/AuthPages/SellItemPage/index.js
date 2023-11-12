@@ -152,7 +152,9 @@ export default function SellItem() {
               <h3>
                 <span>
                   {language === "en"
-                    ? en.start_selling.select
+                    ? en.start_selling.select +
+                      " " +
+                      brandNames[subCategories][language]
                     : vi.start_selling.select +
                       " " +
                       brandNames[subCategories][language]}

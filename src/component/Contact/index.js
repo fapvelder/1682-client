@@ -23,10 +23,11 @@ export default function Contact() {
   const [currentChatUser, setCurrentChatUser] = useState("");
   const [haveChattedUsers, setHaveChattedUsers] = useState([]);
   const [listUsers, setListUsers] = useState([]);
+  const [sortUsers, setSortUsers] = useState([]);
   const [lastMessages, setLastMessages] = useState({}); // State to store last messages
   const [reload, setReload] = useState(false);
   const [activeUser, setActiveUser] = useState(null);
-  const data = jwtDecode(state.token);
+  const data = jwtDecode(state?.token);
   const id = data._id;
   useEffect(() => {
     const getUsers = async () => {
@@ -80,6 +81,7 @@ export default function Contact() {
     const getLastMessages = async () => {
       try {
         const lastMessagesData = {};
+
         for (const user of listUsers) {
           if (user._id !== id) {
             const result = await getLastMessage(id, user._id);
@@ -87,6 +89,13 @@ export default function Contact() {
           }
         }
         setLastMessages(lastMessagesData);
+        setSortUsers(
+          [...listUsers].sort((a, b) => {
+            const updatedAtA = new Date(lastMessagesData[a._id]?.updatedAt);
+            const updatedAtB = new Date(lastMessagesData[b._id]?.updatedAt);
+            return updatedAtB - updatedAtA;
+          })
+        );
       } catch (err) {
         toast.error(getError(err));
       }
@@ -103,7 +112,7 @@ export default function Contact() {
       <Grid container className="mg-auto-80 bodyChat">
         <Grid item xs={12} sm={3} md={3}>
           <div className="listUsersContainer">
-            {listUsers?.map(
+            {sortUsers?.map(
               (user) =>
                 user._id !== id && (
                   <div

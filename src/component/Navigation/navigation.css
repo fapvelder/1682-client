@@ -12,6 +12,7 @@
   font-size: inherit;
 }
 .light {
+  --active-color: rgb(167, 159, 159);
   --color-mode: var(--color-mode-light);
   --background-color: white;
   --background-color-outside: white;
@@ -40,6 +41,7 @@
 }
 
 .dark {
+  --active-color: rgb(60, 60, 60);
   --color-mode: var(--color-mode-dark);
   --background-color: #494949;
   --background-color-outside: #303030;

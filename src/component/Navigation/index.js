@@ -40,6 +40,9 @@ export default function Navigation() {
   const [navOpen, setNavOpen] = useState(false);
   const [selectedProfile, setSelectedProfile] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  useEffect(() => {
+    localStorage.setItem("theme", "light");
+  }, []);
   const navThemeText =
     language === "en"
       ? theme === "dark"
@@ -505,6 +508,7 @@ export default function Navigation() {
                           <li>
                             <Link to={`/profile/${user?.slug}`}>
                               <img
+                                style={{ padding: "5px 0px" }}
                                 className="dropdownProfileImg"
                                 src={user?.avatar}
                                 alt={user?.fullName}

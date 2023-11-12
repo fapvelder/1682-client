@@ -4,7 +4,7 @@
   /* background-color: var(--color-mode); */
 }
 .userContainer.activeUser {
-  background-color: rgb(60, 60, 60);
+  background-color: var(--active-color);
 }
 .bodyChat {
   margin-top: 10px;

@@ -116,12 +116,15 @@ export default function ListingItem() {
       </div>
     </div>
   );
+  useEffect(() => {
+    const totalFee = Number(digitalFee) + Number(commissionFee);
+    setFinalIncome((price - totalFee).toFixed(2));
+  }, [price, digitalFee, commissionFee]);
   const checkPrice = (e) => {
     if (e) {
       setPrice(e);
       setDigitalFee((e * 0.02).toFixed(2));
       setCommissionFee((e * 0.08).toFixed(2));
-      setFinalIncome((e - digitalFee - commissionFee).toFixed(2));
     }
   };
   const handleDepositItem = async () => {
@@ -382,9 +385,13 @@ export default function ListingItem() {
                 // value={deliveryMethod}
                 style={{ padding: 15 }}
               >
-                <Space direction="vertical">
+                <Space direction="vertical ">
                   {category === "Game Items" ? (
-                    <Radio value="Bot" onClick={showModal}>
+                    <Radio
+                      className="text-white"
+                      value="Bot"
+                      onClick={showModal}
+                    >
                       {language === "en"
                         ? en.start_selling.listings.automatic_bot
                         : vi.start_selling.listings.automatic_bot}
@@ -556,11 +563,10 @@ export default function ListingItem() {
           </Grid>
           <Grid container style={{ display: "flex", justifyContent: "end" }}>
             <Button
-              className="defaultButton"
+              className="defaultButton text-white"
               disabled={checkToContinue()}
               onClick={() => createListingItem()}
             >
-              {" "}
               {language === "en"
                 ? en.start_selling.listings.done
                 : vi.start_selling.listings.done}

@@ -14,6 +14,8 @@ export default function CSItem({
   onButtonClick,
   display = true,
   height = 150,
+  name,
+  key,
 }) {
   const [add, setAdd] = useState(false);
   const handleButtonClick = () => {
@@ -23,20 +25,28 @@ export default function CSItem({
   };
   return (
     <Grid
+      key={key}
       item
       className="background-cs-item"
       style={{
         padding: 5,
         width: `${width}%`,
         borderRadius: "5px",
-        height: 220,
+        height: name ? 240 : 135,
       }}
     >
       <img style={{ width: "95%", height: height }} src={image} alt="" />
-      {/* <div>
-        {st && `ST /`} {exterior} / {float}
-      </div> */}
-      <span className="text">{price}</span>
+      {name && (
+        <div className="text-start">
+          <span className="text " style={{ fontSize: 10 }}>
+            {name.length > 25 ? `${name.substring(0, 25)}...` : name}
+          </span>
+        </div>
+      )}
+      <div className="text-start">
+        <span className="text">{price}</span>
+      </div>
+
       {display && (
         <div>
           <Button

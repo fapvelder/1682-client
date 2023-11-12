@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 import en from "../../../component/languages/en.json";
 import vi from "../../../component/languages/vi.json";
+import Overview from "./WalletChildren/Overview.js";
 export default function Wallet() {
   const { state } = useContext(Store);
   const language = state?.language || "en";
@@ -47,6 +48,11 @@ export default function Wallet() {
       label:
         language === "en" ? en.wallet.withdraw.title : vi.wallet.withdraw.title,
       children: <Withdraw language={language} vi={vi} en={en} />,
+    },
+    {
+      key: "4",
+      label: "Overview",
+      children: <Overview />,
     },
   ];
   return (

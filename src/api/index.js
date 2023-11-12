@@ -194,7 +194,7 @@ export const tradeCSGO = (
     totalAdmin,
     totalUser,
   });
-//Products
+//products
 export const createListing = (
   userID,
   title,
@@ -273,6 +273,11 @@ export const searchProduct = (
 export const getMyProducts = (userID) =>
   axiosInstance.post("/products/myProducts", { userID });
 
+export const getUserChart = (userID) =>
+  axiosInstance.post("/products/chart", { userID });
+export const getAdminChart = () => axiosInstance.post("/products/admin-chart");
+export const getProductLog = () =>
+  axiosInstance.post("/products/admin-product");
 //Paypal
 export const createOrderPaypal = (cost) =>
   axiosInstance.post("/paypal/my-server/create-paypal-order", {
