@@ -2,6 +2,7 @@ import { Grid } from "@material-ui/core";
 import { Button } from "antd";
 import React, { useState } from "react";
 import { BsFillCartPlusFill, BsFillCartXFill } from "react-icons/bs";
+import { Tooltip } from "antd";
 
 export default function CSItem({
   width = 30,
@@ -36,16 +37,18 @@ export default function CSItem({
       }}
     >
       <img style={{ width: "95%", height: height }} src={image} alt="" />
-      {name && (
+      <Tooltip title={name}>
+        {name && (
+          <div className="text-start">
+            <span className="text " style={{ fontSize: 10 }}>
+              {name.length > 25 ? `${name.substring(0, 25)}...` : name}
+            </span>
+          </div>
+        )}
         <div className="text-start">
-          <span className="text " style={{ fontSize: 10 }}>
-            {name.length > 25 ? `${name.substring(0, 25)}...` : name}
-          </span>
+          <span className="text">{price}</span>
         </div>
-      )}
-      <div className="text-start">
-        <span className="text">{price}</span>
-      </div>
+      </Tooltip>
 
       {display && (
         <div>
